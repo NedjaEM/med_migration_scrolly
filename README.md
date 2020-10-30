@@ -1,4 +1,4 @@
-# med-scroller
+# med_migration_scrolly
 
 ## Project setup
 ```

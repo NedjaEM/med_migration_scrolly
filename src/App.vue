@@ -3,64 +3,10 @@
     <MapIntro></MapIntro>
     <div id="graphic">
       <div id="sections">
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>
-            Europe's Mediterrenean Border is known to be the most lethal border
-            in the world
-          </h1>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>There are multiple routes that migrants follow to get to Europe through the Mediterrenean</h1>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>Central Route</h1>
-          <p>Which starts in North Africa (mainly Libya and Tunisia) to Italy</p>
-          <p>The closest island Lampedusa is reachable in 1 day from Tunisia and three days from 
-            Libya </p>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>Western Route</h1>
-          <p>From Morocco to Spain, spanning only 15 Km, making it the shortest route.</p>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <p>After the Morocco-Spain Western route was closed, the route from Mauritania and Senegal to 
-            the Canary Islands became a more popular Western route.
-          </p>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>Eastern Route</h1>
-          <p>From Turkey to Greece. This route became prominent between 2014 and 2016 following the political
-            situation in Syria.
-          </p>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>Let's look into the numbers of arrivals through the Mediterrenean to Europe </h1>
-          <p>
-          </p>
-        </section>
-        <section class="step">
-          <div class="title"></div>
-          <br /><br /><br /><br />
-          <h1>Let's look into the numbers of arrivals through the Mediterrenean to Europe </h1>
-          <p>
-          </p>
-        </section>
+        <Story :state="state" :active_index="active_index"></Story>
       </div>
       <div id="map"></div>
+      <div id="photos"></div>
     </div>
   </div>
 </template>
@@ -68,6 +14,7 @@
 <script>
 /* eslint-disable */
 import MapIntro from "./components/MapIntro.vue";
+import Story from "./components/Story.vue";
 import * as d3 from "../../lib/d3";
 import map_json from "../public/Data/map.geo.json";
 
@@ -75,37 +22,46 @@ export default {
   name: "App",
   components: {
     MapIntro,
+    Story,
+  },
+  data: function () {
+    return {
+      width: window.innerWidth * 1.2,
+      height: window.innerHeight * 1.4,
+      state: "",
+      active_index: 0,
+      // scroll: this.scroller().container(d3.select("#graphic")),
+      legend_keys: ["Departing", "Arriving"],
+      svg: d3
+        .select("#map")
+        .append("svg")
+        .attr("width", this.width)
+        .attr("height", this.height),
+    };
   },
   mounted() {
     this.drawInitial();
-    let scroll = this.scroller().container(d3.select("#graphic"));
+
+    scroll = this.scroller().container(d3.select("#graphic"));
     scroll();
-
-    console.log(map_json)
-
-    // let activationFunctions = [
-    //   this.drawMap
-    //   ];
-
-    // console.log(activationFunctions)
-
- 
-  let lastIndex,
+    let lastIndex,
       activeIndex = 0;
-
 
     var scroll_functions = this;
 
     scroll.on("active", function (index) {
-      console.log(scroll)
+      console.log(scroll);
       d3.selectAll(".step")
         .transition()
         .duration(500)
         .style("opacity", function (d, i) {
+          console.log("i is " + index);
           return i === index ? 1 : 0.1;
         });
 
       activeIndex = index;
+      scroll_functions.active_index = activeIndex;
+
       let sign = activeIndex - lastIndex < 0 ? -1 : 1;
       let scrolledSections = d3.range(
         lastIndex + sign,
@@ -113,27 +69,23 @@ export default {
         sign
       );
       scrolledSections.forEach((i) => {
-        console.log("section "+ i)
-        if (i==0) {
-          scroll_functions.hideMap()
+        console.log("section " + i);
+        if (i == 0) {
+          scroll_functions.hideMap();
         }
-        if (i==1){
-          scroll_functions.drawMap()
+        if (i == 1) {
+          scroll_functions.drawMap();
         }
-        if (i==2) {
-          scroll_functions.colorCentral()
-        }
-        else if (i==3){
-          scroll_functions.colorWestern()
-        }
-        else if (i==4){
-          scroll_functions.colorWestern2()
-        }
-        else if (i==5){
-          scroll_functions.colorEastern()
-        }
-        else if (i==6){
-           scroll_functions.hideMap()
+        if (i == 2) {
+          scroll_functions.colorCentral();
+        } else if (i == 3) {
+          scroll_functions.colorWestern();
+        } else if (i == 4) {
+          scroll_functions.colorWestern2();
+        } else if (i == 5) {
+          scroll_functions.colorEastern();
+        } else if (i == 6) {
+          scroll_functions.hideMap();
         }
       });
       lastIndex = activeIndex;
@@ -150,22 +102,25 @@ export default {
       let dispatch = d3.dispatch("active", "progress");
       let sections = d3.selectAll(".step");
       let sectionPositions;
+      var self = this;
 
       let currentIndex = -1;
       let containerStart = 0;
 
-      function scroll() {
+      const scroll = () => {
         d3.select(window)
           .on("scroll.scroller", position)
           .on("resize.scroller", resize);
 
         resize();
 
+        console.log(this);
+
         let timer = d3.timer(function () {
           position();
           timer.stop();
         });
-      }
+      };
 
       function resize() {
         sectionPositions = [];
@@ -182,13 +137,15 @@ export default {
       }
 
       function position() {
-        let pos = window.pageYOffset - 800 - containerStart;
+        let pos = window.pageYOffset - 400 - containerStart;
         let sectionIndex = d3.bisect(sectionPositions, pos);
         sectionIndex = Math.min(sections.size() - 1, sectionIndex);
 
         if (currentIndex !== sectionIndex) {
+          self.state = "active";
           dispatch.call("active", this, sectionIndex);
           currentIndex = sectionIndex;
+          console.log(self.state);
         }
 
         let prevIndex = Math.max(sectionIndex - 1, 0);
@@ -196,6 +153,8 @@ export default {
         let progress =
           (pos - prevTop) / (sectionPositions[sectionIndex] - prevTop);
         dispatch.call("progress", this, currentIndex, progress);
+        self.state = "progress";
+        console.log(self.state);
       }
 
       scroll.container = function (value) {
@@ -214,21 +173,23 @@ export default {
     },
 
     drawInitial: function () {
-      const width = window.innerWidth * 1.2,
-        height = window.innerHeight * 1.4,
-        svg = d3
-          .select("#map")
-          .append("svg")
-          .attr("width", width)
-          .attr("height", height);
+      console.log("val " + this.svg);
+      // const width = window.innerWidth * 1.2,
+      //   height = window.innerHeight * 1.4,
+      this.svg = d3
+        .select("#map")
+        .append("svg")
+        .attr("width", this.width)
+        .attr("height", this.height);
 
-      console.log(width);
-      const projection = d3.geoMercator().fitSize([width, height], map_json);
+      const projection = d3
+        .geoMercator()
+        .fitSize([this.width, this.height], map_json);
 
       console.log();
 
       const path = d3.geoPath().projection(projection);
-      svg
+      this.svg
         .selectAll(".country")
         .data(map_json.features)
         .join("path")
@@ -238,117 +199,204 @@ export default {
         .attr("stroke", "black");
 
       d3.selectAll(".country").attr("opacity", 0);
+
+      //drawing legend
+
+      var color = d3
+        .scaleOrdinal()
+        .domain(this.legend_keys)
+        .range(["#800020", "#006b80"]);
+
+      this.svg
+        .selectAll(".mydots")
+        .data(this.legend_keys)
+        .enter()
+        .append("circle")
+        .attr("class", "mydots")
+        .attr("cx", 1300)
+        .attr("cy", function (d, i) {
+          return 100 + i * 25;
+        })
+        .attr("r", 10)
+        .attr("opacity", 0)
+        .style("fill", function (d) {
+          return color(d);
+        });
+
+      // Add one dot in the legend for each name.
+      this.svg
+        .selectAll(".mylabels")
+        .data(this.legend_keys)
+        .enter()
+        .append("text")
+        .attr("class", "mylabels")
+        .attr("x", 1320)
+        .attr("y", function (d, i) {
+          return 100 + i * 25;
+        })
+        .style("font-size", "30px")
+        .style("fill", function (d) {
+          return color(d);
+        })
+        .text(function (d) {
+          return d;
+        })
+        .attr("text-anchor", "left")
+        .attr("opacity", 0)
+        .style("alignment-baseline", "middle");
     },
 
-     hideMap: function(){
-       d3.selectAll(".country")
+    hideMap: function () {
+      d3.selectAll(".country")
         .transition()
         .duration(1000)
-        .attr("fill","none")
-        .attr("opacity", 0)
-        
-     },
-     drawMap: function () {
-     console.log("setting maps opacity");
-          d3.selectAll(".country").attr("opacity", 1);
-          var totalLength = d3.selectAll(".country").node().getTotalLength();
-          console.log(totalLength)
-          d3.selectAll(".country")
-           .attr("opacity", 1)
-            .attr("stroke-dasharray", totalLength + " " + totalLength)
-            .attr("stroke-dashoffset", totalLength)
-            .transition()
-            .duration(2000)
-            .ease(d3.easeLinear)
-            .attr("stroke-dashoffset", 0)
+        .attr("fill", "none")
+        .attr("opacity", 0);
     },
-    colorCentral: function() {
-      console.log("coloring central")
+    drawMap: function () {
+      console.log("setting maps opacity");
+      console.log(d3.selectAll("mydots"));
+      console.log(d3.selectAll("mylabels"));
+      d3.selectAll(".country").attr("opacity", 1);
+      var totalLength = d3.selectAll(".country").node().getTotalLength();
+      console.log(totalLength);
       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Tunisia" || d.properties.name === "Libya")
-      .transition()
-      .duration(1500)
-      .attr("fill","#800020")
-      .attr("fill-opacity", "0.5")
-      d3.selectAll(".country")
-      .filter(d => d.properties.name === "Italy")
-      .transition()
-      .duration(1500)
-      .attr("fill", "#006b80")
-      .attr("fill-opacity", "0.5")
-            // .filter())
+        .attr("opacity", 1)
+        .attr("stroke-dasharray", totalLength + " " + totalLength)
+        .attr("stroke-dashoffset", totalLength)
+        .transition()
+        .duration(2000)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+      // this.svg.append('rect')
+      //  .attr("width",this.width/6)
+      //  .attr("height",this.height/7)
+      //  .attr("fill", "#a4dded")
+      //  .attr("x", 1000)
     },
-    colorWestern: function() {
-      console.log("coloring Western")
+    colorCentral: function () {
+      console.log("coloring central");
       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Tunisia" || d.properties.name === "Libya" || d.properties.name === "Italy")
-      .transition()
-      .duration(1500)
-      .attr("fill","none")
-    
-       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Morocco" )
-      .transition()
-      .duration(1500)
-      .attr("fill","#800020")
-      .attr("fill-opacity", "0.5")
-      d3.selectAll(".country")
-      .filter(d => d.properties.name === "Spain")
-      .transition()
-      .duration(1500)
-      .attr("fill", "#006b80")
-      .attr("fill-opacity", "0.5")
-      
-    },
-    colorWestern2: function() {
-       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Morocco" || d.properties.name === "Spain" )
-      .transition()
-      .duration(1500)
-      .attr("fill","grey")
- 
-       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Mauritania" || d.properties.name === "Senegal" )
-      .transition()
-      .duration(1500)
-      .attr("fill","#800020")
-      .attr("fill-opacity", "0.5")
-      d3.selectAll(".country")
-      .filter(d => d.properties.name === "the Canary Islands")
-      .transition()
-      .duration(1500)
-      .attr("fill", "#006b80")
-      .attr("fill-opacity", "0.5")
-    },
-    colorEastern: function() {
-      console.log("coloring central")
-       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Morocco" || d.properties.name === "Spain" )
-      .transition()
-      .duration(1500)
-      .attr("fill","none")
-      d3.selectAll(".country")
-      .filter(d => d.properties.name === "Mauritania" || d.properties.name === "Senegal")
-      .transition()
-      .duration(1500)
-      .attr("fill","none")
-       d3.selectAll(".country")
-      .filter(d => d.properties.name === "Turkey" )
-      .transition()
-      .duration(1500)
-      .attr("fill","#800020")
-      .attr("fill-opacity", "0.5")
-      d3.selectAll(".country")
-      .filter(d => d.properties.name === "Greece")
-      .transition()
-      .duration(1500)
-      .attr("fill", "#006b80")
-      .attr("fill-opacity", "0.5")
-            // .filter())
-    },
-    firstImage: function(){
+        .filter(
+          (d) =>
+            d.properties.name === "Tunisia" || d.properties.name === "Libya"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
 
-    }
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Italy")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
+      console.log(d3.select("mylabels"));
+
+      d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 1);
+      d3.selectAll(".mydots").attr("opacity", 1);
+    },
+    colorWestern: function () {
+      console.log("coloring Western");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Tunisia" ||
+            d.properties.name === "Libya" ||
+            d.properties.name === "Italy"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "none");
+
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Morocco")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Spain")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
+    },
+    colorWestern2: function () {
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Morocco" || d.properties.name === "Spain"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "grey");
+
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Mauritania" ||
+            d.properties.name === "Senegal"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "the Canary Islands")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
+    },
+    colorEastern: function () {
+      console.log("coloring central");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Morocco" || d.properties.name === "Spain"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "none");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Mauritania" ||
+            d.properties.name === "Senegal"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "none");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Turkey")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Greece")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
+      // .filter())
+    },
+    firstImage: function () {
+      console.log("calling");
+      var img = d3
+        .select("#photos")
+        .append("img")
+        .attr(
+          "src",
+          "https://api.time.com/wp-content/uploads/2015/10/italy-migrants-refugees-asylum-seekers-1.jpg"
+        )
+        .style("opacity", 0);
+      // .attr("right","-500px")
+      console.log(img);
+      img.transition().duration(4000).ease(d3.easeLinear).style("opacity", 1);
+    },
   },
 };
 </script>
@@ -364,16 +412,15 @@ export default {
   /* height: 10000px; */
 }
 
-
 @media (max-width: 900px) {
   #sections {
-  position: relative;
-  /* display: inline-block; */
-  width: 10rem;
-  /* top: 60px; */
-  z-index: 90;
-  /* margin-left: rem; */
-}
+    position: relative;
+    /* display: inline-block; */
+    width: 10rem;
+    /* top: 60px; */
+    z-index: 90;
+    /* margin-left: rem; */
+  }
 }
 
 .step {
@@ -400,19 +447,19 @@ p {
 
 @media (max-width: 900px) {
   .step {
-  margin-bottom: 1rem;
-  height: 50rem;
-  /* font-family: "Domine"; */
-  font-family: "Courier New", Courier, monospace;
-  font-weight: 400;
-  line-height: 1.4em;
-  font-size: 0.5em;
-  text-align: justify;
-  /* margin-left: 0.5rem; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
+    margin-bottom: 1rem;
+    height: 50rem;
+    /* font-family: "Domine"; */
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 400;
+    line-height: 1.4em;
+    font-size: 0.5em;
+    text-align: justify;
+    /* margin-left: 0.5rem; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
 }
 #graphic {
   /* margin: auto; */
@@ -424,11 +471,11 @@ p {
 
 @media (max-width: 900px) {
   #graphic {
-  width: 100rem;
-  flex-direction: row;
-  align-items: top;
-  justify-content: space-around;
-}
+    width: 100rem;
+    flex-direction: row;
+    align-items: top;
+    justify-content: space-around;
+  }
 }
 
 #map {
@@ -439,12 +486,26 @@ p {
   /* right: -750px; */
   z-index: 1;
   /* margin-left: 0; */
-  height: 1000rem;
+  /* height: 100rem; */
   /* width: 1000rem; */
 }
 
+#photos {
+  /* display: inline-block; */
+  position: fixed;
+  top: 1rem;
 
+  left: 500px;
+  z-index: 1;
+  /* margin-left: 0; */
+  height: 10px;
+  width: 100px;
+}
 
+/* 
+rect{
+  z-index: 100;
+} */
 
 #app {
   /* font-family: Helvetica, Arial, sans-serif; */

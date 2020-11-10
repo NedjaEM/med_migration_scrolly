@@ -73,9 +73,16 @@ export default {
 <style scoped>
 p {
   font-family: "Courier New", Courier, monospace;
-  /* font-weight: 800; */
+  font-weight: 800;
   line-height: 1.4em;
   font-size: 1em;
+}
+
+h1 {
+  opacity: 0.8;
+   font-family: "Courier New", Courier, monospace;
+  /* font-weight: 800;
+  line-height: 1.4em; */
 }
 
 .step {

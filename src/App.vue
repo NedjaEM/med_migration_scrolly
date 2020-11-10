@@ -296,7 +296,7 @@ export default {
           .style("fill", "#53292a")
           .style("fill-opacity", 0.5)
           .style("opacity", 0)
-          .attr("stroke", "black")
+          .attr("stroke", "#2c3e50")
           .attr("cx", function (d) {
             return x(d.Year);
           })
@@ -322,8 +322,8 @@ export default {
             return y(d.Year);
           })
           .attr("font-family", "Courier")
-          .attr("fill", "black")
-          .attr("font-size","30px")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight","bold")
           .style("opacity", "0")
           .attr("font-size", "0.8em")
           .attr("text-anchor", "middle");
@@ -349,7 +349,8 @@ export default {
     },
 
     hideBubbles: function () {
-      d3.selectAll(".circle2").transition().duration(1000).style("opacity", 0);
+      d3.selectAll(".bubbles").transition().duration(1000).style("opacity", 0);
+      d3.selectAll(".text-years").transition().duration(1000).style("opacity", 0);
     },
 
     drawMap: function () {
@@ -511,7 +512,8 @@ export default {
         .filter((d) => d.Year === 2014)
         .transition()
         .duration(1000)
-        .style("fill-opacity", 1);
+        .style("fill", "#790306")
+        .style("fill-opacity","1");
     },
   },
 };
@@ -554,12 +556,28 @@ export default {
   justify-content: space-around;
 }
 
-p,
+
 text {
   font-family: "Courier New", Courier, monospace;
   /* font-weight: 800; */
   line-height: 1.4em;
   font-size: 1em;
+  
+}
+
+p {
+   font-family: "Courier New", Courier, monospace;
+  /* font-weight: 800; */
+  line-height: 1.4em;
+  font-size: 1em;
+  opacity: 0.6;
+}
+
+.text-years {
+  font-weight: 800;
+  font-size: 30px;
+  color: #2c3e50;
+  opacity: 0.6;
 }
 
 @media (max-width: 900px) {

@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <MapIntro></MapIntro>
+    <!-- <MapIntro></MapIntro> -->
     <div id="graphic">
       <div id="sections">
         <Story :state="state" :active_index="active_index"></Story>
       </div>
       <div id="map"></div>
-      <div id="photos"></div>
+      <!-- <div id="photos"></div> -->
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@ import MapIntro from "./components/MapIntro.vue";
 import Story from "./components/Story.vue";
 import * as d3 from "../../lib/d3";
 import map_json from "../public/Data/map.geo.json";
+import bar_data from "../public/Data/aggregate_data.csv";
 
 export default {
   name: "App",
@@ -29,6 +30,7 @@ export default {
       width: window.innerWidth * 1.2,
       height: window.innerHeight * 1.4,
       state: "",
+      loadData: [],
       active_index: 0,
       // scroll: this.scroller().container(d3.select("#graphic")),
       legend_keys: ["Departing", "Arriving"],
@@ -40,6 +42,7 @@ export default {
     };
   },
   mounted() {
+    console.log(bar_data);
     this.drawInitial();
 
     scroll = this.scroller().container(d3.select("#graphic"));
@@ -72,20 +75,31 @@ export default {
         console.log("section " + i);
         if (i == 0) {
           scroll_functions.hideMap();
+          scroll_functions.hideBubbles();
         }
         if (i == 1) {
           scroll_functions.drawMap();
+          scroll_functions.hideLegend()
         }
         if (i == 2) {
+          scroll_functions.drawMapNoTransition();
           scroll_functions.colorCentral();
         } else if (i == 3) {
+          scroll_functions.drawMapNoTransition()
           scroll_functions.colorWestern();
         } else if (i == 4) {
+          scroll_functions.drawMapNoTransition()
           scroll_functions.colorWestern2();
         } else if (i == 5) {
+          scroll_functions.drawMapNoTransition()
           scroll_functions.colorEastern();
+          scroll_functions.hideBubbles()
         } else if (i == 6) {
           scroll_functions.hideMap();
+          scroll_functions.drawBarChart();
+        } else if (i == 7) {
+          scroll_functions.chart2014();
+ 
         }
       });
       lastIndex = activeIndex;
@@ -244,6 +258,52 @@ export default {
         .attr("text-anchor", "left")
         .attr("opacity", 0)
         .style("alignment-baseline", "middle");
+
+      d3.csv(bar_data, d3.autoType).then((data) => {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        var x = d3
+          .scaleLinear()
+          .domain([2014, 2020])
+          .range([this.width / 5, this.width / 1.2]);
+
+        var y = d3
+          .scaleLinear()
+          .domain([2014, 2020])
+          .range([this.height / 1.5, this.height / 7]);
+
+        var z = d3
+          .scaleLinear()
+          .domain([0, d3.max(data, (d) => d["Total Arrivals"])])
+          .range([40, 120]);
+
+        this.svg
+          .append("g")
+          .selectAll(".dot")
+          
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("class", "dot")
+          .attr("cx", function (d) {
+            return x(d.Year);
+          })
+          .attr("cy", function (d) {
+            return y(d.Year);
+          })
+          .attr("r", function (d) {
+            return z(d["Total Arrivals"]);
+          })
+          .style("fill", "#53292a")
+          .style("fill-opacity",0.5)
+          .style("opacity", 0)
+          .attr("stroke", "black")
+          .append("text")
+          .attr("dx", function(d){return x(d.Year)})
+          .attr("dy", function(d){return y(d.Year)})
+          .text(function(d){return d.Year});
+
+      });
     },
 
     hideMap: function () {
@@ -252,27 +312,47 @@ export default {
         .duration(1000)
         .attr("fill", "none")
         .attr("opacity", 0);
+
+             d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
+      d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
+      
     },
+
+    hideLegend: function () {
+      d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
+      d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
+    },
+
+    hideBubbles: function () {
+      d3.selectAll(".dot")
+      .transition().duration(1000)
+      .style("opacity", 0);
+    },
+
     drawMap: function () {
-      console.log("setting maps opacity");
-      console.log(d3.selectAll("mydots"));
-      console.log(d3.selectAll("mylabels"));
       d3.selectAll(".country").attr("opacity", 1);
       var totalLength = d3.selectAll(".country").node().getTotalLength();
-      console.log(totalLength);
+
       d3.selectAll(".country")
         .attr("opacity", 1)
         .attr("stroke-dasharray", totalLength + " " + totalLength)
         .attr("stroke-dashoffset", totalLength)
         .transition()
-        .duration(2000)
+        .duration(1500)
         .ease(d3.easeLinear)
-        .attr("stroke-dashoffset", 0);
-      // this.svg.append('rect')
-      //  .attr("width",this.width/6)
-      //  .attr("height",this.height/7)
-      //  .attr("fill", "#a4dded")
-      //  .attr("x", 1000)
+        .attr("stroke-dashoffset", 0)
+        .attr("fill-opacity", 0);
+     
+    },
+     drawMapNoTransition: function () {
+      d3.selectAll(".country").attr("opacity", 1);
+     
+
+      d3.selectAll(".country")
+        .attr("opacity", 1)
+        .transition()
+        .attr("fill-opacity", 0);
+     
     },
     colorCentral: function () {
       console.log("coloring central");
@@ -295,7 +375,7 @@ export default {
       console.log(d3.select("mylabels"));
 
       d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 1);
-      d3.selectAll(".mydots").attr("opacity", 1);
+      d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 1);
     },
     colorWestern: function () {
       console.log("coloring Western");
@@ -397,6 +477,26 @@ export default {
       console.log(img);
       img.transition().duration(4000).ease(d3.easeLinear).style("opacity", 1);
     },
+
+    drawBarChart: function () {
+      d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
+      d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
+      d3.selectAll(".dot")
+      .transition().duration(1000)
+      .style("opacity", 0.7);
+    },
+
+    chart2014: function () {
+      console.log(d3.selectAll(".dot"))
+      d3.selectAll(".dot")
+        .filter(
+          (d) =>
+            d.Year = 2014
+        )
+        .transition()
+        .duration(1000)
+        .style("opacity",0)
+    }
   },
 };
 </script>
@@ -438,7 +538,7 @@ export default {
   justify-content: space-around;
 }
 
-p {
+p, text {
   font-family: "Courier New", Courier, monospace;
   /* font-weight: 800; */
   line-height: 1.4em;

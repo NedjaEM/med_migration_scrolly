@@ -79,27 +79,26 @@ export default {
         }
         if (i == 1) {
           scroll_functions.drawMap();
-          scroll_functions.hideLegend()
+          scroll_functions.hideLegend();
         }
         if (i == 2) {
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorCentral();
         } else if (i == 3) {
-          scroll_functions.drawMapNoTransition()
+          scroll_functions.drawMapNoTransition();
           scroll_functions.colorWestern();
         } else if (i == 4) {
-          scroll_functions.drawMapNoTransition()
+          scroll_functions.drawMapNoTransition();
           scroll_functions.colorWestern2();
         } else if (i == 5) {
-          scroll_functions.drawMapNoTransition()
+          scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
-          scroll_functions.hideBubbles()
+          scroll_functions.hideBubbles();
         } else if (i == 6) {
           scroll_functions.hideMap();
           scroll_functions.drawBarChart();
         } else if (i == 7) {
           scroll_functions.chart2014();
- 
         }
       });
       lastIndex = activeIndex;
@@ -232,7 +231,7 @@ export default {
           return 100 + i * 25;
         })
         .attr("r", 10)
-        .attr("opacity", 0)
+        .attr("opacity", 0) 
         .style("fill", function (d) {
           return color(d);
         });
@@ -277,14 +276,27 @@ export default {
           .domain([0, d3.max(data, (d) => d["Total Arrivals"])])
           .range([40, 120]);
 
-        this.svg
-          .append("g")
-          .selectAll(".dot")
-          
+        //Creating the groups
+        var circles = this.svg.selectAll("g.circles");
+
+        //Adding circles to the groups
+        circles = circles
           .data(data)
           .enter()
-          .append("circle")
-          .attr("class", "dot")
+          .append("g")
+          .classed("circles", true);
+
+        circles.append("svg:circle")
+        .attr("class","bubbles");
+
+        //Styling the circles.
+        circles
+
+          .selectAll("circle")
+          .style("fill", "#53292a")
+          .style("fill-opacity", 0.5)
+          .style("opacity", 0)
+          .attr("stroke", "black")
           .attr("cx", function (d) {
             return x(d.Year);
           })
@@ -293,15 +305,29 @@ export default {
           })
           .attr("r", function (d) {
             return z(d["Total Arrivals"]);
+          });
+
+        //Adding text labels to the groups
+        circles.append("text");
+
+        //Styling text
+        circles
+          .selectAll("text")
+          .attr("class","text-years")
+          .text(d => d.Year)
+           .attr("dx", function (d) {
+            return x(d.Year);
           })
-          .style("fill", "#53292a")
-          .style("fill-opacity",0.5)
-          .style("opacity", 0)
-          .attr("stroke", "black")
-          .append("text")
-          .attr("dx", function(d){return x(d.Year)})
-          .attr("dy", function(d){return y(d.Year)})
-          .text(function(d){return d.Year});
+          .attr("dy", function (d) {
+            return y(d.Year);
+          })
+          .attr("font-family", "Courier")
+          .attr("fill", "black")
+          .attr("font-size","30px")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
+
 
       });
     },
@@ -313,9 +339,8 @@ export default {
         .attr("fill", "none")
         .attr("opacity", 0);
 
-             d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
+      d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
       d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
-      
     },
 
     hideLegend: function () {
@@ -324,9 +349,7 @@ export default {
     },
 
     hideBubbles: function () {
-      d3.selectAll(".dot")
-      .transition().duration(1000)
-      .style("opacity", 0);
+      d3.selectAll(".circle2").transition().duration(1000).style("opacity", 0);
     },
 
     drawMap: function () {
@@ -342,17 +365,14 @@ export default {
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0)
         .attr("fill-opacity", 0);
-     
     },
-     drawMapNoTransition: function () {
+    drawMapNoTransition: function () {
       d3.selectAll(".country").attr("opacity", 1);
-     
 
       d3.selectAll(".country")
         .attr("opacity", 1)
         .transition()
         .attr("fill-opacity", 0);
-     
     },
     colorCentral: function () {
       console.log("coloring central");
@@ -481,22 +501,18 @@ export default {
     drawBarChart: function () {
       d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
       d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
-      d3.selectAll(".dot")
-      .transition().duration(1000)
-      .style("opacity", 0.7);
+      console.log(d3.selectAll("circle"))
+      d3.selectAll(".bubbles").transition().duration(1000).style("opacity", 0.7);
+      d3.selectAll(".text-years").transition().duration(1000).style("opacity", 0.7)
     },
 
     chart2014: function () {
-      console.log(d3.selectAll(".dot"))
-      d3.selectAll(".dot")
-        .filter(
-          (d) =>
-            d.Year = 2014
-        )
+      d3.selectAll(".bubbles")
+        .filter((d) => d.Year === 2014)
         .transition()
         .duration(1000)
-        .style("opacity",0)
-    }
+        .style("fill-opacity", 1);
+    },
   },
 };
 </script>
@@ -538,7 +554,8 @@ export default {
   justify-content: space-around;
 }
 
-p, text {
+p,
+text {
   font-family: "Courier New", Courier, monospace;
   /* font-weight: 800; */
   line-height: 1.4em;

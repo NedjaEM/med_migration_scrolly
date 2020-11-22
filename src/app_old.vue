@@ -1,25 +1,12 @@
 <template>
   <div id="app">
-    <!-- <MapIntro></MapIntro> -->
-    <div id="graphic">
+    <MapIntro></MapIntro>
+    <!-- <div id="graphic">
       <div id="sections">
         <Story :state="state" :active_index="active_index"></Story>
       </div>
       <div id="map"></div>
-      <!-- <div id="photos"></div> -->
-    </div>
-    <div id="graphic2">
-      <div id="sections">
-        <Story2 :state="state" :active_index="active_index"></Story2>
-      </div>
-      <div id="bub"></div>
-    </div>
-    <div id="graphic3">
-      <div id="sections">
-        <Story2 :state="state" :active_index="active_index"></Story2>
-      </div>
-      <div id="bub2"></div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -27,18 +14,15 @@
 /* eslint-disable */
 import MapIntro from "./components/MapIntro.vue";
 import Story from "./components/Story.vue";
-import Story2 from "./components/Story2.vue";
 import * as d3 from "../../lib/d3";
 import map_json from "../public/Data/map.geo.json";
 import bar_data from "../public/Data/aggregate_data.csv";
-import missing_data from "../public/Data/med_migrants.csv";
 
 export default {
   name: "App",
   components: {
     MapIntro,
     Story,
-    Story2,
   },
   data: function () {
     return {
@@ -54,15 +38,9 @@ export default {
         .append("svg")
         .attr("width", this.width)
         .attr("height", this.height),
-      svg2: d3
-        .select("#bub")
-        .append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height),
     };
   },
   mounted() {
-    console.log(bar_data);
     this.drawInitial();
 
     scroll = this.scroller().container(d3.select("#graphic"));
@@ -85,23 +63,21 @@ export default {
       activeIndex = index;
       scroll_functions.active_index = activeIndex;
 
-      console.log("scroll func ", scroll_functions);
-
       let sign = activeIndex - lastIndex < 0 ? -1 : 1;
       let scrolledSections = d3.range(
         lastIndex + sign,
         activeIndex + sign,
         sign
       );
-
-      console.log("scrolled sec ", scrolledSections);
       scrolledSections.forEach((i) => {
-        console.log("function ", i);
+        console.log("section " + i);
         if (i == 0) {
           scroll_functions.hideMap();
+          scroll_functions.hideBubbles();
         }
         if (i == 1) {
           scroll_functions.drawMap();
+          scroll_functions.hideLegend();
           scroll_functions.hideRoute12();
         }
         if (i == 2) {
@@ -123,17 +99,6 @@ export default {
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
           scroll_functions.hideBubbles();
-        } else if (i == 6) {
-          scroll_functions.hideMap();
-          scroll_functions.hideRoute6();
-          // scroll_functions.firstImage();
-          scroll_functions.hideChart()
-           scroll_functions.drawBarChart();
-          //  scroll_functions.zoomBackChart()
-        } else if (i == 7) {
-          scroll_functions.unzoomChart()
-          scroll_functions.chart2014();
-          // scroll_functions.drawSecondBub();
         }
       });
       lastIndex = activeIndex;
@@ -143,8 +108,6 @@ export default {
       if ((index == 2) & (progress > 0.7)) {
       }
     });
-
-    this.drawInitialBub();
   },
   methods: {
     scroller: function () {
@@ -221,353 +184,7 @@ export default {
 
       return scroll;
     },
-    drawSecondBub: function () {
-      this.svg = this.svg = d3
-        .select("#bub2")
-        .append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height);
 
-      d3.csv(missing_data, d3.autoType).then((data) => {
-        //   var deadByYear = d3
-        //     .nest()
-        //     .key(function (d) {
-
-        //       return [d["Region of Incident"], d["Reported Year"]];
-        //     })
-        //     .rollup(function (leaves) {
-        //       return {
-        //         numberDead: d3.sum(leaves, function (d) {
-        //           return d["Number Dead"];
-        //         }),
-        //       };
-        //     })
-        //     .entries(data);
-        //   console.log("rollup data is ",deadByYear)
-        let color = d3.scaleSequential(
-          d3.extent(data, (d) => d.year),
-          d3.interpolateCividis
-        );
-        let yAxis = (g) =>
-          g
-            .call(d3.axisLeft(y).ticks(8))
-            .call((g) => g.select(".domain").remove())
-            .call((g) => g.selectAll(".tick line").remove());
-
-        let xAxis = (g) =>
-          g
-            .call(d3.axisTop(x))
-            .call((g) => g.select(".domain").remove())
-            .call((g) =>
-              g
-                .append("text")
-                .attr("x", this.width)
-                .attr("y", 20)
-                .attr("font-weight", "bold")
-                .attr("fill", "currentColor")
-                .attr("text-anchor", "end")
-                .text("Month")
-            );
-
-        let r = d3
-          .scaleSqrt()
-          .domain(d3.extent(data, (d) => d.missing_dead))
-          .range([1, 10]);
-
-        let y = d3.scaleBand().domain(["All"]).range([noSplitHeight, 0]);
-        let x = d3
-          .scaleLinear()
-          .domain(d3.extent(data, (d) => d.month))
-          .range([0, this.width]);
-
-        // let groups = d3.group(data, (d) => d.year);
-
-        let force = d3
-          .forceSimulation(data)
-          .force("charge", d3.forceManyBody().strength(0))
-          .force(
-            "x",
-            d3.forceX().x((d) => x(d.month))
-          )
-          .force(
-            "y",
-            d3.forceY((d) => y(d.year))
-          )
-          .force(
-            "collision",
-            d3.forceCollide().radius((d) => r(d.missing_dead) + 1)
-          );
-
-        let noSplitHeight = 500;
-        let splitHight = 900;
-
-        const wrapper = this.svg.append("g");
-        // .attr("transform", `translate(${margin.left}, ${margin.top})`);
-        console.log("wrapper is ", wrapper);
-        // Add x-Axis
-        wrapper.append("g").call(xAxis);
-
-        const yAxisContainer = wrapper
-          .append("g")
-          .attr("transform", `translate(-10,0)`);
-
-        const circles = wrapper
-          .append("g")
-          .attr("class", "circles")
-          .selectAll("circle")
-          .data(data)
-          .join("circle")
-          .attr("r", function (d) {
-            console.log("radisu is ", d.missing_dead);
-            r(d.missing_dead);
-          })
-          .attr("fill", (d) => color(d.year))
-          .attr("cx", function (d) {
-            console.log("cx is ", d.month);
-            x(d.month);
-          })
-          .attr("cy", (d) => y(d.year) + y.bandwidth() / 2);
-
-        force.on("tick", () => {
-          circles
-            .transition()
-            .ease(d3.easeLinear)
-            .attr("cx", (d) => d.x)
-            .attr("cy", (d) => d.y);
-        });
-
-        //  invalidation.then(() => force.stop());
-
-        // return Object.assign(svg.node(), {
-        //   update(split) {
-        //     let height = split ? splitHeight : noSplitHeight;
-        //     let years = [...yearGroups.keys()].sort()
-
-        //     // Update height of svg object
-        //     const t = d3.transition().duration(750);
-        //     svg.transition(t).attr('viewBox', [0, 0, width, height]);
-
-        //     // Update domain of y-Axis
-        //     y.domain(split ? years : ['All']);
-        //     y.range(split ? [splitHeight , 0] : [noSplitHeight , 0]);
-        //     yAxisContainer.call(yAxis, y, split ? years : ['All'])
-        //       .call(g => g.select('.domain').remove())
-        //       .call(g => g.selectAll('.tick line').remove());
-
-        //     // Update simulation
-        //     force.force('y', split ? d3.forceY(d => y(d.year) + y.bandwidth() / 2) : // If split by year align by year
-        //                              d3.forceY((noSplitHeight) / 2)); // If not split align to middle
-        //     //force.nodes(running);
-        //     force.alpha(1).restart();
-        //   }
-        // })
-      });
-    },
-
-    drawInitialBub: function () {
-      this.svg = d3
-        .select("#bub")
-        .append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height);
-
-      d3.csv(bar_data, d3.autoType).then((data) => {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        var x = d3
-          .scaleLinear()
-          .domain([2014, 2020])
-          .range([this.width / 5, this.width / 1.2]);
-
-        let g = this.svg.append("g");
-        var y = d3
-          .scaleLinear()
-          .domain([2014, 2020])
-          .range([this.height / 1.5, this.height / 7]);
-
-        var z = d3
-          .scaleLinear()
-          .domain([0, d3.max(data, (d) => d["Total Arrivals"])])
-          .range([40, 120]);
-
-        const [width, height, margin] = [this.width, 250, 15];
-
-        const radius = data[0]["Total Arrivals"] / 5000 - margin;
-        console.log(radius);
-        const xStart = width / 20 + (0.5 * data[0]["Year"]) / 10;
-        const yStart = height * 1.5 - radius;
-        const circle = g
-          .append("path")
-          .attr("class", "second")
-          .attr(
-            "d",
-            `M ${xStart},${yStart}
-                a ${radius} ${radius} 0 1 1 0 ${radius * 2}
-                  ${radius} ${radius} 0 1 1 0 ${-radius * 2} z`
-          );
-
-        const radius2 = data[1]["Total Arrivals"] / 5000 - margin;
-        const xStart2 = width / 10 + (1.5 * data[1]["Year"]) / 10;
-        const yStart2 = height * 1.5 - radius2;
-        const circle2 = g
-          .append("path")
-          .attr("class", "second")
-          .attr(
-            "d",
-            `M ${xStart2},${yStart2}
-                a ${radius2} ${radius2} 0 1 1 0 ${radius2 * 2}
-                  ${radius2} ${radius2} 0 1 1 0 ${-radius2 * 2} z`
-          );
-
-        const radius3 = data[2]["Total Arrivals"] / 5000 - margin;
-        const xStart3 = width / 4 + (2 * data[2]["Year"]) / 10;
-        const yStart3 = height * 1.5 - radius3;
-        const circle3 = g
-          .append("path")
-          .attr("class", "second")
-          .attr(
-            "d",
-            `M ${xStart3},${yStart3}
-                a ${radius3} ${radius3} 0 1 1 0 ${radius3 * 2}
-                  ${radius3} ${radius3} 0 1 1 0 ${-radius3 * 2} z`
-          );
-
-        const radius4 = data[3]["Total Arrivals"] / 5000 - margin;
-        const xStart4 = width / 3.5 + (2.5 * data[3]["Year"]) / 10;
-        const yStart4 = height * 1.5 - radius4;
-        const circle4 = g
-          .append("path")
-          .attr("class", "second")
-          .attr(
-            "d",
-            `M ${xStart4},${yStart4}
-                a ${radius4} ${radius4} 0 1 1 0 ${radius4 * 2}
-                  ${radius4} ${radius4} 0 1 1 0 ${-radius4 * 2} z`
-          );
-
-        const radius5 = data[4]["Total Arrivals"] / 5000 - margin;
-        const xStart5 = width / 3.4 + (3 * data[4]["Year"]) / 10;
-        const yStart5 = height * 1.5 - radius5;
-        const circle5 = g
-          .append("path")
-          .attr("class", "second")
-          .attr(
-            "d",
-            `M ${xStart5},${yStart5}
-                a ${radius5} ${radius5} 0 1 1 0 ${radius5 * 2}
-                  ${radius5} ${radius5} 0 1 1 0 ${-radius5 * 2} z`
-          );
-
-        const radius6 = data[5]["Total Arrivals"] / 5000 - margin;
-        const xStart6 = width / 3 + (3 * data[5]["Year"]) / 10;
-        const yStart6 = height * 1.5 - radius6;
-        const circle6 = g
-          .append("path")
-          .attr("class", "second")
-          .attr(
-            "d",
-            `M ${xStart6},${yStart6}
-                a ${radius6} ${radius6} 0 1 1 0 ${radius6 * 2}
-                  ${radius6} ${radius6} 0 1 1 0 ${-radius6 * 2} z`
-          );
-
-        circle
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle2
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle3
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle4
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle5
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle6
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        var x = d3
-          .scaleSqrt()
-          .domain([2014, 2020])
-          .range([xStart - 100, xStart6 + 100]);
-
-        g.selectAll("text")
-          .data(data)
-          .join("text")
-          .attr("class", "text-years")
-          .text((d) => d.Year)
-          .attr("dx", (d) => x(d.Year) + d.Year / 20)
-          .attr("dy", this.height / 5)
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        // var circles = this.svg.selectAll("g.circles");
-        // //Adding circles to the groups
-        // circles = circles
-        //   .data(data)
-        //   .enter()
-        //   .append("g")
-        //   .classed("circles", true);
-
-        //Styling the circles.
-        // const circle = this.svg.append("g")
-        //   .selectAll(".bubbles")
-        //   .data(data)
-        //   .join("path")
-        //   .attr(
-        //     "d",
-        //     `M ${this.width/5 -z(d["Total Arrivals"])},${this.height/2 - z(d["Total Arrivals"])}
-        //         a ${z(d["Total Arrivals"])} ${z(d["Total Arrivals"])} 0 1 1 0 ${z(d["Total Arrivals"]) * 2}
-        //           ${z(d["Total Arrivals"])} ${z(d["Total Arrivals"])} 0 1 1 0 ${-z(d["Total Arrivals"]) * 2} z`
-        //   )
-        //   .attr("class","bubbles")
-        //   .attr("fill", "none")
-        //   .attr("stroke", "black")
-        //   .attr("stroke-width", "1.5")
-        //   .style("opacity", 1)
-
-        //  circle
-        // .attr("fill", "none")
-        // .attr("stroke", "black")
-        // .attr("stroke-width", "1.5")
-        // .attr("opacity", 0);
-      });
-      this.svg
-        .append("image")
-        .attr("class", "img")
-        .attr(
-          "xlink:href",
-          "https://api.time.com/wp-content/uploads/2015/10/italy-migrants-refugees-asylum-seekers-1.jpg"
-        )
-        // .attr("height",this.height/1.5)
-        // .attr("width",this.width /1.5)
-        .style("opacity", 0);
-    },
     drawInitial: function () {
       this.svg = d3
         .select("#map")
@@ -595,8 +212,93 @@ export default {
 
       d3.selectAll(".country").attr("opacity", 0);
 
-      console.log(this.svg);
-      console.log(d3.selectAll(".country"));
+      //drawing legend
+
+      var color = d3
+        .scaleOrdinal()
+        .domain(this.legend_keys)
+        .range(["#800020", "#006b80"]);
+
+      this.svg
+        .selectAll(".mydots")
+        .data(this.legend_keys)
+        .enter()
+        .append("circle")
+        .attr("class", "mydots")
+        .attr("cx", 1300)
+        .attr("cy", function (d, i) {
+          return 100 + i * 25;
+        })
+        .attr("r", 10)
+        .attr("opacity", 0)
+        .style("fill", function (d) {
+          return color(d);
+        });
+
+      // Add one dot in the legend for each name.
+      this.svg
+        .selectAll(".mylabels")
+        .data(this.legend_keys)
+        .enter()
+        .append("text")
+        .attr("class", "mylabels")
+        .attr("x", 1320)
+        .attr("y", function (d, i) {
+          return 100 + i * 25;
+        })
+        .style("font-size", "30px")
+        .style("fill", function (d) {
+          return color(d);
+        })
+        .text(function (d) {
+          return d;
+        })
+        .attr("text-anchor", "left")
+        .attr("opacity", 0)
+        .style("alignment-baseline", "middle");
+
+      d3.csv(bar_data, d3.autoType).then((data) => {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        var x = d3
+          .scaleLinear()
+          .domain([2014, 2020])
+          .range([this.width / 5, this.width / 1.2]);
+
+        var y = d3
+          .scaleLinear()
+          .domain([2014, 2020])
+          .range([this.height / 1.5, this.height / 7]);
+
+        var z = d3
+          .scaleLinear()
+          .domain([0, d3.max(data, (d) => d["Total Arrivals"])])
+          .range([40, 120]);
+
+        //Creating the groups
+        var circles = this.svg.selectAll("g.circles");
+
+        const [width, height, margin] = [this.width, 250, 15];
+
+        const radius = Math.min(width, height) / 2 - margin;
+        const xStart = width / 5;
+        const yStart = height * 2 - radius;
+        const circle = this.svg
+          .append("path")
+          .attr("class", "first")
+          .attr(
+            "d",
+            `M ${xStart},${yStart}
+                a ${radius} ${radius} 0 1 1 0 ${radius * 2}
+                  ${radius} ${radius} 0 1 1 0 ${-radius * 2} z`
+          );
+
+        circle
+          .attr("fill", "none")
+          .attr("stroke", "black")
+          .attr("stroke-width", "1.5")
+          .attr("opacity", 0);
+      });
 
       let tunis = [10, 33];
       let tunis_mid = [10.6, 36.41];
@@ -614,6 +316,8 @@ export default {
       let turkey = [30, 40];
       let turkey_mid = [28, 37];
       let greece = [22, 37.655];
+
+      console.log(projection([28.2916, 16.6]));
 
       const curve = d3.line().curve(d3.curveNatural);
 
@@ -750,10 +454,10 @@ export default {
 
     hideBubbles: function () {
       d3.selectAll(".bubbles").transition().duration(1000).style("opacity", 0);
-      // d3.selectAll(".text-years")
-      //   .transition()
-      //   .duration(1000)
-      //   .style("opacity", 1);
+      d3.selectAll(".text-years")
+        .transition()
+        .duration(1000)
+        .style("opacity", 0);
     },
 
     drawMap: function () {
@@ -800,6 +504,37 @@ export default {
       // d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 1);
       // d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 1);
 
+      const projection = d3
+        .geoMercator()
+        .fitSize([this.width, this.height], map_json);
+
+      const totalLength_route1 = d3
+        .selectAll(".route1")
+        .node()
+        .getTotalLength();
+      const totalLength_route2 = d3
+        .selectAll(".route2")
+        .node()
+        .getTotalLength();
+
+      d3.selectAll(".route1")
+        .attr("opacity", 1)
+        .attr("stroke-dasharray", totalLength_route1 + " " + totalLength_route1)
+        .attr("stroke-dashoffset", totalLength_route1)
+        .transition()
+        .duration(1000)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+
+      d3.selectAll(".route2")
+        .attr("opacity", 1)
+        .attr("stroke-dasharray", totalLength_route2 + " " + totalLength_route2)
+        .attr("stroke-dashoffset", totalLength_route2)
+        .transition()
+        .duration(1000)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+
       var zoom = d3.zoom().on("zoom", zoomed);
       var zoomLines1 = d3.zoom().on("zoom", zoomedLines1);
       var zoomLines2 = d3.zoom().on("zoom", zoomedLines2);
@@ -838,11 +573,13 @@ export default {
 
       d3.selectAll(".country")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(zoom.transform, d3.zoomIdentity.translate(-600, -100).scale(1.8));
 
       d3.selectAll(".route1")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(
           zoomLines1.transform,
@@ -850,6 +587,7 @@ export default {
         );
       d3.selectAll(".route2")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(
           zoomLines2.transform,
@@ -857,11 +595,13 @@ export default {
         );
       d3.selectAll(".route3")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(
           zoomLines3.transform,
           d3.zoomIdentity.translate(-600, -100).scale(1.8)
         );
+
 
       d3.selectAll(".route4")
         .transition()
@@ -871,7 +611,7 @@ export default {
           d3.zoomIdentity.translate(-600, -100).scale(1.8)
         );
 
-      d3.selectAll(".route5")
+       d3.selectAll(".route5")
         .transition()
         .duration(750)
         .call(
@@ -887,41 +627,22 @@ export default {
           zoomLines6.transform,
           d3.zoomIdentity.translate(-600, -100).scale(1.8)
         );
-
-      const projection = d3
-        .geoMercator()
-        .fitSize([this.width, this.height], map_json);
-
-      const totalLength_route1 = d3
-        .selectAll(".route1")
-        .node()
-        .getTotalLength();
-      const totalLength_route2 = d3
-        .selectAll(".route2")
-        .node()
-        .getTotalLength();
-
-      d3.selectAll(".route1")
-        .attr("opacity", 1)
-        .attr("stroke-dasharray", totalLength_route1 + " " + totalLength_route1)
-        .attr("stroke-dashoffset", totalLength_route1)
-        .transition()
-        .delay(750)
-        .duration(750)
-        .ease(d3.easeLinear)
-        .attr("stroke-dashoffset", 0);
-
-      d3.selectAll(".route2")
-        .attr("opacity", 1)
-        .attr("stroke-dasharray", totalLength_route2 + " " + totalLength_route2)
-        .attr("stroke-dashoffset", totalLength_route2)
-        .transition()
-        .delay(750)
-        .duration(750)
-        .ease(d3.easeLinear)
-        .attr("stroke-dashoffset", 0);
     },
     colorWestern: function () {
+      const totalLength_route3 = d3
+        .selectAll(".route3")
+        .node()
+        .getTotalLength();
+
+      d3.selectAll(".route3")
+        .attr("opacity", 1)
+        .attr("stroke-dasharray", totalLength_route3 + " " + totalLength_route3)
+        .attr("stroke-dashoffset", totalLength_route3)
+        .transition()
+        .duration(1000)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+
       var zoom = d3.zoom().on("zoom", zoomed);
 
       function zoomed() {
@@ -930,6 +651,7 @@ export default {
 
       d3.selectAll(".country")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(zoom.transform, d3.zoomIdentity.translate(-400, -400).scale(1.7));
 
@@ -941,12 +663,15 @@ export default {
 
       d3.selectAll(".route3")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(
           zoomLines3.transform,
           d3.zoomIdentity.translate(-400, -400).scale(1.7)
         );
 
+
+      
       var zoomLines4 = d3.zoom().on("zoom", zoomedLines4);
       var zoomLines5 = d3.zoom().on("zoom", zoomedLines5);
       var zoomLines6 = d3.zoom().on("zoom", zoomedLines6);
@@ -1039,20 +764,6 @@ export default {
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
 
-      const totalLength_route3 = d3
-        .selectAll(".route3")
-        .node()
-        .getTotalLength();
-
-      d3.selectAll(".route3")
-        .attr("opacity", 1)
-        .attr("stroke-dasharray", totalLength_route3 + " " + totalLength_route3)
-        .attr("stroke-dashoffset", totalLength_route3)
-        .transition()
-        .delay(750)
-        .duration(750)
-        .ease(d3.easeLinear)
-        .attr("stroke-dashoffset", 0);
     },
     colorWestern2: function () {
       // d3.selectAll(".country")
@@ -1142,6 +853,20 @@ export default {
       //   .attr("fill-opacity", "0.5");
       //   .filter())
 
+      const totalLength_route6 = d3
+        .selectAll(".route6")
+        .node()
+        .getTotalLength();
+
+      d3.selectAll(".route6")
+        .attr("opacity", 1)
+        .attr("stroke-dasharray", totalLength_route6 + " " + totalLength_route6)
+        .attr("stroke-dashoffset", totalLength_route6)
+        .transition()
+        .duration(1000)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+
       function zoomed() {
         d3.selectAll(".country").attr("transform", d3.event.transform);
       }
@@ -1154,6 +879,7 @@ export default {
 
       d3.selectAll(".country")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(
           zoom.transform,
@@ -1163,118 +889,55 @@ export default {
       console.log("route 6 is ", d3.selectAll(".route6"));
       d3.selectAll(".route6")
         .transition()
+        .delay(1000)
         .duration(750)
         .call(
           zoomLines6.transform,
           d3.zoomIdentity.translate(-1000, -200).scale(1.9)
         );
-
-      const totalLength_route6 = d3
-        .selectAll(".route6")
-        .node()
-        .getTotalLength();
-
-      d3.selectAll(".route6")
-        .attr("opacity", 1)
-        .attr("stroke-dasharray", totalLength_route6 + " " + totalLength_route6)
-        .attr("stroke-dashoffset", totalLength_route6)
-        .transition()
-        .delay(750)
-        .duration(1000)
-        .ease(d3.easeLinear)
-        .attr("stroke-dashoffset", 0);
     },
     firstImage: function () {
-      d3.selectAll(".img")
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear)
-        .style("opacity", 1)
-        .attr("height", this.height / 1.5)
-        .attr("width", this.width / 1.5);
+      console.log("calling");
+      var img = d3
+        .select("#photos")
+        .append("img")
+        .attr(
+          "src",
+          "https://api.time.com/wp-content/uploads/2015/10/italy-migrants-refugees-asylum-seekers-1.jpg"
+        )
+        .style("opacity", 0);
+      // .attr("right","-500px")
+      console.log(img);
+      img.transition().duration(4000).ease(d3.easeLinear).style("opacity", 1);
     },
 
     drawBarChart: function () {
-      let pathLength2;
-      d3.selectAll(".second")
+      d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
+      d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
+      console.log(d3.selectAll("circle"));
+      // d3.selectAll(".bubbles")
+      //   .transition()
+      //   .duration(1000)
+      //   .style("opacity", 0.7);
+      // d3.selectAll(".text-years")
+      //   .transition()
+      //   .duration(1000)
+      //   .style("opacity", 0.7);
+
+      let pathLength;
+      const numDashes = 0;
+      const spacing = 0.2;
+      d3.selectAll(".first")
         .attr("stroke-dasharray", function () {
-          pathLength2 = 40 * this.getTotalLength();
+          pathLength = this.getTotalLength();
         })
         .attr("opacity", 1)
-        .attr("stroke-dasharray", pathLength2 + " " + pathLength2)
-        .attr("stroke-dashoffset", pathLength2)
+        .attr("stroke-dasharray", pathLength + " " + pathLength)
+        .attr("stroke-dashoffset", pathLength)
         .transition()
         .duration(1500)
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
-
-      d3.selectAll(".text-years").style("opacity", "1").transition();
-    },
-
-    hideChart: function () {
-      d3.selectAll(".second")
-        .attr("opacity","0")
-        .transition()
-      d3.selectAll(".text-years")
-        .style("opacity","0")
-        .transition()
-    },
-
-
-    unzoomChart: function (){
-       function zoomed() {
-        d3.selectAll(".second").attr("transform", d3.event.transform);
-      }
-      function zoomedText() {
-        d3.selectAll(".text-years").attr("transform", d3.event.transform);
-      }
-
-      var zoom = d3.zoom().on("zoom", zoomed);
-      var zoomText = d3.zoom().on("zoom", zoomedText);
-
-      d3.selectAll(".second")
-        .transition()
-        .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(600, -50).scale(0.5)
-        );
-      
-      d3.selectAll(".text-years")
-        .transition()
-        .duration(750)
-        .call(
-          zoomText.transform,
-          d3.zoomIdentity.translate(600, -50).scale(0.5)
-        );
-    },
-
-    zoomBackChart: function(){
-         function zoomed() {
-        d3.selectAll(".second").attr("transform", d3.event.transform);
-      }
-      function zoomedText() {
-        d3.selectAll(".text-years").attr("transform", d3.event.transform);
-      }
-
-      var zoom = d3.zoom().on("zoom", zoomed);
-      var zoomText = d3.zoom().on("zoom", zoomedText);
-
-      d3.selectAll(".second")
-        .transition()
-        .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(-600, 50).scale(1)
-        );
-      
-      d3.selectAll(".text-years")
-        .transition()
-        .duration(750)
-        .call(
-          zoomText.transform,
-          d3.zoomIdentity.translate(-600, 50).scale(1)
-        );
     },
 
     resetChart: function () {
@@ -1294,7 +957,6 @@ export default {
         .style("fill", "#790306")
         .style("fill-opacity", "1");
     },
-
 
     resetZoom: function () {
       var zoom = d3.zoom().on("zoom", zoomed);
@@ -1336,7 +998,6 @@ export default {
   z-index: 90;
   margin-left: 1rem;
   /* height: 10000px; */
-  padding: 2px;
 }
 
 @media (max-width: 900px) {
@@ -1403,15 +1064,12 @@ p {
     justify-content: space-around;
   }
 }
-#graphic,
-#graphic2,
-#graphic3 {
+#graphic {
   /* margin: auto; */
   width: 100rem;
   flex-direction: row;
   align-items: top;
   justify-content: space-around;
-  padding: 2px;
 }
 
 @media (max-width: 900px) {
@@ -1423,9 +1081,7 @@ p {
   }
 }
 
-#map,
-#bub,
-#bub2 {
+#map {
   /* display: inline-block; */
   position: fixed;
   top: 1rem;
@@ -1435,17 +1091,18 @@ p {
   /* margin-left: 0; */
   /* height: 100rem; */
   /* width: 1000rem; */
-  padding: 2px;
 }
 
-#img {
+#photos {
   /* display: inline-block; */
-  /* position: fixed; */
-  /* top: 1rem; */
+  position: fixed;
+  top: 1rem;
 
   left: 500px;
   z-index: 1;
   /* margin-left: 0; */
+  height: 10px;
+  width: 100px;
 }
 
 /* 
@@ -1462,12 +1119,5 @@ rect{
   background-color: #dbd9d2;
   margin-top: 1rem;
   /* max-width: 100rem; */
-}
-
-.text-years {
-  font-weight: 800;
-  font-size: 30px;
-  color: #2c3e50;
-  opacity: 0.6;
 }
 </style>

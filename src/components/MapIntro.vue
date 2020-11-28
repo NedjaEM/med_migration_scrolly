@@ -144,7 +144,7 @@ export default {
       }
 
       function position() {
-        let pos = window.pageYOffset - 400 - containerStart;
+        let pos = window.pageYOffset - 1000 - containerStart;
         let sectionIndex = d3.bisect(sectionPositions, pos);
         sectionIndex = Math.min(sections.size() - 1, sectionIndex);
 

@@ -1,26 +1,46 @@
 <template>
-  <div id="app">
-    <!-- <MapIntro></MapIntro> -->
-    <div id="graphic">
-      <div id="sections">
-        <Story :state="state" :active_index="active_index"></Story>
+  <main class="scroll-container">
+    <!-- <section>
+        <h2></h2>
+    </section> -->
+    <header>
+      <h1 class="header_title">
+        Mapping State Violence and Colonial Legacies in the Mediterranean
+      </h1>
+      <nav>
+        <ul class="header_nav">
+          <li class="header_navItem">
+            <a href="#">Menu</a>
+          </li>
+          <li class="header_navItem">
+            <a href="#">Account</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <div id="app">
+      <!-- <MapIntro></MapIntro> -->
+      <div id="graphic">
+        <div id="sections">
+          <Story :state="state" :active_index="active_index"></Story>
+        </div>
+        <div id="map"></div>
+        <!-- <div id="photos"></div> -->
       </div>
-      <div id="map"></div>
-      <!-- <div id="photos"></div> -->
-    </div>
-    <div id="graphic2">
-      <div id="sections">
-        <Story2 :state="state" :active_index="active_index"></Story2>
+      <div id="graphic2">
+        <div id="sections">
+          <Story2 :state="state" :active_index="active_index"></Story2>
+        </div>
+        <div id="bub"></div>
       </div>
-      <div id="bub"></div>
-    </div>
-    <div id="graphic3">
-      <div id="sections">
-        <Story2 :state="state" :active_index="active_index"></Story2>
+      <div id="graphic3">
+        <div id="sections">
+          <Story3 :state="state" :active_index="active_index"></Story3>
+        </div>
+        <div id="bub2"></div>
       </div>
-      <div id="bub2"></div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -28,6 +48,7 @@
 import MapIntro from "./components/MapIntro.vue";
 import Story from "./components/Story.vue";
 import Story2 from "./components/Story2.vue";
+import Story3 from "./components/Story3.vue";
 import * as d3 from "../../lib/d3";
 import map_json from "../public/Data/map.geo.json";
 import bar_data from "../public/Data/aggregate_data.csv";
@@ -39,6 +60,7 @@ export default {
     MapIntro,
     Story,
     Story2,
+    Story3,
   },
   data: function () {
     return {
@@ -64,6 +86,8 @@ export default {
   mounted() {
     console.log(bar_data);
     this.drawInitial();
+    this.drawInitialBub();
+    // this.drawSecondBub();
 
     scroll = this.scroller().container(d3.select("#graphic"));
     scroll();
@@ -123,17 +147,29 @@ export default {
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
           scroll_functions.hideBubbles();
+          scroll_functions.hideChart();
         } else if (i == 6) {
           scroll_functions.hideMap();
           scroll_functions.hideRoute6();
           // scroll_functions.firstImage();
-          scroll_functions.hideChart()
-           scroll_functions.drawBarChart();
+
+          scroll_functions.drawBarChart();
           //  scroll_functions.zoomBackChart()
         } else if (i == 7) {
-          scroll_functions.unzoomChart()
-          scroll_functions.chart2014();
-          // scroll_functions.drawSecondBub();
+          scroll_functions.unzoomChart();
+          scroll_functions.highlight2014();
+        } else if (i == 8) {
+          scroll_functions.highlight2015();
+        } else if (i == 9) {
+          scroll_functions.highlight2016();
+        } else if (i == 10) {
+          scroll_functions.highlight2017();
+        } else if (i == 11) {
+          scroll_functions.highlight2018();
+        } else if (i == 12) {
+          scroll_functions.highlight2019();
+        } else if (i == 13) {
+          scroll_functions.drawSecondBub();
         }
       });
       lastIndex = activeIndex;
@@ -143,8 +179,6 @@ export default {
       if ((index == 2) & (progress > 0.7)) {
       }
     });
-
-    this.drawInitialBub();
   },
   methods: {
     scroller: function () {
@@ -222,30 +256,15 @@ export default {
       return scroll;
     },
     drawSecondBub: function () {
-      this.svg = this.svg = d3
+      this.svg = d3
         .select("#bub2")
         .append("svg")
         .attr("width", this.width)
         .attr("height", this.height);
 
       d3.csv(missing_data, d3.autoType).then((data) => {
-        //   var deadByYear = d3
-        //     .nest()
-        //     .key(function (d) {
-
-        //       return [d["Region of Incident"], d["Reported Year"]];
-        //     })
-        //     .rollup(function (leaves) {
-        //       return {
-        //         numberDead: d3.sum(leaves, function (d) {
-        //           return d["Number Dead"];
-        //         }),
-        //       };
-        //     })
-        //     .entries(data);
-        //   console.log("rollup data is ",deadByYear)
         let color = d3.scaleSequential(
-          d3.extent(data, (d) => d.year),
+          d3.extent(data, (d) => d["Reported Year"]),
           d3.interpolateCividis
         );
         let yAxis = (g) =>
@@ -271,32 +290,77 @@ export default {
 
         let r = d3
           .scaleSqrt()
-          .domain(d3.extent(data, (d) => d.missing_dead))
+          .domain(d3.extent(data, (d) => d["Total Dead and Missing"]))
           .range([1, 10]);
 
-        let y = d3.scaleBand().domain(["All"]).range([noSplitHeight, 0]);
+        let y = d3
+          .scaleLinear()
+          .domain(d3.extent(data, (d) => d["Reported Year"]))
+          .range([0, this.height]);
+
+        data.forEach(function (d) {
+          if (d["Reported Month"] == "Jan") {
+            d.month = 1;
+          }
+          if (d["Reported Month"] == "Feb") {
+            d.month = 2;
+          }
+          if (d["Reported Month"] == "Mar") {
+            d.month = 3;
+          }
+          if (d["Reported Month"] == "Apr") {
+            d.month = 4;
+          }
+          if (d["Reported Month"] == "May") {
+            d.month = 5;
+          }
+          if (d["Reported Month"] == "Jun") {
+            d.month = 6;
+          }
+          if (d["Reported Month"] == "Jul") {
+            d.month = 7;
+          }
+          if (d["Reported Month"] == "Aug") {
+            d.month = 8;
+          }
+          if (d["Reported Month"] == "Sep") {
+            d.month = 9;
+          }
+          if (d["Reported Month"] == "Oct") {
+            d.month = 10;
+          }
+          if (d["Reported Month"] == "Nov") {
+            d.month = 11;
+          }
+          if (d["Reported Month"] == "Dec") {
+            d.month = 12;
+          }
+        });
+
         let x = d3
           .scaleLinear()
           .domain(d3.extent(data, (d) => d.month))
           .range([0, this.width]);
 
+        console.log("x is ", x);
+
         // let groups = d3.group(data, (d) => d.year);
 
-        let force = d3
-          .forceSimulation(data)
-          .force("charge", d3.forceManyBody().strength(0))
-          .force(
-            "x",
-            d3.forceX().x((d) => x(d.month))
-          )
-          .force(
-            "y",
-            d3.forceY((d) => y(d.year))
-          )
-          .force(
-            "collision",
-            d3.forceCollide().radius((d) => r(d.missing_dead) + 1)
-          );
+        // let force = d3
+        //   .forceSimulation(data)
+        //   .force("charge", d3.forceManyBody().strength(0))
+        //   .force(
+        //     "x",
+        //     d3.forceX().x((d) => x(d["Reported Month"]))
+        //   )
+        //   .force(
+        //     "y",
+        //     d3.forceY((d) => y(d["Reported Year"]))
+        //   )
+        //   .force(
+        //     "collision",
+        //     d3.forceCollide().radius((d) => r(d["Total Dead and Missing"]) + 1)
+        //   );
 
         let noSplitHeight = 500;
         let splitHight = 900;
@@ -318,23 +382,22 @@ export default {
           .data(data)
           .join("circle")
           .attr("r", function (d) {
-            console.log("radisu is ", d.missing_dead);
-            r(d.missing_dead);
+            r(d["Total Dead and Missing"]);
           })
-          .attr("fill", (d) => color(d.year))
+          .attr("fill", (d) => color(d["Reported Year"]))
+          .attr("cy", (d) => y(d["Reported Year"]))
           .attr("cx", function (d) {
-            console.log("cx is ", d.month);
+            console.log(x(d.month));
             x(d.month);
-          })
-          .attr("cy", (d) => y(d.year) + y.bandwidth() / 2);
+          });
 
-        force.on("tick", () => {
-          circles
-            .transition()
-            .ease(d3.easeLinear)
-            .attr("cx", (d) => d.x)
-            .attr("cy", (d) => d.y);
-        });
+        // force.on("tick", () => {
+        //   circles
+        //     .transition()
+        //     .ease(d3.easeLinear)
+        //     .attr("cx", (d) => d.x)
+        //     .attr("cy", (d) => d.y);
+        // });
 
         //  invalidation.then(() => force.stop());
 
@@ -376,68 +439,105 @@ export default {
         this.height = window.innerHeight;
         var x = d3
           .scaleLinear()
-          .domain([2014, 2020])
-          .range([this.width / 5, this.width / 1.2]);
+          .domain([2014, 2019])
+          .range([this.width / 6, this.width / 1.5]);
 
-        let g = this.svg.append("g");
+        let g1 = this.svg.append("g");
+        let g2 = this.svg.append("g");
+        let g3 = this.svg.append("g");
+        let g4 = this.svg.append("g");
+        let g5 = this.svg.append("g");
+        let g6 = this.svg.append("g");
         var y = d3
           .scaleLinear()
           .domain([2014, 2020])
           .range([this.height / 1.5, this.height / 7]);
 
         var z = d3
-          .scaleLinear()
+          .scaleSqrt()
           .domain([0, d3.max(data, (d) => d["Total Arrivals"])])
-          .range([40, 120]);
+          .range([20, 100]);
 
         const [width, height, margin] = [this.width, 250, 15];
 
-        const radius = data[0]["Total Arrivals"] / 5000 - margin;
+        const radius = z(data[0]["Total Arrivals"]);
         console.log(radius);
-        const xStart = width / 20 + (0.5 * data[0]["Year"]) / 10;
+        const xStart = x(data[0]["Year"] + radius / 100);
         const yStart = height * 1.5 - radius;
-        const circle = g
+        const circle = g1
           .append("path")
-          .attr("class", "second")
+          .attr("class", "second year1")
           .attr(
             "d",
             `M ${xStart},${yStart}
                 a ${radius} ${radius} 0 1 1 0 ${radius * 2}
                   ${radius} ${radius} 0 1 1 0 ${-radius * 2} z`
           );
+        g1.append("text")
+          .text("2014")
+          .attr("x", xStart)
+          .attr("y", yStart - 10)
+          .attr("class", "text-years")
+          .attr("font-family", "Courier")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight", "bold")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
 
-        const radius2 = data[1]["Total Arrivals"] / 5000 - margin;
-        const xStart2 = width / 10 + (1.5 * data[1]["Year"]) / 10;
+        const radius2 = z(data[1]["Total Arrivals"]);
+        const xStart2 = x(data[1]["Year"] + radius2 / 100 - 0.4);
         const yStart2 = height * 1.5 - radius2;
-        const circle2 = g
+        const circle2 = g2
           .append("path")
-          .attr("class", "second")
+          .attr("class", "second year2")
           .attr(
             "d",
             `M ${xStart2},${yStart2}
                 a ${radius2} ${radius2} 0 1 1 0 ${radius2 * 2}
                   ${radius2} ${radius2} 0 1 1 0 ${-radius2 * 2} z`
           );
+        g2.append("text")
+          .text("2015")
+          .attr("x", xStart2)
+          .attr("y", yStart2 - 10)
+          .attr("class", "text-years")
+          .attr("font-family", "Courier")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight", "bold")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
 
-        const radius3 = data[2]["Total Arrivals"] / 5000 - margin;
-        const xStart3 = width / 4 + (2 * data[2]["Year"]) / 10;
+        const radius3 = z(data[2]["Total Arrivals"]);
+        const xStart3 = x(data[2]["Year"] + radius3 / 100);
         const yStart3 = height * 1.5 - radius3;
-        const circle3 = g
+        const circle3 = g3
           .append("path")
-          .attr("class", "second")
+          .attr("class", "second year3")
           .attr(
             "d",
             `M ${xStart3},${yStart3}
                 a ${radius3} ${radius3} 0 1 1 0 ${radius3 * 2}
                   ${radius3} ${radius3} 0 1 1 0 ${-radius3 * 2} z`
           );
-
-        const radius4 = data[3]["Total Arrivals"] / 5000 - margin;
-        const xStart4 = width / 3.5 + (2.5 * data[3]["Year"]) / 10;
+        g3.append("text")
+          .text("2016")
+          .attr("x", xStart3)
+          .attr("y", yStart3 - 10)
+          .attr("class", "text-years")
+          .attr("font-family", "Courier")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight", "bold")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
+        const radius4 = z(data[3]["Total Arrivals"]);
+        const xStart4 = x(data[3]["Year"] + radius4 / 100);
         const yStart4 = height * 1.5 - radius4;
-        const circle4 = g
+        const circle4 = g4
           .append("path")
-          .attr("class", "second")
+          .attr("class", "second year4")
           .attr(
             "d",
             `M ${xStart4},${yStart4}
@@ -445,12 +545,24 @@ export default {
                   ${radius4} ${radius4} 0 1 1 0 ${-radius4 * 2} z`
           );
 
-        const radius5 = data[4]["Total Arrivals"] / 5000 - margin;
-        const xStart5 = width / 3.4 + (3 * data[4]["Year"]) / 10;
+        g4.append("text")
+          .text("2017")
+          .attr("x", xStart4)
+          .attr("y", yStart4 - 10)
+          .attr("class", "text-years")
+          .attr("font-family", "Courier")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight", "bold")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
+
+        const radius5 = z(data[4]["Total Arrivals"]);
+        const xStart5 = x(data[4]["Year"] + radius5 / 100 - 0.2);
         const yStart5 = height * 1.5 - radius5;
-        const circle5 = g
+        const circle5 = g5
           .append("path")
-          .attr("class", "second")
+          .attr("class", "second year5")
           .attr(
             "d",
             `M ${xStart5},${yStart5}
@@ -458,18 +570,41 @@ export default {
                   ${radius5} ${radius5} 0 1 1 0 ${-radius5 * 2} z`
           );
 
-        const radius6 = data[5]["Total Arrivals"] / 5000 - margin;
-        const xStart6 = width / 3 + (3 * data[5]["Year"]) / 10;
+        g5.append("text")
+          .text("2018")
+          .attr("x", xStart5)
+          .attr("y", yStart5 - 10)
+          .attr("class", "text-years")
+          .attr("font-family", "Courier")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight", "bold")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
+
+        const radius6 = z(data[5]["Total Arrivals"] / 5000 - margin);
+        const xStart6 = x(data[5]["Year"] + radius6 / 100 - 0.3);
         const yStart6 = height * 1.5 - radius6;
-        const circle6 = g
+        const circle6 = g6
           .append("path")
-          .attr("class", "second")
+          .attr("class", "second year6")
           .attr(
             "d",
             `M ${xStart6},${yStart6}
                 a ${radius6} ${radius6} 0 1 1 0 ${radius6 * 2}
                   ${radius6} ${radius6} 0 1 1 0 ${-radius6 * 2} z`
           );
+        g6.append("text")
+          .text("2019")
+          .attr("x", xStart6)
+          .attr("y", yStart6 - 10)
+          .attr("class", "text-years")
+          .attr("font-family", "Courier")
+          .attr("fill", "#2c3e50")
+          .attr("font-weight", "bold")
+          .style("opacity", "0")
+          .attr("font-size", "0.8em")
+          .attr("text-anchor", "middle");
 
         circle
           .attr("fill", "none")
@@ -508,54 +643,9 @@ export default {
           .attr("opacity", 0);
 
         var x = d3
-          .scaleSqrt()
+          .scaleLinear()
           .domain([2014, 2020])
           .range([xStart - 100, xStart6 + 100]);
-
-        g.selectAll("text")
-          .data(data)
-          .join("text")
-          .attr("class", "text-years")
-          .text((d) => d.Year)
-          .attr("dx", (d) => x(d.Year) + d.Year / 20)
-          .attr("dy", this.height / 5)
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        // var circles = this.svg.selectAll("g.circles");
-        // //Adding circles to the groups
-        // circles = circles
-        //   .data(data)
-        //   .enter()
-        //   .append("g")
-        //   .classed("circles", true);
-
-        //Styling the circles.
-        // const circle = this.svg.append("g")
-        //   .selectAll(".bubbles")
-        //   .data(data)
-        //   .join("path")
-        //   .attr(
-        //     "d",
-        //     `M ${this.width/5 -z(d["Total Arrivals"])},${this.height/2 - z(d["Total Arrivals"])}
-        //         a ${z(d["Total Arrivals"])} ${z(d["Total Arrivals"])} 0 1 1 0 ${z(d["Total Arrivals"]) * 2}
-        //           ${z(d["Total Arrivals"])} ${z(d["Total Arrivals"])} 0 1 1 0 ${-z(d["Total Arrivals"]) * 2} z`
-        //   )
-        //   .attr("class","bubbles")
-        //   .attr("fill", "none")
-        //   .attr("stroke", "black")
-        //   .attr("stroke-width", "1.5")
-        //   .style("opacity", 1)
-
-        //  circle
-        // .attr("fill", "none")
-        // .attr("stroke", "black")
-        // .attr("stroke-width", "1.5")
-        // .attr("opacity", 0);
       });
       this.svg
         .append("image")
@@ -567,6 +657,113 @@ export default {
         // .attr("height",this.height/1.5)
         // .attr("width",this.width /1.5)
         .style("opacity", 0);
+
+      const projection = d3
+        .geoMercator()
+        .fitSize([2.4 * this.width, 2.4 * this.height], map_json);
+
+      const path = d3.geoPath().projection(projection);
+
+      let groups_map = this.svg
+        .selectAll(".evros")
+        .data(map_json.features)
+        .enter()
+        // .append("g")
+        .filter(
+          (d) =>
+            d.properties.name === "Syria" ||
+            d.properties.name === "Greece" ||
+            d.properties.name === "Turkey"
+        )
+        .append("g");
+
+      groups_map
+        .append("path")
+        .attr("d", path)
+        .attr("class", "evros")
+        .attr("fill", "#b35525")
+        .attr("stroke", "black")
+        .attr("opacity", "0");
+      groups_map
+        .append("text")
+        .text((d) => d.properties.name)
+        .attr("color", "black")
+        .attr("class", "countries");
+
+      groups_map.attr("transform", "translate(-1800,-300)");
+      // d3.selectAll(".evros")
+      //   .append("text")
+      //   .text((d) => d.properties.name)
+      //   .attr("color", "black")
+      //   .attr("class", "countries");
+
+      // this.svg
+      //   .append("text")
+      //   .text(
+      //     "The number of sea arrivals through the mediterranean increased significantly reaching 209,660 people"
+      //   )
+      //   .attr("transform", "translate(0,300)")
+      //   .style("font-size", "20px")
+      //   .attr("class", "first_text")
+      //   .attr("opacity", "0");
+
+      // this.svg
+      //   .append("defs")
+      //   .append("g")
+      //   .attr("id", "iconCustom")
+      //   .append("path")
+      //   .attr(
+      //     "d",
+      //     "M3.5,2H2.7C3,1.8,3.3,1.5,3.3,1.1c0-0.6-0.4-1-1-1c-0.6,0-1,0.4-1,1c0,0.4,0.2,0.7,0.6,0.9H1.1C0.7,2,0.4,2.3,0.4,2.6v1.9c0,0.3,0.3,0.6,0.6,0.6h0.2c0,0,0,0.1,0,0.1v1.9c0,0.3,0.2,0.6,0.3,0.6h1.3c0.2,0,0.3-0.3,0.3-0.6V5.3c0,0,0-0.1,0-0.1h0.2c0.3,0,0.6-0.3,0.6-0.6V2.6C4.1,2.3,3.8,2,3.5,2z"
+      //   );
+
+      // this.svg.append("rect").attr("width", 500).attr("height", 500).attr("top",500);
+
+      //specify the number of columns and rows for pictogram layout
+      // var numCols = 50;
+      // var numRows = 50;
+
+      //padding for the grid
+      // var xPadding = 100;
+      // var yPadding = 150;
+
+      //horizontal and vertical spacing between the icons
+      // var hBuffer = 8;
+      // var wBuffer = 8;
+
+      //generate a d3 range for the total number of required elements
+      // var myIndex = d3.range(numCols * numRows);
+
+      //text element to display number of icons highlighted
+      // this.svg
+      //   .append("text")
+      //   .attr("id", "txtValue")
+      //   .attr("x", xPadding)
+      //   .attr("y", yPadding)
+      //   .attr("dy", -3)
+      //   .text("0");
+
+      //create group element and create an svg <use> element for each icon
+      // this.svg
+      //   .append("g")
+      //   .attr("id", "pictoLayer")
+      //   .selectAll("use")
+      //   .data(myIndex)
+      //   .enter()
+      //   .append("use")
+      //   .attr("xlink:href", "#iconCustom")
+      //   .attr("id", function (d) {
+      //     return "icon" + d;
+      //   })
+      //   .attr("x", function (d) {
+      //     var remainder = d % numCols; //calculates the x position (column number) using modulus
+      //     return xPadding + remainder * wBuffer; //apply the buffer and return value
+      //   })
+      //   .attr("y", function (d) {
+      //     var whole = Math.floor(d / numCols); //calculates the y position (row number)
+      //     return yPadding + whole * hBuffer; //apply the buffer and return the value
+      //   })
+      //   .classed("iconPlain", true);
     },
     drawInitial: function () {
       this.svg = d3
@@ -1212,17 +1409,12 @@ export default {
     },
 
     hideChart: function () {
-      d3.selectAll(".second")
-        .attr("opacity","0")
-        .transition()
-      d3.selectAll(".text-years")
-        .style("opacity","0")
-        .transition()
+      d3.selectAll(".second").attr("opacity", "0").transition();
+      d3.selectAll(".text-years").style("opacity", "0").transition();
     },
 
-
-    unzoomChart: function (){
-       function zoomed() {
+    unzoomChart: function () {
+      function zoomed() {
         d3.selectAll(".second").attr("transform", d3.event.transform);
       }
       function zoomedText() {
@@ -1235,11 +1427,8 @@ export default {
       d3.selectAll(".second")
         .transition()
         .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(600, -50).scale(0.5)
-        );
-      
+        .call(zoom.transform, d3.zoomIdentity.translate(600, -50).scale(0.5));
+
       d3.selectAll(".text-years")
         .transition()
         .duration(750)
@@ -1249,8 +1438,8 @@ export default {
         );
     },
 
-    zoomBackChart: function(){
-         function zoomed() {
+    zoomBackChart: function () {
+      function zoomed() {
         d3.selectAll(".second").attr("transform", d3.event.transform);
       }
       function zoomedText() {
@@ -1263,18 +1452,12 @@ export default {
       d3.selectAll(".second")
         .transition()
         .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(-600, 50).scale(1)
-        );
-      
+        .call(zoom.transform, d3.zoomIdentity.translate(-600, 50).scale(1));
+
       d3.selectAll(".text-years")
         .transition()
         .duration(750)
-        .call(
-          zoomText.transform,
-          d3.zoomIdentity.translate(-600, 50).scale(1)
-        );
+        .call(zoomText.transform, d3.zoomIdentity.translate(-600, 50).scale(1));
     },
 
     resetChart: function () {
@@ -1286,15 +1469,31 @@ export default {
         .attr("stroke", "#2c3e50");
     },
 
-    chart2014: function () {
-      d3.selectAll(".bubbles")
-        .filter((d) => d.Year === 2014)
-        .transition()
-        .duration(1000)
-        .style("fill", "#790306")
-        .style("fill-opacity", "1");
+    highlight2014: function () {
+      d3.selectAll(".year1").attr("fill", "#766F81").transition();
+      // d3.selectAll(".evros").transition().delay(500).attr("opacity", "1");
+      // d3.selectAll(".first_text").transition().delay(500).attr("opacity", "1");
     },
 
+    highlight2015: function () {
+      d3.selectAll(".year2").attr("fill", "#766F81").transition();
+      d3.selectAll(".first_text").attr("opacity", "0");
+    },
+
+    highlight2016: function () {
+      d3.selectAll(".year3").attr("fill", "#766F81").transition();
+    },
+
+    highlight2017: function () {
+      d3.selectAll(".year4").attr("fill", "#766F81").transition();
+    },
+
+    highlight2018: function () {
+      d3.selectAll(".year5").attr("fill", "#766F81").transition();
+    },
+    highlight2019: function () {
+      d3.selectAll(".year6").attr("fill", "#766F81").transition();
+    },
 
     resetZoom: function () {
       var zoom = d3.zoom().on("zoom", zoomed);
@@ -1372,7 +1571,8 @@ text {
   font-size: 1em;
 }
 
-p {
+p,
+.countries {
   font-family: "Courier New", Courier, monospace;
   /* font-weight: 800; */
   line-height: 1.4em;
@@ -1469,5 +1669,95 @@ rect{
   font-size: 30px;
   color: #2c3e50;
   opacity: 0.6;
+}
+
+.scroll-container {
+  height: 100vh;
+  /* overflow-y: scroll; */
+  scroll-snap-type: y mandatory;
+}
+
+section {
+  height: 100vh;
+  scroll-snap-align: center;
+}
+
+header {
+  align-items: center;
+  background: #898883;
+  color: #dbd9d2;
+  display: flex;
+  height: 70px;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  transition: transform 300ms ease-in-out;
+  transform: translateY(0);
+  width: 96%;
+  z-index: 10;
+}
+
+.header_title {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header_nav {
+  list-style: none;
+  padding: 0;
+}
+
+.header_navItem {
+  display: inline-block;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  margin-left: 20px;
+  text-transform: uppercase;
+  color: #dbd9d2;
+}
+
+.header_navItem a {
+  text-decoration: none;
+  color: #dbd9d2;
+}
+
+.header_navItem a:after {
+  background-color: #dbd9d2;
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  transition: height 100ms ease-in, margin 100ms ease-in;
+  width: 100%;
+}
+
+.header_navItem a:hover:after {
+  height: 3px;
+  margin-bottom: 0;
+  color: #dbd9d2;
+}
+
+text {
+  fill: #bb6d82;
+  text-anchor: left;
+  font-size: 12px;
+  font-family: sans-serif, Helvetica, Arial;
+  font-weight: bold;
+}
+
+.iconPlain {
+  fill: #a7a59b;
+}
+
+.iconSelected {
+  fill: #bb6d82;
+}
+
+rect {
+  fill: #fff1e0;
 }
 </style>

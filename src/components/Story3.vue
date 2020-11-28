@@ -2,7 +2,7 @@
   <div>
     <section class="step" v-for="step in steps" :key="step.id">
       <h1>{{ step.title }}</h1>
-      <h1>{{ step.description }}</h1>
+      <p>{{ step.description }}</p>
       <!-- <p>{{ active_index }}</p>
       <p>{{ step.id }}</p> -->
     </section>
@@ -23,38 +23,8 @@ export default {
         {
           title: "",
           description:
-            "Let's look into the numbers of arrivals through the Mediterrenean to Europe",
+            "Let's look into the number of migrants who went missing or died",
         },
-         {
-          title: "2014",
-          description:
-            "",
-        },
-        {
-          title: "2015",
-          description:
-            "  ",
-        },
-        {
-          title: "2016",
-          description:
-            "  ",
-        },
-        {
-          title: "2017",
-          description:
-            "  ",
-        },
-        {
-          title: "2018",
-          description:
-            "  ",
-        },
-        {
-          title: "2019",
-          description:
-            "  ",
-        }
       ],
     };
   },
@@ -75,7 +45,7 @@ p {
 
 h1 {
   opacity: 0.8;
-   font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   /* font-weight: 800;
   line-height: 1.4em; */
 }

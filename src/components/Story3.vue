@@ -25,6 +25,11 @@ export default {
           description:
             "Let's look into the number of migrants who went missing or died",
         },
+         {
+          title: "",
+          description:
+            "",
+        }
       ],
     };
   },

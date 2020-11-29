@@ -10,10 +10,10 @@
       <nav>
         <ul class="header_nav">
           <li class="header_navItem">
-            <a href="#">Menu</a>
+            <a href="#">About</a>
           </li>
           <li class="header_navItem">
-            <a href="#">Account</a>
+            <a href="#">Contact</a>
           </li>
         </ul>
       </nav>
@@ -148,15 +148,18 @@ export default {
           scroll_functions.colorEastern();
           scroll_functions.hideBubbles();
           scroll_functions.hideChart();
+          scroll_functions.removeHighlight();
         } else if (i == 6) {
           scroll_functions.hideMap();
           scroll_functions.hideRoute6();
           // scroll_functions.firstImage();
 
-          scroll_functions.drawBarChart();
+          // scroll_functions.drawBarChart();
           //  scroll_functions.zoomBackChart()
+
+          scroll_functions.showIcons();
         } else if (i == 7) {
-          scroll_functions.unzoomChart();
+          // scroll_functions.unzoomChart();
           scroll_functions.highlight2014();
         } else if (i == 8) {
           scroll_functions.highlight2015();
@@ -170,6 +173,8 @@ export default {
           scroll_functions.highlight2019();
         } else if (i == 13) {
           scroll_functions.drawSecondBub();
+          scroll_functions.removeHighlight();
+          scroll_functions.lastView()
         }
       });
       lastIndex = activeIndex;
@@ -296,7 +301,7 @@ export default {
         let y = d3
           .scaleLinear()
           .domain(d3.extent(data, (d) => d["Reported Year"]))
-          .range([0, this.height]);
+          .range([this.height / 8, this.height / 1.5]);
 
         data.forEach(function (d) {
           if (d["Reported Month"] == "Jan") {
@@ -340,27 +345,12 @@ export default {
         let x = d3
           .scaleLinear()
           .domain(d3.extent(data, (d) => d.month))
-          .range([0, this.width]);
+          .range([this.width / 8, this.width / 1.5]);
 
         console.log("x is ", x);
 
         // let groups = d3.group(data, (d) => d.year);
 
-        // let force = d3
-        //   .forceSimulation(data)
-        //   .force("charge", d3.forceManyBody().strength(0))
-        //   .force(
-        //     "x",
-        //     d3.forceX().x((d) => x(d["Reported Month"]))
-        //   )
-        //   .force(
-        //     "y",
-        //     d3.forceY((d) => y(d["Reported Year"]))
-        //   )
-        //   .force(
-        //     "collision",
-        //     d3.forceCollide().radius((d) => r(d["Total Dead and Missing"]) + 1)
-        //   );
 
         let noSplitHeight = 500;
         let splitHight = 900;
@@ -377,19 +367,31 @@ export default {
 
         const circles = wrapper
           .append("g")
-          .attr("class", "circles")
+          .attr("class", "last")
           .selectAll("circle")
           .data(data)
           .join("circle")
-          .attr("r", function (d) {
-            r(d["Total Dead and Missing"]);
-          })
+          .attr("r", (d) => r(d["Total Dead and Missing"]))
           .attr("fill", (d) => color(d["Reported Year"]))
           .attr("cy", (d) => y(d["Reported Year"]))
-          .attr("cx", function (d) {
-            console.log(x(d.month));
-            x(d.month);
-          });
+          .attr("cx", (d) => x(d.month))
+          .attr("opacity", "0");
+
+        let force = d3
+          .forceSimulation(data)
+          .force("charge", d3.forceManyBody().strength(0))
+          .force(
+            "y",
+            d3.forceY((d) => y(d["Reported Year"]))
+          )
+          .force(
+            "x",
+            d3.forceX((d) => x(d.month))
+          )
+          .force(
+            "collision",
+            d3.forceCollide().radius((d) => r(d["Total Dead and Missing"]) + 1)
+          );
 
         // force.on("tick", () => {
         //   circles
@@ -690,12 +692,12 @@ export default {
         .attr("color", "black")
         .attr("class", "countries");
 
-      groups_map.attr("transform", "translate(-1800,-300)");
-      // d3.selectAll(".evros")
-      //   .append("text")
-      //   .text((d) => d.properties.name)
-      //   .attr("color", "black")
-      //   .attr("class", "countries");
+      groups_map.attr("transform", "translate(-1400,-300)");
+      d3.selectAll(".evros")
+        .append("text")
+        .text((d) => d.properties.name)
+        .attr("color", "black")
+        .attr("class", "countries");
 
       // this.svg
       //   .append("text")
@@ -707,32 +709,32 @@ export default {
       //   .attr("class", "first_text")
       //   .attr("opacity", "0");
 
-      // this.svg
-      //   .append("defs")
-      //   .append("g")
-      //   .attr("id", "iconCustom")
-      //   .append("path")
-      //   .attr(
-      //     "d",
-      //     "M3.5,2H2.7C3,1.8,3.3,1.5,3.3,1.1c0-0.6-0.4-1-1-1c-0.6,0-1,0.4-1,1c0,0.4,0.2,0.7,0.6,0.9H1.1C0.7,2,0.4,2.3,0.4,2.6v1.9c0,0.3,0.3,0.6,0.6,0.6h0.2c0,0,0,0.1,0,0.1v1.9c0,0.3,0.2,0.6,0.3,0.6h1.3c0.2,0,0.3-0.3,0.3-0.6V5.3c0,0,0-0.1,0-0.1h0.2c0.3,0,0.6-0.3,0.6-0.6V2.6C4.1,2.3,3.8,2,3.5,2z"
-      //   );
+      this.svg
+        .append("defs")
+        .append("g")
+        .attr("id", "iconCustom")
+        .append("path")
+        .attr(
+          "d",
+          "M3.5,2H2.7C3,1.8,3.3,1.5,3.3,1.1c0-0.6-0.4-1-1-1c-0.6,0-1,0.4-1,1c0,0.4,0.2,0.7,0.6,0.9H1.1C0.7,2,0.4,2.3,0.4,2.6v1.9c0,0.3,0.3,0.6,0.6,0.6h0.2c0,0,0,0.1,0,0.1v1.9c0,0.3,0.2,0.6,0.3,0.6h1.3c0.2,0,0.3-0.3,0.3-0.6V5.3c0,0,0-0.1,0-0.1h0.2c0.3,0,0.6-0.3,0.6-0.6V2.6C4.1,2.3,3.8,2,3.5,2z"
+        );
 
       // this.svg.append("rect").attr("width", 500).attr("height", 500).attr("top",500);
 
       //specify the number of columns and rows for pictogram layout
-      // var numCols = 50;
-      // var numRows = 50;
+      var numCols = 10;
+      var numRows = 20;
 
       //padding for the grid
-      // var xPadding = 100;
-      // var yPadding = 150;
+      var xPadding = 30;
+      var yPadding = 30;
 
       //horizontal and vertical spacing between the icons
-      // var hBuffer = 8;
-      // var wBuffer = 8;
+      var hBuffer = 8;
+      var wBuffer = 8;
 
       //generate a d3 range for the total number of required elements
-      // var myIndex = d3.range(numCols * numRows);
+      var myIndex = d3.range(numCols * numRows);
 
       //text element to display number of icons highlighted
       // this.svg
@@ -744,26 +746,42 @@ export default {
       //   .text("0");
 
       //create group element and create an svg <use> element for each icon
-      // this.svg
-      //   .append("g")
-      //   .attr("id", "pictoLayer")
-      //   .selectAll("use")
-      //   .data(myIndex)
-      //   .enter()
-      //   .append("use")
-      //   .attr("xlink:href", "#iconCustom")
-      //   .attr("id", function (d) {
-      //     return "icon" + d;
-      //   })
-      //   .attr("x", function (d) {
-      //     var remainder = d % numCols; //calculates the x position (column number) using modulus
-      //     return xPadding + remainder * wBuffer; //apply the buffer and return value
-      //   })
-      //   .attr("y", function (d) {
-      //     var whole = Math.floor(d / numCols); //calculates the y position (row number)
-      //     return yPadding + whole * hBuffer; //apply the buffer and return the value
-      //   })
-      //   .classed("iconPlain", true);
+      this.svg
+        .append("g")
+        .attr("id", "pictoLayer")
+        .selectAll("use")
+        .data(myIndex)
+        .enter()
+        .append("use")
+        .attr("xlink:href", "#iconCustom")
+        .attr("id", function (d) {
+          return "icon" + d;
+        })
+        .attr("x", function (d) {
+          var remainder = d % numCols; //calculates the x position (column number) using modulus
+          return xPadding + remainder * wBuffer; //apply the buffer and return value
+        })
+        .attr("y", function (d) {
+          var whole = Math.floor(d / numCols); //calculates the y position (row number)
+          return yPadding + whole * hBuffer; //apply the buffer and return the value
+        })
+
+        .classed("iconPlain", true)
+        .attr("opacity", "0");
+
+      var zoom = d3.zoom().on("zoom", zoomed);
+
+      function zoomed() {
+        d3.selectAll(".iconPlain").attr("transform", d3.event.transform);
+      }
+
+      d3.selectAll(".route1")
+        .transition()
+        .duration(750)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.translate(this.width / 2.4, 15).scale(3.5)
+        );
     },
     drawInitial: function () {
       this.svg = d3
@@ -1471,6 +1489,13 @@ export default {
 
     highlight2014: function () {
       d3.selectAll(".year1").attr("fill", "#766F81").transition();
+      d3.selectAll("use").attr("class", function (d, i) {
+        if (d < 11) {
+          return "iconSelected";
+        } else {
+          return "iconPlain";
+        }
+      });
       // d3.selectAll(".evros").transition().delay(500).attr("opacity", "1");
       // d3.selectAll(".first_text").transition().delay(500).attr("opacity", "1");
     },
@@ -1478,6 +1503,8 @@ export default {
     highlight2015: function () {
       d3.selectAll(".year2").attr("fill", "#766F81").transition();
       d3.selectAll(".first_text").attr("opacity", "0");
+      d3.selectAll(".evros").transition().delay(500).attr("opacity", "0");
+      d3.selectAll(".first_text").transition().delay(500).attr("opacity", "0");
     },
 
     highlight2016: function () {
@@ -1494,6 +1521,22 @@ export default {
     highlight2019: function () {
       d3.selectAll(".year6").attr("fill", "#766F81").transition();
     },
+    lastView: function (){
+      d3.selectAll(".last")
+        .attr("opacity","1")
+    },
+
+    removeHighlight: function () {
+      d3.selectAll(".year1").attr("fill", "none");
+      d3.selectAll(".year2").attr("fill", "none");
+      d3.selectAll(".year3").attr("fill", "none");
+      d3.selectAll(".year4").attr("fill", "none");
+      d3.selectAll(".year5").attr("fill", "none");
+      d3.selectAll(".year6").attr("fill", "none");
+      d3.selectAll(".evros").attr("opacity", "0");
+      d3.selectAll(".iconPlain").attr("opacity", "0");
+      d3.selectAll(".iconSelected").transition().attr("opacity", "0");
+    },
 
     resetZoom: function () {
       var zoom = d3.zoom().on("zoom", zoomed);
@@ -1507,6 +1550,10 @@ export default {
         .transition()
         .duration(750)
         .call(zoom.transform, d3.zoomIdentity.translate(-1000, -900));
+    },
+
+    showIcons: function () {
+      d3.selectAll(".iconPlain").attr("opacity", "1");
     },
     hideRoute12: function () {
       d3.selectAll(".route1").transition().duration(200).attr("opacity", 0);

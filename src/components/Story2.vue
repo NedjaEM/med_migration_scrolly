@@ -23,7 +23,7 @@ export default {
         {
           title: "",
           description:
-            "Let's look into the numbers of arrivals through the Mediterrenean to Europe",
+            "According to data from the IOM (International Organization for Migration, almost 2 million people have arrived to Spain, Italy, Greece and Cyprus through the Mediterranean between 2014 and 2019.",
         },
         {
           title: "2014",
@@ -128,7 +128,8 @@ p {
   font-family: "Courier New", Courier, monospace;
   font-weight: 800;
   line-height: 1.4em;
-  font-size: 1em;
+  font-size: 1em;  
+  margin-top: -80%;
 }
 
 h1 {
@@ -136,6 +137,7 @@ h1 {
   font-family: "Courier New", Courier, monospace;
   /* font-weight: 800;
   line-height: 1.4em; */
+  margin-bottom: 0px;
 }
 
 .step {
@@ -145,8 +147,8 @@ h1 {
   font-family: "Courier New", Courier, monospace;
   font-weight: 400;
   line-height: 1.4em;
-  font-size: 1.5em;
-  text-align: justify;
+  font-size: 1.2em;
+  text-align: left;
   margin-left: 0.5rem;
   display: flex;
   flex-direction: column;

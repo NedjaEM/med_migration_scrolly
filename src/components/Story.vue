@@ -49,7 +49,7 @@ export default {
           title: "Eastern Route",
           description:
             " From Turkey to Greece. This route became prominent between 2014 and 2016 following the political situation in Syria.",
-        }
+        },
       ],
     };
   },
@@ -63,27 +63,28 @@ export default {
 <style scoped>
 p {
   font-family: "Courier New", Courier, monospace;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.4em;
   font-size: 1em;
+   margin-top: -100%;
 }
 
 h1 {
   opacity: 0.8;
-   font-family: "Courier New", Courier, monospace;
-  /* font-weight: 800;
-  line-height: 1.4em; */
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1em;
+   margin-bottom: 0px;
+
 }
 
 .step {
-  margin-bottom: 1rem;
   height: 50rem;
   /* font-family: "Domine"; */
   font-family: "Courier New", Courier, monospace;
   font-weight: 400;
   line-height: 1.4em;
-  font-size: 1.5em;
-  text-align: justify;
+  font-size: 1.2em;
+  text-align: left;;
   margin-left: 0.5rem;
   display: flex;
   flex-direction: column;

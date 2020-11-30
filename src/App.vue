@@ -64,8 +64,8 @@ export default {
   },
   data: function () {
     return {
-      width: window.innerWidth * 1.2,
-      height: window.innerHeight * 1.4,
+      width: window.innerWidth,
+      height: window.innerHeight,
       state: "",
       loadData: [],
       active_index: 0,
@@ -137,11 +137,12 @@ export default {
           scroll_functions.resetZoom();
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorWestern();
+          scroll_functions.hideRoute45();
         } else if (i == 4) {
-          scroll_functions.hideRoute3();
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorWestern2();
           scroll_functions.hideRoute6();
+          scroll_functions.hideRoute3();
         } else if (i == 5) {
           scroll_functions.hideRoute45();
           scroll_functions.drawMapNoTransition();
@@ -161,20 +162,20 @@ export default {
         } else if (i == 7) {
           // scroll_functions.unzoomChart();
           scroll_functions.highlight2014();
-        } else if (i == 8) {
-          scroll_functions.highlight2015();
-        } else if (i == 9) {
-          scroll_functions.highlight2016();
-        } else if (i == 10) {
-          scroll_functions.highlight2017();
         } else if (i == 11) {
+          scroll_functions.highlight2015();
+        } else if (i == 18) {
+          scroll_functions.highlight2016();
+        } else if (i == 20) {
+          scroll_functions.highlight2017();
+        } else if (i == 22) {
           scroll_functions.highlight2018();
-        } else if (i == 12) {
+        } else if (i == 23) {
           scroll_functions.highlight2019();
-        } else if (i == 13) {
+        } else if (i == 24) {
           scroll_functions.drawSecondBub();
           scroll_functions.removeHighlight();
-          scroll_functions.lastView()
+          scroll_functions.lastView();
         }
       });
       lastIndex = activeIndex;
@@ -351,7 +352,6 @@ export default {
 
         // let groups = d3.group(data, (d) => d.year);
 
-
         let noSplitHeight = 500;
         let splitHight = 900;
 
@@ -367,7 +367,7 @@ export default {
 
         const circles = wrapper
           .append("g")
-          .attr("class", "last")
+         
           .selectAll("circle")
           .data(data)
           .join("circle")
@@ -375,6 +375,7 @@ export default {
           .attr("fill", (d) => color(d["Reported Year"]))
           .attr("cy", (d) => y(d["Reported Year"]))
           .attr("cx", (d) => x(d.month))
+           .attr("class", "last")
           .attr("opacity", "0");
 
         let force = d3
@@ -737,13 +738,15 @@ export default {
       var myIndex = d3.range(numCols * numRows);
 
       //text element to display number of icons highlighted
-      // this.svg
-      //   .append("text")
-      //   .attr("id", "txtValue")
-      //   .attr("x", xPadding)
-      //   .attr("y", yPadding)
-      //   .attr("dy", -3)
-      //   .text("0");
+      this.svg
+        .append("text")
+        .attr("id", "txtValue")
+        .attr("x", 0.85 * this.width)
+        .attr("y", 0.18 * this.height)
+        .attr("dy", -3)
+        .attr("class", "icon-text")
+        .text("1,927,007")
+        .attr("opacity", "0");
 
       //create group element and create an svg <use> element for each icon
       this.svg
@@ -775,12 +778,14 @@ export default {
         d3.selectAll(".iconPlain").attr("transform", d3.event.transform);
       }
 
-      d3.selectAll(".route1")
+      d3.selectAll(".iconPlain")
         .transition()
         .duration(750)
         .call(
           zoom.transform,
-          d3.zoomIdentity.translate(this.width / 2.4, 15).scale(3.5)
+          d3.zoomIdentity
+            .translate(0.75 * this.width, this.height / 10)
+            .scale(this.width / 500)
         );
     },
     drawInitial: function () {
@@ -806,7 +811,8 @@ export default {
         .attr("d", path)
         .attr("class", "country")
         .attr("fill", "#c4c1b6")
-        .attr("stroke", "black");
+        .attr("stroke", "black")
+        .attr("transform", `translate(${this.width / 5},40)`);
 
       d3.selectAll(".country").attr("opacity", 0);
 
@@ -1054,54 +1060,36 @@ export default {
       d3.selectAll(".country")
         .transition()
         .duration(750)
-        .call(zoom.transform, d3.zoomIdentity.translate(-600, -100).scale(1.8));
+        .call(zoom.transform, d3.zoomIdentity.scale(1.8));
 
       d3.selectAll(".route1")
         .transition()
         .duration(750)
-        .call(
-          zoomLines1.transform,
-          d3.zoomIdentity.translate(-600, -100).scale(1.8)
-        );
+        .call(zoomLines1.transform, d3.zoomIdentity.scale(1.8));
       d3.selectAll(".route2")
         .transition()
         .duration(750)
-        .call(
-          zoomLines2.transform,
-          d3.zoomIdentity.translate(-600, -100).scale(1.8)
-        );
+        .call(zoomLines2.transform, d3.zoomIdentity.scale(1.8));
       d3.selectAll(".route3")
         .transition()
         .duration(750)
-        .call(
-          zoomLines3.transform,
-          d3.zoomIdentity.translate(-600, -100).scale(1.8)
-        );
+        .call(zoomLines3.transform, d3.zoomIdentity.scale(1.8));
 
       d3.selectAll(".route4")
         .transition()
         .duration(750)
-        .call(
-          zoomLines4.transform,
-          d3.zoomIdentity.translate(-600, -100).scale(1.8)
-        );
+        .call(zoomLines4.transform, d3.zoomIdentity.scale(1.8));
 
       d3.selectAll(".route5")
         .transition()
         .duration(750)
-        .call(
-          zoomLines5.transform,
-          d3.zoomIdentity.translate(-600, -100).scale(1.8)
-        );
+        .call(zoomLines5.transform, d3.zoomIdentity.scale(1.8));
 
       d3.selectAll(".route6")
         .transition()
         .delay(1000)
         .duration(750)
-        .call(
-          zoomLines6.transform,
-          d3.zoomIdentity.translate(-600, -100).scale(1.8)
-        );
+        .call(zoomLines6.transform, d3.zoomIdentity.scale(1.8));
 
       const projection = d3
         .geoMercator()
@@ -1137,72 +1125,6 @@ export default {
         .attr("stroke-dashoffset", 0);
     },
     colorWestern: function () {
-      var zoom = d3.zoom().on("zoom", zoomed);
-
-      function zoomed() {
-        d3.selectAll(".country").attr("transform", d3.event.transform);
-      }
-
-      d3.selectAll(".country")
-        .transition()
-        .duration(750)
-        .call(zoom.transform, d3.zoomIdentity.translate(-400, -400).scale(1.7));
-
-      var zoomLines3 = d3.zoom().on("zoom", zoomedLines3);
-
-      function zoomedLines3() {
-        d3.selectAll(".route3").attr("transform", d3.event.transform);
-      }
-
-      d3.selectAll(".route3")
-        .transition()
-        .duration(750)
-        .call(
-          zoomLines3.transform,
-          d3.zoomIdentity.translate(-400, -400).scale(1.7)
-        );
-
-      var zoomLines4 = d3.zoom().on("zoom", zoomedLines4);
-      var zoomLines5 = d3.zoom().on("zoom", zoomedLines5);
-      var zoomLines6 = d3.zoom().on("zoom", zoomedLines6);
-
-      function zoomedLines4() {
-        d3.selectAll(".route4").attr("transform", d3.event.transform);
-      }
-
-      function zoomedLines5() {
-        d3.selectAll(".route5").attr("transform", d3.event.transform);
-      }
-
-      function zoomedLines6() {
-        d3.selectAll(".route6").attr("transform", d3.event.transform);
-      }
-
-      d3.selectAll(".route4")
-        .transition()
-        .duration(750)
-        .call(
-          zoomLines4.transform,
-          d3.zoomIdentity.translate(-400, -400).scale(1.7)
-        );
-
-      d3.selectAll(".route5")
-        .transition()
-        .duration(750)
-        .call(
-          zoomLines5.transform,
-          d3.zoomIdentity.translate(-400, -400).scale(1.7)
-        );
-
-      d3.selectAll(".route6")
-        .transition()
-
-        .duration(750)
-        .call(
-          zoomLines6.transform,
-          d3.zoomIdentity.translate(-400, -400).scale(1.7)
-        );
-
       // d3.selectAll(".country")
       //   .filter(
       //     (d) =>
@@ -1295,6 +1217,59 @@ export default {
       //   .attr("fill", "#006b80")
       //   .attr("fill-opacity", "0.5");
 
+      var zoom = d3.zoom().on("zoom", zoomed);
+
+      function zoomed() {
+        d3.selectAll(".country").attr("transform", d3.event.transform);
+      }
+
+      d3.selectAll(".country")
+        .transition()
+        .duration(750)
+        .call(zoom.transform, d3.zoomIdentity.scale(1.5));
+
+      var zoomLines4 = d3.zoom().on("zoom", zoomedLines4);
+      var zoomLines5 = d3.zoom().on("zoom", zoomedLines5);
+      var zoomLines6 = d3.zoom().on("zoom", zoomedLines6);
+      var zoomLines3 = d3.zoom().on("zoom", zoomedLines3);
+
+      function zoomedLines4() {
+        d3.selectAll(".route4").attr("transform", d3.event.transform);
+      }
+
+      function zoomedLines5() {
+        d3.selectAll(".route5").attr("transform", d3.event.transform);
+      }
+
+      function zoomedLines6() {
+        d3.selectAll(".route6").attr("transform", d3.event.transform);
+      }
+
+      function zoomedLines3() {
+        d3.selectAll(".route3").attr("transform", d3.event.transform);
+      }
+
+      d3.selectAll(".route4")
+        .transition()
+        .duration(750)
+        .call(zoomLines4.transform, d3.zoomIdentity.scale(1.5));
+
+      d3.selectAll(".route5")
+        .transition()
+        .duration(750)
+        .call(zoomLines5.transform, d3.zoomIdentity.scale(1.5));
+
+      d3.selectAll(".route6")
+        .transition()
+
+        .duration(750)
+        .call(zoomLines6.transform, d3.zoomIdentity.scale(1.5));
+
+      d3.selectAll(".route3")
+        .transition()
+        .duration(750)
+        .call(zoomLines3.transform, d3.zoomIdentity.scale(1.5));
+
       const totalLength_route4 = d3
         .selectAll(".route4")
         .node()
@@ -1323,6 +1298,17 @@ export default {
         .duration(1000)
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
+
+      var zoomLines3 = d3.zoom().on("zoom", zoomedLines3);
+
+      function zoomedLines3() {
+        d3.selectAll(".route3").attr("transform", d3.event.transform);
+      }
+
+      // d3.selectAll(".route3")
+      //   .transition()
+      //   .duration(750)
+      //   .call(zoomLines3.transform, d3.zoomIdentity.scale(1.5));
     },
     colorEastern: function () {
       // console.log("coloring central");
@@ -1370,19 +1356,13 @@ export default {
       d3.selectAll(".country")
         .transition()
         .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(-1000, -200).scale(1.9)
-        );
+        .call(zoom.transform, d3.zoomIdentity.scale(1.3));
 
       console.log("route 6 is ", d3.selectAll(".route6"));
       d3.selectAll(".route6")
         .transition()
         .duration(750)
-        .call(
-          zoomLines6.transform,
-          d3.zoomIdentity.translate(-1000, -200).scale(1.9)
-        );
+        .call(zoomLines6.transform, d3.zoomIdentity.scale(1.3));
 
       const totalLength_route6 = d3
         .selectAll(".route6")
@@ -1490,7 +1470,7 @@ export default {
     highlight2014: function () {
       d3.selectAll(".year1").attr("fill", "#766F81").transition();
       d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 11) {
+        if (d < 21.7) {
           return "iconSelected";
         } else {
           return "iconPlain";
@@ -1505,25 +1485,59 @@ export default {
       d3.selectAll(".first_text").attr("opacity", "0");
       d3.selectAll(".evros").transition().delay(500).attr("opacity", "0");
       d3.selectAll(".first_text").transition().delay(500).attr("opacity", "0");
+      d3.selectAll("use").attr("class", function (d, i) {
+        if (d < 126.7) {
+          return "iconSelected";
+        } else {
+          return "iconPlain";
+        }
+      });
     },
 
     highlight2016: function () {
       d3.selectAll(".year3").attr("fill", "#766F81").transition();
+      d3.selectAll("use").attr("class", function (d, i) {
+        if (d < 163.7) {
+          return "iconSelected";
+        } else {
+          return "iconPlain";
+        }
+      });
     },
 
     highlight2017: function () {
       d3.selectAll(".year4").attr("fill", "#766F81").transition();
+      d3.selectAll("use").attr("class", function (d, i) {
+        if (d < 177) {
+          return "iconSelected";
+        } else {
+          return "iconPlain";
+        }
+      });
     },
 
     highlight2018: function () {
       d3.selectAll(".year5").attr("fill", "#766F81").transition();
+      d3.selectAll("use").attr("class", function (d, i) {
+        if (d < 189) {
+          return "iconSelected";
+        } else {
+          return "iconPlain";
+        }
+      });
     },
     highlight2019: function () {
       d3.selectAll(".year6").attr("fill", "#766F81").transition();
+      d3.selectAll("use").attr("class", function (d, i) {
+        if (d < 200) {
+          return "iconSelected";
+        } else {
+          return "iconPlain";
+        }
+      });
     },
-    lastView: function (){
-      d3.selectAll(".last")
-        .attr("opacity","1")
+    lastView: function () {
+      d3.selectAll(".last").transition().attr("opacity", "1");
     },
 
     removeHighlight: function () {
@@ -1534,26 +1548,34 @@ export default {
       d3.selectAll(".year5").attr("fill", "none");
       d3.selectAll(".year6").attr("fill", "none");
       d3.selectAll(".evros").attr("opacity", "0");
-      d3.selectAll(".iconPlain").attr("opacity", "0");
+      d3.selectAll(".iconPlain").transition().attr("opacity", "0");
+      d3.selectAll(".icon-text").transition().attr("opacity", "0");
       d3.selectAll(".iconSelected").transition().attr("opacity", "0");
     },
 
     resetZoom: function () {
-      var zoom = d3.zoom().on("zoom", zoomed);
+      // var zoom = d3.zoom().on("zoom", zoomed);
 
-      function zoomed() {
-        d3.selectAll(".country").attr("transform", d3.event.transform);
-      }
+      // function zoomed() {
+      //   d3.selectAll(".country").attr("transform", d3.event.transform);
+      // }
 
-      console.log(d3.selectAll(".country"));
-      d3.selectAll(".country")
-        .transition()
-        .duration(750)
-        .call(zoom.transform, d3.zoomIdentity.translate(-1000, -900));
+      // console.log(d3.selectAll(".country"));
+      // d3.selectAll(".country")
+      //   .transition()
+      //   .duration(750)
+      //   .call(zoom.transform, d3.zoomIdentity.translate(-1000, -900));
     },
 
     showIcons: function () {
-      d3.selectAll(".iconPlain").attr("opacity", "1");
+      d3.selectAll(".iconPlain")
+        .transition()
+        .duration(1000)
+        .attr("opacity", "1");
+      d3.selectAll(".icon-text")
+        .transition()
+        .duration(1000)
+        .attr("opacity", "1");
     },
     hideRoute12: function () {
       d3.selectAll(".route1").transition().duration(200).attr("opacity", 0);
@@ -1577,38 +1599,36 @@ export default {
 #sections {
   position: relative;
   /* display: inline-block; */
-  width: 40rem;
+  width: 30%;
+  height: 40%;
   /* top: 60px; */
   z-index: 90;
   margin-left: 1rem;
   /* height: 10000px; */
-  padding: 2px;
+  padding: 1%;
 }
 
 @media (max-width: 900px) {
   #sections {
-    position: relative;
-    /* display: inline-block; */
-    width: 10rem;
-    /* top: 60px; */
-    z-index: 90;
-    /* margin-left: rem; */
   }
 }
 
 .step {
   margin-bottom: 1rem;
-  height: 50rem;
+  height: 40%;
   /* font-family: "Domine"; */
   font-family: "Courier New", Courier, monospace;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.4em;
   font-size: 1.5em;
   text-align: justify;
   margin-left: 0.5rem;
   display: flex;
+  top: 20%;
   flex-direction: column;
   justify-content: space-around;
+  background-color: none;
+  padding-left: 2%;
 }
 
 text {
@@ -1636,29 +1656,17 @@ p,
 
 @media (max-width: 900px) {
   .step {
-    margin-bottom: 1rem;
-    height: 50rem;
-    /* font-family: "Domine"; */
-    font-family: "Courier New", Courier, monospace;
-    font-weight: 400;
-    line-height: 1.4em;
-    font-size: 0.5em;
-    text-align: justify;
-    /* margin-left: 0.5rem; */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
   }
 }
 #graphic,
 #graphic2,
 #graphic3 {
   /* margin: auto; */
-  width: 100rem;
+  width: 100%;
   flex-direction: row;
   align-items: top;
   justify-content: space-around;
-  padding: 2px;
+  padding-right: 2px;
 }
 
 @media (max-width: 900px) {
@@ -1676,7 +1684,7 @@ p,
   /* display: inline-block; */
   position: fixed;
   top: 1rem;
-  right: -50rem;
+  /* right: -30%; */
   /* right: -750px; */
   z-index: 1;
   /* margin-left: 0; */
@@ -1741,7 +1749,7 @@ header {
   transition: transform 300ms ease-in-out;
   transform: translateY(0);
   width: 96%;
-  z-index: 10;
+  z-index: 100;
 }
 
 .header_title {
@@ -1791,7 +1799,7 @@ header {
 text {
   fill: #bb6d82;
   text-anchor: left;
-  font-size: 12px;
+  font-size: 20px;
   font-family: sans-serif, Helvetica, Arial;
   font-weight: bold;
 }

@@ -46,6 +46,7 @@ p {
   font-weight: 800;
   line-height: 1.4em;
   font-size: 1em;
+    margin-top: -100%;
 }
 
 h1 {
@@ -53,6 +54,7 @@ h1 {
   font-family: "Courier New", Courier, monospace;
   /* font-weight: 800;
   line-height: 1.4em; */
+  margin-bottom: 0px;
 }
 
 .step {
@@ -63,7 +65,7 @@ h1 {
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.5em;
-  text-align: justify;
+  text-align: left;
   margin-left: 0.5rem;
   display: flex;
   flex-direction: column;

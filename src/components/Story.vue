@@ -22,11 +22,6 @@ export default {
       steps: [
         {
           title:
-            "Europe's Mediterrenean Border is known to be the most lethal border in the world",
-          description: "",
-        },
-        {
-          title:
             "There are multiple routes that migrants follow to get to Europe through the Mediterrenean",
           description: "",
         },

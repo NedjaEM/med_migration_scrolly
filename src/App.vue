@@ -1,9 +1,7 @@
 <template>
   <main class="scroll-container">
-    <!-- <section>
-        <h2></h2>
-    </section> -->
-    <header>
+    <VueScrollProgress></VueScrollProgress>
+    <header class="header">
       <h1 class="header_title">
         Mapping State Violence and Colonial Legacies in the Mediterranean
       </h1>
@@ -19,6 +17,44 @@
       </nav>
     </header>
     <div id="app">
+      <section class="landing">
+        <div class="banksy"></div>
+        <div class="intro">
+          <h2>
+            Migrants and State Violence <br />
+            in the Mediterranean
+          </h2>
+          <h3>
+            Europe's Mediterrenean Border is known to be <br />
+            the most lethal border in the world. <br/>
+            <br>
+            This project aims to highlight the Mediterranean migration events between 2014 and 2019 <br/>
+            by unfolding the involvment of nation states in the crisis.
+          </h3>
+          <br >
+          <br>
+          <br>
+            <div class="content">
+              <svg id="more-arrows">
+                <polygon
+                  class="arrow-top"
+                  fill= "#898883"
+                  points="37.6,27.9 1.8,1.3 3.3,0 37.6,25.3 71.9,0 73.7,1.3 "
+                />
+                <polygon
+                  class="arrow-middle"
+                   fill= "#898883"
+                  points="37.6,45.8 0.8,18.7 4.4,16.4 37.6,41.2 71.2,16.4 74.5,18.7 "
+                />
+                <polygon
+                  class="arrow-bottom"
+                   fill= "#898883"
+                  points="37.6,64 0,36.1 5.1,32.8 37.6,56.8 70.4,32.8 75.5,36.1 "
+                />
+              </svg>
+            </div>
+        </div>
+      </section>
       <!-- <MapIntro></MapIntro> -->
       <div id="graphic">
         <div id="sections">
@@ -38,6 +74,12 @@
           <Story3 :state="state" :active_index="active_index"></Story3>
         </div>
         <div id="bub2"></div>
+        <iframe
+          width="100%"
+          height="484"
+          frameborder="0"
+          src="https://observablehq.com/embed/45452375886aed80?cell=chart"
+        ></iframe>
       </div>
     </div>
   </main>
@@ -53,6 +95,10 @@ import * as d3 from "../../lib/d3";
 import map_json from "../public/Data/map.geo.json";
 import bar_data from "../public/Data/aggregate_data.csv";
 import missing_data from "../public/Data/med_migrants.csv";
+import VueScrollProgress from "vue-scroll-progress";
+import Vue from "vue";
+
+Vue.use(VueScrollProgress);
 
 export default {
   name: "App",
@@ -61,6 +107,7 @@ export default {
     Story,
     Story2,
     Story3,
+    VueScrollProgress,
   },
   data: function () {
     return {
@@ -84,7 +131,6 @@ export default {
     };
   },
   mounted() {
-    console.log(bar_data);
     this.drawInitial();
     this.drawInitialBub();
     // this.drawSecondBub();
@@ -125,12 +171,13 @@ export default {
           scroll_functions.hideMap();
         }
         if (i == 1) {
+          d3.selectAll("header").attr("opacity", 1);
           scroll_functions.drawMap();
           scroll_functions.hideRoute12();
         }
         if (i == 2) {
           scroll_functions.hideRoute3();
-          scroll_functions.drawMapNoTransition();
+          // scroll_functions.drawMapNoTransition();
           scroll_functions.colorCentral();
         } else if (i == 3) {
           scroll_functions.hideRoute12();
@@ -170,12 +217,12 @@ export default {
           scroll_functions.highlight2017();
         } else if (i == 22) {
           scroll_functions.highlight2018();
+          // scroll_functions.drawSecondBub();
         } else if (i == 23) {
           scroll_functions.highlight2019();
         } else if (i == 24) {
-          scroll_functions.drawSecondBub();
           scroll_functions.removeHighlight();
-          scroll_functions.lastView();
+          // scroll_functions.lastView();
         }
       });
       lastIndex = activeIndex;
@@ -227,7 +274,7 @@ export default {
       }
 
       function position() {
-        let pos = window.pageYOffset - 400 - containerStart;
+        let pos = window.pageYOffset - 700 - containerStart;
         let sectionIndex = d3.bisect(sectionPositions, pos);
         sectionIndex = Math.min(sections.size() - 1, sectionIndex);
 
@@ -367,7 +414,7 @@ export default {
 
         const circles = wrapper
           .append("g")
-         
+
           .selectAll("circle")
           .data(data)
           .join("circle")
@@ -375,7 +422,7 @@ export default {
           .attr("fill", (d) => color(d["Reported Year"]))
           .attr("cy", (d) => y(d["Reported Year"]))
           .attr("cx", (d) => x(d.month))
-           .attr("class", "last")
+          .attr("class", "last")
           .attr("opacity", "0");
 
         let force = d3
@@ -802,17 +849,24 @@ export default {
       console.log();
 
       const path = d3.geoPath().projection(projection);
-      this.svg
+      let map_initial = this.svg
         .append("g")
         .selectAll(".country")
         .data(map_json.features)
-        .enter()
+        .enter();
+
+      map_initial
         .append("path")
         .attr("d", path)
         .attr("class", "country")
         .attr("fill", "#c4c1b6")
-        .attr("stroke", "black")
+        .attr("stroke", "#898883")
         .attr("transform", `translate(${this.width / 5},40)`);
+      // map_initial
+      //   .append("text")
+      //   .text((d) => d.properties.name)
+      //   .attr("color", "black")
+      //   .attr("class", "countries");
 
       d3.selectAll(".country").attr("opacity", 0);
 
@@ -992,8 +1046,6 @@ export default {
         .attr("fill", "#c4c1b6");
     },
     drawMapNoTransition: function () {
-      d3.selectAll(".country").attr("opacity", 1);
-
       d3.selectAll(".country")
         .attr("opacity", 1)
         .transition()
@@ -1059,8 +1111,11 @@ export default {
 
       d3.selectAll(".country")
         .transition()
-        .duration(750)
-        .call(zoom.transform, d3.zoomIdentity.scale(1.8));
+        // .duration(750)
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.scale(1.8).translate(this.width / 100, 0)
+        );
 
       d3.selectAll(".route1")
         .transition()
@@ -1555,11 +1610,9 @@ export default {
 
     resetZoom: function () {
       // var zoom = d3.zoom().on("zoom", zoomed);
-
       // function zoomed() {
       //   d3.selectAll(".country").attr("transform", d3.event.transform);
       // }
-
       // console.log(d3.selectAll(".country"));
       // d3.selectAll(".country")
       //   .transition()
@@ -1582,7 +1635,7 @@ export default {
       d3.selectAll(".route2").transition().duration(200).attr("opacity", 0);
     },
     hideRoute3: function () {
-      d3.selectAll(".route3").transition().duration(200).attr("opacity", 0);
+      d3.selectAll(".route3").transition().attr("opacity", "0");
     },
     hideRoute45: function () {
       d3.selectAll(".route4").transition().duration(200).attr("opacity", 0);
@@ -1645,6 +1698,21 @@ p,
   line-height: 1.4em;
   font-size: 1em;
   opacity: 0.6;
+}
+
+h2 {
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.4em;
+  font-size: 1.5em;
+  opacity: 0.85;
+}
+
+h3 {
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.4em;
+  font-size: 1em;
+  padding: auto;
+  opacity: 0.7;
 }
 
 .text-years {
@@ -1745,10 +1813,11 @@ header {
   height: 70px;
   justify-content: space-between;
   padding: 0 20px;
+  top: -3px;
   position: fixed;
   transition: transform 300ms ease-in-out;
   transform: translateY(0);
-  width: 96%;
+  width: 95%;
   z-index: 100;
 }
 
@@ -1797,7 +1866,7 @@ header {
 }
 
 text {
-  fill: #bb6d82;
+  fill: #00688b;
   text-anchor: left;
   font-size: 20px;
   font-family: sans-serif, Helvetica, Arial;
@@ -1809,10 +1878,69 @@ text {
 }
 
 .iconSelected {
-  fill: #bb6d82;
+  fill: #00688b;
 }
 
 rect {
   fill: #fff1e0;
 }
+
+.intro,
+.banksy {
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  top: 15%;
+  left: 0.5%;
+}
+
+.banksy {
+  border: #00688b;
+}
+
+#progress-container-el {
+  /* background */
+  background-color: #dbd9d2 !important;
+}
+
+#progress-el {
+  /* progress bar */
+  background-color: #766F81 !important;
+}
+
+.landing {
+  display: flex;
+}
+
+.banksy {
+  flex: 0.7;
+}
+.intro {
+  flex: 1;
+}
+
+.landing {
+  background-image: url("../public/Data/inspo.jpg");
+
+  background-position: left;
+
+  background-repeat: no-repeat;
+
+  background-attachment: fixed;
+
+  background-color: #dbd9d2;
+}
+
+
+.content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-15%, -20%);
+  color: #898883;
+}
+  
+
+
+
 </style>

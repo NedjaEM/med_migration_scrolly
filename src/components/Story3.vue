@@ -20,16 +20,7 @@ export default {
   data: function () {
     return {
       steps: [
-        {
-          title: "",
-          description:
-            "Let's look into the number of migrants who went missing or died",
-        },
-         {
-          title: "",
-          description:
-            "",
-        }
+        
       ],
     };
   },
@@ -42,30 +33,29 @@ export default {
 
 <style scoped>
 p {
-  font-family: "Courier New", Courier, monospace;
-  font-weight: 800;
+  font-family: "Courier New", Courier;
+  font-weight: 600;
   line-height: 1.4em;
   font-size: 1em;
-    margin-top: -100%;
+   margin-top: -100%;
 }
 
 h1 {
   opacity: 0.8;
-  font-family: "Courier New", Courier, monospace;
-  /* font-weight: 800;
-  line-height: 1.4em; */
-  margin-bottom: 0px;
+  font-family: "Courier New", Courier;
+  font-size: 1em;
+   margin-bottom: 0px;
+
 }
 
 .step {
-  margin-bottom: 1rem;
   height: 50rem;
   /* font-family: "Domine"; */
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier;
   font-weight: 400;
   line-height: 1.4em;
-  font-size: 1.5em;
-  text-align: left;
+  font-size: 1.2em;
+  text-align: left;;
   margin-left: 0.5rem;
   display: flex;
   flex-direction: column;

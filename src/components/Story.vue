@@ -28,7 +28,7 @@ export default {
         {
           title: "Central Route",
           description:
-            "Which starts in North Africa (mainly Libya and Tunisia) to Italy, The closest island Lampedusa is reachable in 1 day from Tunisia and three days from Libya",
+            "Which starts in North Africa (mainly Libya and Tunisia) to Italy. The closest island Lampedusa is reachable in 1 day from Tunisia and three days from Libya",
         },
         {
           title: "Western Route",
@@ -57,7 +57,7 @@ export default {
 
 <style scoped>
 p {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier;
   font-weight: 600;
   line-height: 1.4em;
   font-size: 1em;
@@ -66,7 +66,7 @@ p {
 
 h1 {
   opacity: 0.8;
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier;
   font-size: 1em;
    margin-bottom: 0px;
 
@@ -75,7 +75,7 @@ h1 {
 .step {
   height: 50rem;
   /* font-family: "Domine"; */
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier;
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.2em;

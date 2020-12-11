@@ -26,33 +26,24 @@
           </h2>
           <h3>
             Europe's Mediterrenean Border is known to be <br />
-            the most lethal border in the world. <br/>
-            <br>
-            This project aims to highlight the Mediterranean migration events between 2014 and 2019 <br/>
+            the most lethal border in the world. <br />
+            <br />
+            This project aims to highlight the Mediterranean migration events
+            between 2014 and 2019 <br />
             by unfolding the involvment of nation states in the crisis.
           </h3>
-          <br >
-          <br>
-          <br>
-            <div class="content">
-              <svg id="more-arrows">
-                <polygon
-                  class="arrow-top"
-                  fill= "#898883"
-                  points="37.6,27.9 1.8,1.3 3.3,0 37.6,25.3 71.9,0 73.7,1.3 "
-                />
-                <polygon
-                  class="arrow-middle"
-                   fill= "#898883"
-                  points="37.6,45.8 0.8,18.7 4.4,16.4 37.6,41.2 71.2,16.4 74.5,18.7 "
-                />
-                <polygon
-                  class="arrow-bottom"
-                   fill= "#898883"
-                  points="37.6,64 0,36.1 5.1,32.8 37.6,56.8 70.4,32.8 75.5,36.1 "
-                />
-              </svg>
-            </div>
+          <br />
+          <br />
+          <br />
+          <div class="content">
+            <svg id="more-arrows">
+              <polygon
+                class="arrow-bottom"
+                fill="#898883"
+                points="37.6,64 0,36.1 5.1,32.8 37.6,56.8 70.4,32.8 75.5,36.1 "
+              />
+            </svg>
+          </div>
         </div>
       </section>
       <!-- <MapIntro></MapIntro> -->
@@ -67,19 +58,51 @@
         <div id="sections">
           <Story2 :state="state" :active_index="active_index"></Story2>
         </div>
-        <div id="bub"></div>
+        <div id="bub">
+          <div class="year">the year is</div>
+        </div>
       </div>
       <div id="graphic3">
         <div id="sections">
           <Story3 :state="state" :active_index="active_index"></Story3>
         </div>
         <div id="bub2"></div>
-        <iframe
-          width="100%"
-          height="484"
-          frameborder="0"
-          src="https://observablehq.com/embed/45452375886aed80?cell=chart"
-        ></iframe>
+        <!-- <div class="observ">
+          Incidents in the Mediterranean resulting in Migrants Death
+        </div> -->
+        <!-- <iframe width="60%" height="526" frameborder="0"
+  src="https://observablehq.com/embed/44d37f5b01e5a5ba?cell=chart"></iframe> -->
+      </div>
+
+      <div class="tooltip1">
+        <img
+          src="https://api.time.com/wp-content/uploads/2015/10/italy-migrants-refugees-asylum-seekers-1.jpg"
+          alt="boatd"
+        />
+        <div class="text-content">
+          <h3>Evros Border</h3>
+          <ul>
+            <li>
+              The 200 Km long Greek-Turkish border along the Evros river has
+              been a common route for migrants coming from Syria, Iraq and
+              Afghanistan\ to cross to Greece from Turkey. However, in 2012, a
+              tall barbed wire fence was build to block entry through the dry
+              land \ part of the border.
+            </li>
+            <li>
+              "This fence gave no other choice to migrants who were fleeing hard
+              conditions in their countries but to seek other crossing
+              alternatives\ namely by crossing the mediterranean sea, a much
+              more perilous route. ",
+            </li>
+            <li>
+              The fence, instead of discouraging migrants to cross,\ caused a
+              high influx of people crossing through the Eastern Mediterranean
+              route and putting their lives at risk.
+            </li>
+          </ul>
+        </div>
+        <i></i>
       </div>
     </div>
   </main>
@@ -133,7 +156,6 @@ export default {
   mounted() {
     this.drawInitial();
     this.drawInitialBub();
-    // this.drawSecondBub();
 
     scroll = this.scroller().container(d3.select("#graphic"));
     scroll();
@@ -149,13 +171,11 @@ export default {
         .duration(500)
         .style("opacity", function (d, i) {
           console.log("i is " + index);
-          return i === index ? 1 : 0.1;
+          return i === index ? 0.1 : 1;
         });
 
       activeIndex = index;
       scroll_functions.active_index = activeIndex;
-
-      console.log("scroll func ", scroll_functions);
 
       let sign = activeIndex - lastIndex < 0 ? -1 : 1;
       let scrolledSections = d3.range(
@@ -163,25 +183,22 @@ export default {
         activeIndex + sign,
         sign
       );
-
-      console.log("scrolled sec ", scrolledSections);
       scrolledSections.forEach((i) => {
         console.log("function ", i);
+        console.log("section ", i);
         if (i == 0) {
           scroll_functions.hideMap();
+          scroll_functions.removeHighlight();
         }
         if (i == 1) {
-          d3.selectAll("header").attr("opacity", 1);
           scroll_functions.drawMap();
           scroll_functions.hideRoute12();
         }
         if (i == 2) {
           scroll_functions.hideRoute3();
-          // scroll_functions.drawMapNoTransition();
           scroll_functions.colorCentral();
         } else if (i == 3) {
           scroll_functions.hideRoute12();
-          scroll_functions.resetZoom();
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorWestern();
           scroll_functions.hideRoute45();
@@ -194,35 +211,26 @@ export default {
           scroll_functions.hideRoute45();
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
-          scroll_functions.hideBubbles();
           scroll_functions.hideChart();
-          scroll_functions.removeHighlight();
         } else if (i == 6) {
+          scroll_functions.removeHighlight();
           scroll_functions.hideMap();
           scroll_functions.hideRoute6();
-          // scroll_functions.firstImage();
-
-          // scroll_functions.drawBarChart();
-          //  scroll_functions.zoomBackChart()
-
           scroll_functions.showIcons();
         } else if (i == 7) {
-          // scroll_functions.unzoomChart();
           scroll_functions.highlight2014();
-        } else if (i == 11) {
+        } else if (i == 10) {
           scroll_functions.highlight2015();
-        } else if (i == 18) {
+        } else if (i == 13) {
           scroll_functions.highlight2016();
-        } else if (i == 20) {
+        } else if (i == 15) {
           scroll_functions.highlight2017();
-        } else if (i == 22) {
+        } else if (i == 16) {
           scroll_functions.highlight2018();
-          // scroll_functions.drawSecondBub();
-        } else if (i == 23) {
+        } else if (i == 17) {
           scroll_functions.highlight2019();
-        } else if (i == 24) {
+        } else if (i == 18) {
           scroll_functions.removeHighlight();
-          // scroll_functions.lastView();
         }
       });
       lastIndex = activeIndex;
@@ -274,7 +282,7 @@ export default {
       }
 
       function position() {
-        let pos = window.pageYOffset - 700 - containerStart;
+        let pos = window.pageYOffset - 400 - containerStart;
         let sectionIndex = d3.bisect(sectionPositions, pos);
         sectionIndex = Math.min(sections.size() - 1, sectionIndex);
 
@@ -308,174 +316,6 @@ export default {
 
       return scroll;
     },
-    drawSecondBub: function () {
-      this.svg = d3
-        .select("#bub2")
-        .append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height);
-
-      d3.csv(missing_data, d3.autoType).then((data) => {
-        let color = d3.scaleSequential(
-          d3.extent(data, (d) => d["Reported Year"]),
-          d3.interpolateCividis
-        );
-        let yAxis = (g) =>
-          g
-            .call(d3.axisLeft(y).ticks(8))
-            .call((g) => g.select(".domain").remove())
-            .call((g) => g.selectAll(".tick line").remove());
-
-        let xAxis = (g) =>
-          g
-            .call(d3.axisTop(x))
-            .call((g) => g.select(".domain").remove())
-            .call((g) =>
-              g
-                .append("text")
-                .attr("x", this.width)
-                .attr("y", 20)
-                .attr("font-weight", "bold")
-                .attr("fill", "currentColor")
-                .attr("text-anchor", "end")
-                .text("Month")
-            );
-
-        let r = d3
-          .scaleSqrt()
-          .domain(d3.extent(data, (d) => d["Total Dead and Missing"]))
-          .range([1, 10]);
-
-        let y = d3
-          .scaleLinear()
-          .domain(d3.extent(data, (d) => d["Reported Year"]))
-          .range([this.height / 8, this.height / 1.5]);
-
-        data.forEach(function (d) {
-          if (d["Reported Month"] == "Jan") {
-            d.month = 1;
-          }
-          if (d["Reported Month"] == "Feb") {
-            d.month = 2;
-          }
-          if (d["Reported Month"] == "Mar") {
-            d.month = 3;
-          }
-          if (d["Reported Month"] == "Apr") {
-            d.month = 4;
-          }
-          if (d["Reported Month"] == "May") {
-            d.month = 5;
-          }
-          if (d["Reported Month"] == "Jun") {
-            d.month = 6;
-          }
-          if (d["Reported Month"] == "Jul") {
-            d.month = 7;
-          }
-          if (d["Reported Month"] == "Aug") {
-            d.month = 8;
-          }
-          if (d["Reported Month"] == "Sep") {
-            d.month = 9;
-          }
-          if (d["Reported Month"] == "Oct") {
-            d.month = 10;
-          }
-          if (d["Reported Month"] == "Nov") {
-            d.month = 11;
-          }
-          if (d["Reported Month"] == "Dec") {
-            d.month = 12;
-          }
-        });
-
-        let x = d3
-          .scaleLinear()
-          .domain(d3.extent(data, (d) => d.month))
-          .range([this.width / 8, this.width / 1.5]);
-
-        console.log("x is ", x);
-
-        // let groups = d3.group(data, (d) => d.year);
-
-        let noSplitHeight = 500;
-        let splitHight = 900;
-
-        const wrapper = this.svg.append("g");
-        // .attr("transform", `translate(${margin.left}, ${margin.top})`);
-        console.log("wrapper is ", wrapper);
-        // Add x-Axis
-        wrapper.append("g").call(xAxis);
-
-        const yAxisContainer = wrapper
-          .append("g")
-          .attr("transform", `translate(-10,0)`);
-
-        const circles = wrapper
-          .append("g")
-
-          .selectAll("circle")
-          .data(data)
-          .join("circle")
-          .attr("r", (d) => r(d["Total Dead and Missing"]))
-          .attr("fill", (d) => color(d["Reported Year"]))
-          .attr("cy", (d) => y(d["Reported Year"]))
-          .attr("cx", (d) => x(d.month))
-          .attr("class", "last")
-          .attr("opacity", "0");
-
-        let force = d3
-          .forceSimulation(data)
-          .force("charge", d3.forceManyBody().strength(0))
-          .force(
-            "y",
-            d3.forceY((d) => y(d["Reported Year"]))
-          )
-          .force(
-            "x",
-            d3.forceX((d) => x(d.month))
-          )
-          .force(
-            "collision",
-            d3.forceCollide().radius((d) => r(d["Total Dead and Missing"]) + 1)
-          );
-
-        // force.on("tick", () => {
-        //   circles
-        //     .transition()
-        //     .ease(d3.easeLinear)
-        //     .attr("cx", (d) => d.x)
-        //     .attr("cy", (d) => d.y);
-        // });
-
-        //  invalidation.then(() => force.stop());
-
-        // return Object.assign(svg.node(), {
-        //   update(split) {
-        //     let height = split ? splitHeight : noSplitHeight;
-        //     let years = [...yearGroups.keys()].sort()
-
-        //     // Update height of svg object
-        //     const t = d3.transition().duration(750);
-        //     svg.transition(t).attr('viewBox', [0, 0, width, height]);
-
-        //     // Update domain of y-Axis
-        //     y.domain(split ? years : ['All']);
-        //     y.range(split ? [splitHeight , 0] : [noSplitHeight , 0]);
-        //     yAxisContainer.call(yAxis, y, split ? years : ['All'])
-        //       .call(g => g.select('.domain').remove())
-        //       .call(g => g.selectAll('.tick line').remove());
-
-        //     // Update simulation
-        //     force.force('y', split ? d3.forceY(d => y(d.year) + y.bandwidth() / 2) : // If split by year align by year
-        //                              d3.forceY((noSplitHeight) / 2)); // If not split align to middle
-        //     //force.nodes(running);
-        //     force.alpha(1).restart();
-        //   }
-        // })
-      });
-    },
 
     drawInitialBub: function () {
       this.svg = d3
@@ -484,278 +324,11 @@ export default {
         .attr("width", this.width)
         .attr("height", this.height);
 
-      d3.csv(bar_data, d3.autoType).then((data) => {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        var x = d3
-          .scaleLinear()
-          .domain([2014, 2019])
-          .range([this.width / 6, this.width / 1.5]);
-
-        let g1 = this.svg.append("g");
-        let g2 = this.svg.append("g");
-        let g3 = this.svg.append("g");
-        let g4 = this.svg.append("g");
-        let g5 = this.svg.append("g");
-        let g6 = this.svg.append("g");
-        var y = d3
-          .scaleLinear()
-          .domain([2014, 2020])
-          .range([this.height / 1.5, this.height / 7]);
-
-        var z = d3
-          .scaleSqrt()
-          .domain([0, d3.max(data, (d) => d["Total Arrivals"])])
-          .range([20, 100]);
-
-        const [width, height, margin] = [this.width, 250, 15];
-
-        const radius = z(data[0]["Total Arrivals"]);
-        console.log(radius);
-        const xStart = x(data[0]["Year"] + radius / 100);
-        const yStart = height * 1.5 - radius;
-        const circle = g1
-          .append("path")
-          .attr("class", "second year1")
-          .attr(
-            "d",
-            `M ${xStart},${yStart}
-                a ${radius} ${radius} 0 1 1 0 ${radius * 2}
-                  ${radius} ${radius} 0 1 1 0 ${-radius * 2} z`
-          );
-        g1.append("text")
-          .text("2014")
-          .attr("x", xStart)
-          .attr("y", yStart - 10)
-          .attr("class", "text-years")
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        const radius2 = z(data[1]["Total Arrivals"]);
-        const xStart2 = x(data[1]["Year"] + radius2 / 100 - 0.4);
-        const yStart2 = height * 1.5 - radius2;
-        const circle2 = g2
-          .append("path")
-          .attr("class", "second year2")
-          .attr(
-            "d",
-            `M ${xStart2},${yStart2}
-                a ${radius2} ${radius2} 0 1 1 0 ${radius2 * 2}
-                  ${radius2} ${radius2} 0 1 1 0 ${-radius2 * 2} z`
-          );
-        g2.append("text")
-          .text("2015")
-          .attr("x", xStart2)
-          .attr("y", yStart2 - 10)
-          .attr("class", "text-years")
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        const radius3 = z(data[2]["Total Arrivals"]);
-        const xStart3 = x(data[2]["Year"] + radius3 / 100);
-        const yStart3 = height * 1.5 - radius3;
-        const circle3 = g3
-          .append("path")
-          .attr("class", "second year3")
-          .attr(
-            "d",
-            `M ${xStart3},${yStart3}
-                a ${radius3} ${radius3} 0 1 1 0 ${radius3 * 2}
-                  ${radius3} ${radius3} 0 1 1 0 ${-radius3 * 2} z`
-          );
-        g3.append("text")
-          .text("2016")
-          .attr("x", xStart3)
-          .attr("y", yStart3 - 10)
-          .attr("class", "text-years")
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-        const radius4 = z(data[3]["Total Arrivals"]);
-        const xStart4 = x(data[3]["Year"] + radius4 / 100);
-        const yStart4 = height * 1.5 - radius4;
-        const circle4 = g4
-          .append("path")
-          .attr("class", "second year4")
-          .attr(
-            "d",
-            `M ${xStart4},${yStart4}
-                a ${radius4} ${radius4} 0 1 1 0 ${radius4 * 2}
-                  ${radius4} ${radius4} 0 1 1 0 ${-radius4 * 2} z`
-          );
-
-        g4.append("text")
-          .text("2017")
-          .attr("x", xStart4)
-          .attr("y", yStart4 - 10)
-          .attr("class", "text-years")
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        const radius5 = z(data[4]["Total Arrivals"]);
-        const xStart5 = x(data[4]["Year"] + radius5 / 100 - 0.2);
-        const yStart5 = height * 1.5 - radius5;
-        const circle5 = g5
-          .append("path")
-          .attr("class", "second year5")
-          .attr(
-            "d",
-            `M ${xStart5},${yStart5}
-                a ${radius5} ${radius5} 0 1 1 0 ${radius5 * 2}
-                  ${radius5} ${radius5} 0 1 1 0 ${-radius5 * 2} z`
-          );
-
-        g5.append("text")
-          .text("2018")
-          .attr("x", xStart5)
-          .attr("y", yStart5 - 10)
-          .attr("class", "text-years")
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        const radius6 = z(data[5]["Total Arrivals"] / 5000 - margin);
-        const xStart6 = x(data[5]["Year"] + radius6 / 100 - 0.3);
-        const yStart6 = height * 1.5 - radius6;
-        const circle6 = g6
-          .append("path")
-          .attr("class", "second year6")
-          .attr(
-            "d",
-            `M ${xStart6},${yStart6}
-                a ${radius6} ${radius6} 0 1 1 0 ${radius6 * 2}
-                  ${radius6} ${radius6} 0 1 1 0 ${-radius6 * 2} z`
-          );
-        g6.append("text")
-          .text("2019")
-          .attr("x", xStart6)
-          .attr("y", yStart6 - 10)
-          .attr("class", "text-years")
-          .attr("font-family", "Courier")
-          .attr("fill", "#2c3e50")
-          .attr("font-weight", "bold")
-          .style("opacity", "0")
-          .attr("font-size", "0.8em")
-          .attr("text-anchor", "middle");
-
-        circle
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle2
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle3
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle4
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle5
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        circle6
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", "1.5")
-          .attr("opacity", 0);
-
-        var x = d3
-          .scaleLinear()
-          .domain([2014, 2020])
-          .range([xStart - 100, xStart6 + 100]);
-      });
-      this.svg
-        .append("image")
-        .attr("class", "img")
-        .attr(
-          "xlink:href",
-          "https://api.time.com/wp-content/uploads/2015/10/italy-migrants-refugees-asylum-seekers-1.jpg"
-        )
-        // .attr("height",this.height/1.5)
-        // .attr("width",this.width /1.5)
-        .style("opacity", 0);
-
       const projection = d3
         .geoMercator()
         .fitSize([2.4 * this.width, 2.4 * this.height], map_json);
 
       const path = d3.geoPath().projection(projection);
-
-      let groups_map = this.svg
-        .selectAll(".evros")
-        .data(map_json.features)
-        .enter()
-        // .append("g")
-        .filter(
-          (d) =>
-            d.properties.name === "Syria" ||
-            d.properties.name === "Greece" ||
-            d.properties.name === "Turkey"
-        )
-        .append("g");
-
-      groups_map
-        .append("path")
-        .attr("d", path)
-        .attr("class", "evros")
-        .attr("fill", "#b35525")
-        .attr("stroke", "black")
-        .attr("opacity", "0");
-      groups_map
-        .append("text")
-        .text((d) => d.properties.name)
-        .attr("color", "black")
-        .attr("class", "countries");
-
-      groups_map.attr("transform", "translate(-1400,-300)");
-      d3.selectAll(".evros")
-        .append("text")
-        .text((d) => d.properties.name)
-        .attr("color", "black")
-        .attr("class", "countries");
-
-      // this.svg
-      //   .append("text")
-      //   .text(
-      //     "The number of sea arrivals through the mediterranean increased significantly reaching 209,660 people"
-      //   )
-      //   .attr("transform", "translate(0,300)")
-      //   .style("font-size", "20px")
-      //   .attr("class", "first_text")
-      //   .attr("opacity", "0");
 
       this.svg
         .append("defs")
@@ -767,10 +340,8 @@ export default {
           "M3.5,2H2.7C3,1.8,3.3,1.5,3.3,1.1c0-0.6-0.4-1-1-1c-0.6,0-1,0.4-1,1c0,0.4,0.2,0.7,0.6,0.9H1.1C0.7,2,0.4,2.3,0.4,2.6v1.9c0,0.3,0.3,0.6,0.6,0.6h0.2c0,0,0,0.1,0,0.1v1.9c0,0.3,0.2,0.6,0.3,0.6h1.3c0.2,0,0.3-0.3,0.3-0.6V5.3c0,0,0-0.1,0-0.1h0.2c0.3,0,0.6-0.3,0.6-0.6V2.6C4.1,2.3,3.8,2,3.5,2z"
         );
 
-      // this.svg.append("rect").attr("width", 500).attr("height", 500).attr("top",500);
-
       //specify the number of columns and rows for pictogram layout
-      var numCols = 10;
+      var numCols = 20;
       var numRows = 20;
 
       //padding for the grid
@@ -788,18 +359,28 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.85 * this.width)
-        .attr("y", 0.18 * this.height)
+        .attr("x", 0.48 * this.width - 200)
+        .attr("y", 0.13 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text")
-        .text("1,927,007")
+        .text("1,927,007 people arrived to Europe")
+        .attr("opacity", "0");
+
+      this.svg
+        .append("text")
+        .attr("id", "txtValue")
+        .attr("x", 0.42 * this.width - 200)
+        .attr("y", 0.16 * this.height)
+        .attr("dy", -3)
+        .attr("class", "icon-text")
+        .text(" through the Mediterranean between 2014 and 2019")
         .attr("opacity", "0");
 
       //create group element and create an svg <use> element for each icon
       this.svg
         .append("g")
         .attr("id", "pictoLayer")
-        .selectAll("use")
+        .selectAll(".iconPlain")
         .data(myIndex)
         .enter()
         .append("use")
@@ -809,7 +390,7 @@ export default {
         })
         .attr("x", function (d) {
           var remainder = d % numCols; //calculates the x position (column number) using modulus
-          return xPadding + remainder * wBuffer; //apply the buffer and return value
+          return xPadding + remainder * wBuffer - 70; //apply the buffer and return value
         })
         .attr("y", function (d) {
           var whole = Math.floor(d / numCols); //calculates the y position (row number)
@@ -817,6 +398,211 @@ export default {
         })
 
         .classed("iconPlain", true)
+        .attr("class", "iconPlain")
+        .attr("opacity", "0");
+
+      this.svg
+        .append("defs1")
+        .append("g")
+        .attr("id", "iconCustomLegend")
+        .append("path")
+        .attr(
+          "d",
+          "M3.5,2H2.7C3,1.8,3.3,1.5,3.3,1.1c0-0.6-0.4-1-1-1c-0.6,0-1,0.4-1,1c0,0.4,0.2,0.7,0.6,0.9H1.1C0.7,2,0.4,2.3,0.4,2.6v1.9c0,0.3,0.3,0.6,0.6,0.6h0.2c0,0,0,0.1,0,0.1v1.9c0,0.3,0.2,0.6,0.3,0.6h1.3c0.2,0,0.3-0.3,0.3-0.6V5.3c0,0,0-0.1,0-0.1h0.2c0.3,0,0.6-0.3,0.6-0.6V2.6C4.1,2.3,3.8,2,3.5,2z"
+        );
+
+      var myIndex_legend = d3.range(1);
+
+      this.svg
+        .append("g")
+        .attr("id", "legend_year")
+         .attr("class", "legend_year")
+        .selectAll("div")
+        .data(myIndex_legend)
+        .enter()
+        .append("use")
+        .attr("xlink:href", "#iconCustomLegend")
+        .attr("x", 0)
+        .attr("y", 0)
+
+        this.svg
+        .append("g")
+        .attr("id", "legend_select")
+        .attr("class", "legend_select")
+        .selectAll("div")
+        .data(myIndex_legend)
+        .enter()
+        .append("use")
+        .attr("xlink:href", "#iconCustomLegend")
+        .attr("x", 0)
+        .attr("y", 0)
+      
+
+      var zoomLegend = d3.zoom().on("zoom", zoomedLegend);
+
+      function zoomedLegend() {
+        d3.selectAll(".legend_year").attr("transform", d3.event.transform);
+      }
+
+      d3.selectAll(".legend_year")
+        .transition()
+        .duration(750)
+        .call(
+          zoomLegend.transform,
+          d3.zoomIdentity
+            .translate(0.8 * this.width, 0.12 * this.height)
+            .scale(this.width / 500)
+        );
+
+      var zoomLegend1 = d3.zoom().on("zoom", zoomedLegend1);
+
+      function zoomedLegend1() {
+        d3.selectAll(".legend_select").attr("transform", d3.event.transform);
+      }
+
+      d3.selectAll(".legend_select")
+        .transition()
+        .duration(750)
+        .call(
+          zoomLegend1.transform,
+          d3.zoomIdentity
+            .translate(0.8 * this.width, 0.17 * this.height)
+            .scale(this.width / 500)
+        );
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", 0.8*this.width+20)
+        .attr("y", 0.12 * this.height +15)
+        .attr("class", "legend")
+        .text(" = 4,817 migrants")
+        .attr("opacity", "0");
+
+       this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", 0.8*this.width+20)
+        .attr("y", 0.17 * this.height +15)
+        .attr("class", "legend")
+        .text("hover over")
+        .attr("opacity", "0");
+
+      d3.selectAll(".legend_select").attr("opacity",0)
+      d3.selectAll(".legend_year").attr("opacity",0)
+
+      let x1 = d3.select("#icon399").attr("x");
+      let y1 = d3.select("#icon399").attr("y");
+
+      let x2 = d3.select("#icon250").attr("x");
+      let y2 = d3.select("#icon250").attr("y");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 7 - 10)
+        .attr("class", "picto1")
+        .text("209,660 migrants")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 7 + 5)
+        .attr("class", "picto1")
+        .text("arrived to Europe")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 2.2 - 10)
+        .attr("class", "picto2")
+        .text("1,017,294 migrants")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 2.2 + 5)
+        .attr("class", "picto2")
+        .text("arrived to Europe")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.7 - 10)
+        .attr("class", "picto3")
+        .text("356,502 migrants")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.7 + 5)
+        .attr("class", "picto3")
+        .text("arrived to Europe")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.55 - 10)
+        .attr("class", "picto4")
+        .text("171,050 migrants")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.55 + 5)
+        .attr("class", "picto4")
+        .text("arrived to Europe")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.4 - 10)
+        .attr("class", "picto5")
+        .text("114,775 migrants")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.4 + 5)
+        .attr("class", "picto5")
+        .text("arrived to Europe")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1.3 - 10)
+        .attr("class", "picto6")
+        .text("100,785 migrants")
+        .attr("opacity", "0");
+
+      this.svg
+        .selectAll("#pictoLayer")
+        .append("text")
+        .attr("x", this.width - 1.5 * x1 - 350)
+        .attr("y", this.height - this.height / 1 + 5)
+        .attr("class", "picto6")
+        .text("arrived to Europe")
         .attr("opacity", "0");
 
       var zoom = d3.zoom().on("zoom", zoomed);
@@ -831,9 +617,119 @@ export default {
         .call(
           zoom.transform,
           d3.zoomIdentity
-            .translate(0.75 * this.width, this.height / 10)
+            .translate(0.4 * this.width, this.height / 20)
             .scale(this.width / 500)
         );
+
+      d3.csv(bar_data, d3.autoType).then((data) => {
+        console.log(data);
+        const yScale = d3
+          .scaleLinear()
+          .domain([0, 1])
+          .range([this.height / 4, this.height - 100]);
+
+        // let colors = d3
+        //   .scaleLinear()
+        //   .domain(data.map((d) => d.Year))
+        //   .range(["#6A359C", "#DCD0FF"])
+        //   .interpolate(d3.interpolateHcl);
+        let colors = d3
+          .scaleOrdinal()
+          .domain(data.map((d) => d["Dead Missing"]))
+          .range([
+            "#acaba8",
+            "#a09f9b",
+            "#94938f",
+            "#5f5f5b",
+            "#7b7a75",
+            "#898883",
+          ]);
+
+        this.svg
+          .append("g")
+          .attr("stroke", "white")
+          .selectAll("rect")
+          .data(data)
+          .join("rect")
+          .attr("class", (d) => "rect" + d.Year)
+          .attr("fill", (d) => colors(d["Dead Missing"]))
+          .attr("y", (d) => yScale(d.start))
+          .attr("x", 0.8 * this.width)
+          .attr("height", (d) => yScale(d.end) - yScale(d.start))
+          .attr("width", 100)
+          .attr("opacity", 0);
+
+        this.svg
+          .append("g")
+          .attr("font-size", 15)
+          .selectAll("text")
+          .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
+          .join("text")
+          .attr("class", (d) => "text" + d.Year)
+          .attr("fill", "#766f81")
+          .attr(
+            "transform",
+            (d) => `translate(${0.8 * this.width},${yScale(d.start) + 6})`
+          )
+          .call((text) =>
+            text
+              .append("tspan")
+              .attr("y", "0.7em")
+              .attr("font-weight", "bold")
+              .text((d) => d.Year)
+          )
+          .attr("opacity", 0);
+
+        this.svg
+          .append("g")
+          .attr("font-size", 15)
+          .selectAll("text")
+          .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
+          .join("text")
+          .attr("class", (d) => "text" + d.Year)
+          .attr("fill", "#766f81")
+          .attr(
+            "transform",
+            (d) => `translate(${0.88 * this.width},${yScale(d.start) + 6})`
+          )
+          .call((text) =>
+            text
+              .append("tspan")
+              .attr("y", "0.7em")
+              .attr("font-weight", "bold")
+              .text((d) => d["Dead Missing"] + " died")
+          )
+          .attr("opacity", 0);
+
+        this.svg
+          .append("g")
+          .attr("font-size", 15)
+          .selectAll("text")
+          .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
+          .join("text")
+          .attr("class", (d) => "text" + d.Year)
+          .attr("fill", "#766f81")
+          .attr(
+            "transform",
+            (d) => `translate(${0.88 * this.width},${yScale(d.start) + 15})`
+          )
+          .call((text) =>
+            text
+              .append("tspan")
+              .attr("y", "0.7em")
+              .attr("font-weight", "bold")
+              .text((d) => "or went missing")
+          )
+          .attr("opacity", 0);
+        // .call((text) =>
+        //   text
+        //     .append("tspan")
+        //     .attr("x", 0)
+        //     .attr("y", "1.7em")
+        //     .attr("fill-opacity", 0.7)
+        //     .text((d) => formatPercent(d.value))
+        // );
+      });
     },
     drawInitial: function () {
       this.svg = d3
@@ -860,18 +756,11 @@ export default {
         .attr("d", path)
         .attr("class", "country")
         .attr("fill", "#c4c1b6")
-        .attr("stroke", "#898883")
-        .attr("transform", `translate(${this.width / 5},40)`);
-      // map_initial
-      //   .append("text")
-      //   .text((d) => d.properties.name)
-      //   .attr("color", "black")
-      //   .attr("class", "countries");
+        .attr("stroke", "#898883");
 
-      d3.selectAll(".country").attr("opacity", 0);
-
-      console.log(this.svg);
-      console.log(d3.selectAll(".country"));
+      d3.selectAll(".country")
+        .attr("transform", `translate(${this.width / 5},40)`)
+        .attr("opacity", 0);
 
       let tunis = [10, 33];
       let tunis_mid = [10.6, 36.41];
@@ -923,51 +812,129 @@ export default {
         projection(greece),
       ];
 
-      console.log(pointsLine4);
-
-      this.svg
+      let route1 = this.svg
+        .append("g")
         .selectAll(".route1")
-        .data([pointsLine1])
+        .attr("class", "route1")
+        .data([pointsLine1]);
+
+      route1
         .join("path")
         .attr("class", "route1")
         .attr("d", curve)
         .attr("stroke", "#766F81")
-        .attr("stroke-width", "5px")
+        .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
-        .attr("opacity", "0");
+        .attr("opacity", "0")
+        .attr("stroke-linecap", "round");
 
-      this.svg
-        .selectAll(".route2")
-        .data([pointsLine2])
+      route1
+        .join("text")
+        .text("Tunisia")
+        .attr("x", projection(tunis)[0] - projection(tunis)[0] / 10)
+        .attr("y", projection(tunis)[1])
+        .attr("class", "countries route1")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      route1
+        .join("text")
+        .text("Italy")
+        .attr("x", projection(italy)[0])
+        .attr("y", projection(italy)[1])
+        .attr("class", "countries route1")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+      route1
+        .join("text")
+        .text("Libya")
+        .attr("x", projection(libya)[0])
+        .attr("y", projection(libya)[1])
+        .attr("class", "countries route1")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      let route2 = this.svg.selectAll(".route2").data([pointsLine2]);
+
+      route2
         .join("path")
         .attr("class", "route2")
         .attr("d", curve)
         .attr("stroke", "#766F81")
-        .attr("stroke-width", "5px")
+        .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
-        .attr("opacity", "0");
+        .attr("opacity", "0")
+        .attr("stroke-linecap", "round");
 
-      this.svg
-        .selectAll(".route3")
-        .data([pointsLine3])
+      let route3 = this.svg.selectAll(".route3").data([pointsLine3]);
+
+      route3
         .join("path")
         .attr("class", "route3")
         .attr("d", curve)
         .attr("stroke", "#766F81")
-        .attr("stroke-width", "5px")
+        .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
-        .attr("opacity", "0");
+        .attr("opacity", "0")
+        .attr("stroke-linecap", "round");
 
-      this.svg
-        .selectAll(".route4")
-        .data([pointsLine4])
+      route3
+        .join("text")
+        .text("Morroco")
+        .attr("x", projection(mor)[0])
+        .attr("y", projection(mor)[1])
+        .attr("class", "countries route3")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      route3
+        .join("text")
+        .text("Spain")
+        .attr("x", projection(spain)[0])
+        .attr("y", projection(spain)[1])
+        .attr("class", "countries route3")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      let route4 = this.svg.selectAll(".route4").data([pointsLine4]);
+
+      route4
         .join("path")
         .attr("class", "route4")
         .attr("d", curve)
         .attr("stroke", "#766F81")
-        .attr("stroke-width", "5px")
+        .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
-        .attr("opacity", "0");
+        .attr("opacity", "0")
+        .attr("stroke-linecap", "round");
+
+      route3
+        .join("text")
+        .text("Senegal")
+        .attr("x", projection(senegal)[0])
+        .attr("y", projection(senegal)[1])
+        .attr("class", "countries route4")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      route3
+        .join("text")
+        .text("Canary")
+        .attr("x", projection(canary)[0])
+        .attr("y", projection(canary)[1])
+        .attr("class", "countries route4")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      route3
+        .join("text")
+        .text("Mauritania")
+        .attr("x", projection(Mauritania)[0])
+        .attr("y", projection(Mauritania)[1])
+        .attr("class", "countries route4")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
       this.svg
         .selectAll(".route5")
         .data([pointsLine5])
@@ -975,20 +942,42 @@ export default {
         .attr("class", "route5")
         .attr("d", curve)
         .attr("stroke", "#766F81")
-        .attr("stroke-width", "5px")
+        .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
-        .attr("opacity", "0");
+        .attr("opacity", "0")
+        .attr("stroke-linecap", "round");
 
-      this.svg
-        .selectAll(".route6")
-        .data([pointsLine6])
+      let route6 = this.svg.selectAll(".route6").data([pointsLine6]);
+
+      route6
         .join("path")
         .attr("class", "route6")
         .attr("d", curve)
         .attr("stroke", "#766F81")
-        .attr("stroke-width", "5px")
+        .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
-        .attr("opacity", "0");
+        .attr("opacity", "0")
+        .attr("stroke-linecap", "round");
+
+      route3
+        .join("text")
+        .text("Greece")
+        .attr("x", projection(greece)[0])
+        .attr("y", projection(greece)[1])
+        .attr("class", "countries route6")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      route3
+        .join("text")
+        .text("Turkey")
+        .attr("x", projection(turkey)[0])
+        .attr("y", projection(turkey)[1])
+        .attr("class", "countries route6")
+        .style("opacity", "0")
+        .style("fill", "766f81");
+
+      d3.selectAll(".countries").style("color", "#766F81");
     },
 
     hideMap: function () {
@@ -1018,19 +1007,6 @@ export default {
       d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
     },
 
-    hideLegend: function () {
-      d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 0);
-      d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 0);
-    },
-
-    hideBubbles: function () {
-      d3.selectAll(".bubbles").transition().duration(1000).style("opacity", 0);
-      // d3.selectAll(".text-years")
-      //   .transition()
-      //   .duration(1000)
-      //   .style("opacity", 1);
-    },
-
     drawMap: function () {
       d3.selectAll(".country").attr("opacity", 1);
       var totalLength = d3.selectAll(".country").node().getTotalLength();
@@ -1052,26 +1028,23 @@ export default {
         .attr("fill", "#c4c1b6");
     },
     colorCentral: function () {
-      // d3.selectAll(".country")
-      //   .filter(
-      //     (d) =>
-      //       d.properties.name === "Tunisia" || d.properties.name === "Libya"
-      //   )
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#800020")
-      //   .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Tunisia" || d.properties.name === "Libya"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
 
-      // d3.selectAll(".country")
-      //   .filter((d) => d.properties.name === "Italy")
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#006b80")
-      //   .attr("fill-opacity", "0.5");
-      // console.log(d3.select("mylabels"));
-
-      // d3.selectAll(".mylabels").transition().duration(1000).attr("opacity", 1);
-      // d3.selectAll(".mydots").transition().duration(1000).attr("opacity", 1);
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Italy")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
+      console.log(d3.select("mylabels"));
 
       var zoom = d3.zoom().on("zoom", zoomed);
       var zoomLines1 = d3.zoom().on("zoom", zoomedLines1);
@@ -1080,6 +1053,7 @@ export default {
       var zoomLines4 = d3.zoom().on("zoom", zoomedLines4);
       var zoomLines5 = d3.zoom().on("zoom", zoomedLines5);
       var zoomLines6 = d3.zoom().on("zoom", zoomedLines6);
+      var zoomText = d3.zoom().on("zoom", zoomedText);
       let that = this;
       function zoomed() {
         d3.selectAll(".country").attr("transform", d3.event.transform);
@@ -1109,11 +1083,23 @@ export default {
         d3.selectAll(".route6").attr("transform", d3.event.transform);
       }
 
+      function zoomedText() {
+        d3.selectAll(".countries").attr("transform", d3.event.transform);
+      }
+
       d3.selectAll(".country")
         .transition()
         // .duration(750)
         .call(
           zoom.transform,
+          d3.zoomIdentity.scale(1.8).translate(this.width / 100, 0)
+        );
+
+      d3.selectAll(".countries")
+        .transition()
+        // .duration(750)
+        .call(
+          zoomText.transform,
           d3.zoomIdentity.scale(1.8).translate(this.width / 100, 0)
         );
 
@@ -1169,6 +1155,12 @@ export default {
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
 
+      d3.selectAll("text.countries.route1")
+        .style("opacity", 1)
+        .transition()
+        .delay(750)
+        .duration(750);
+
       d3.selectAll(".route2")
         .attr("opacity", 1)
         .attr("stroke-dasharray", totalLength_route2 + " " + totalLength_route2)
@@ -1180,29 +1172,27 @@ export default {
         .attr("stroke-dashoffset", 0);
     },
     colorWestern: function () {
-      // d3.selectAll(".country")
-      //   .filter(
-      //     (d) =>
-      //       d.properties.name === "Tunisia" ||
-      //       d.properties.name === "Libya" ||
-      //       d.properties.name === "Italy"
-      //   )
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#c4c1b6");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Tunisia" ||
+            d.properties.name === "Libya" ||
+            d.properties.name === "Italy"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill-opacity", 0.5);
 
-      // d3.selectAll(".country")
-      //   .filter((d) => d.properties.name === "Morocco")
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#800020")
-      //   .attr("fill-opacity", "0.5");
-      // d3.selectAll(".country")
-      //   .filter((d) => d.properties.name === "Spain")
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#006b80")
-      //   .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Morocco")
+        .transition()
+        .duration(1500)
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Spain")
+        .transition()
+        .duration(1500)
+        .attr("fill-opacity", "0.5");
 
       const totalLength_route1 = d3
         .selectAll(".route1")
@@ -1245,37 +1235,53 @@ export default {
         .duration(750)
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
+
+      d3.selectAll("text.countries.route3")
+        .style("opacity", 1)
+        .transition()
+        .delay(750)
+        .duration(750);
+
+      d3.selectAll("text.countries.route1")
+        .style("opacity", 0)
+        .transition()
+        .delay(750)
+        .duration(750);
     },
     colorWestern2: function () {
-      // d3.selectAll(".country")
-      //   .filter(
-      //     (d) =>
-      //       d.properties.name === "Morocco" || d.properties.name === "Spain"
-      //   )
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#c4c1b6");
-      // d3.selectAll(".country")
-      //   .filter(
-      //     (d) =>
-      //       d.properties.name === "Mauritania" ||
-      //       d.properties.name === "Senegal"
-      //   )
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#800020")
-      //   .attr("fill-opacity", "0.5");
-      // d3.selectAll(".country")
-      //   .filter((d) => d.properties.name === "the Canary Islands")
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#006b80")
-      //   .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Morocco" || d.properties.name === "Spain"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Mauritania" ||
+            d.properties.name === "Senegal"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "the Canary Islands")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
 
       var zoom = d3.zoom().on("zoom", zoomed);
 
       function zoomed() {
         d3.selectAll(".country").attr("transform", d3.event.transform);
+      }
+
+      function zoomedText() {
+        d3.selectAll(".countrries").attr("transform", d3.event.transform);
       }
 
       d3.selectAll(".country")
@@ -1287,6 +1293,7 @@ export default {
       var zoomLines5 = d3.zoom().on("zoom", zoomedLines5);
       var zoomLines6 = d3.zoom().on("zoom", zoomedLines6);
       var zoomLines3 = d3.zoom().on("zoom", zoomedLines3);
+      var zoomText = d3.zoom().on("zoom", zoomedText);
 
       function zoomedLines4() {
         d3.selectAll(".route4").attr("transform", d3.event.transform);
@@ -1303,6 +1310,14 @@ export default {
       function zoomedLines3() {
         d3.selectAll(".route3").attr("transform", d3.event.transform);
       }
+
+      d3.selectAll(".countries")
+        .transition()
+        // .duration(750)
+        .call(
+          zoomText.transform,
+          d3.zoomIdentity.scale(1.8).translate(this.width / 100, 0)
+        );
 
       d3.selectAll(".route4")
         .transition()
@@ -1344,6 +1359,14 @@ export default {
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
 
+      d3.selectAll(".countries.route4").style("opacity", "1");
+
+      d3.selectAll("text.countries.route3")
+        .style("opacity", 0)
+        .transition()
+        .delay(750)
+        .duration(750);
+
       d3.selectAll(".route5")
         .attr("opacity", 1)
         .attr("stroke-dasharray", totalLength_route5 + " " + totalLength_route5)
@@ -1359,44 +1382,37 @@ export default {
       function zoomedLines3() {
         d3.selectAll(".route3").attr("transform", d3.event.transform);
       }
-
-      // d3.selectAll(".route3")
-      //   .transition()
-      //   .duration(750)
-      //   .call(zoomLines3.transform, d3.zoomIdentity.scale(1.5));
     },
     colorEastern: function () {
-      // console.log("coloring central");
-      // d3.selectAll(".country")
-      //   .filter(
-      //     (d) =>
-      //       d.properties.name === "Morocco" || d.properties.name === "Spain"
-      //   )
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#c4c1b6");
-      // d3.selectAll(".country")
-      //   .filter(
-      //     (d) =>
-      //       d.properties.name === "Mauritania" ||
-      //       d.properties.name === "Senegal"
-      //   )
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#c4c1b6");
-      // d3.selectAll(".country")
-      //   .filter((d) => d.properties.name === "Turkey")
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#800020")
-      //   .attr("fill-opacity", "0.5");
-      // d3.selectAll(".country")
-      //   .filter((d) => d.properties.name === "Greece")
-      //   .transition()
-      //   .duration(1500)
-      //   .attr("fill", "#006b80")
-      //   .attr("fill-opacity", "0.5");
-      //   .filter())
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Morocco" || d.properties.name === "Spain"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "#c4c1b6");
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Mauritania" ||
+            d.properties.name === "Senegal"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Turkey")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#800020")
+        .attr("fill-opacity", "0.5");
+      d3.selectAll(".country")
+        .filter((d) => d.properties.name === "Greece")
+        .transition()
+        .duration(1500)
+        .attr("fill", "#006b80")
+        .attr("fill-opacity", "0.5");
 
       function zoomed() {
         d3.selectAll(".country").attr("transform", d3.event.transform);
@@ -1405,13 +1421,23 @@ export default {
         d3.selectAll(".route6").attr("transform", d3.event.transform);
       }
 
+      function zoomedText() {
+        d3.selectAll(".countries").attr("transform", d3.event.transform);
+      }
+
       var zoom = d3.zoom().on("zoom", zoomed);
       var zoomLines6 = d3.zoom().on("zoom", zoomedLines6);
+      var zoomText = d3.zoom().on("zoom", zoomedText);
 
       d3.selectAll(".country")
         .transition()
         .duration(750)
         .call(zoom.transform, d3.zoomIdentity.scale(1.3));
+
+      d3.selectAll(".countries")
+        .transition()
+        .duration(750)
+        .call(zoomText.transform, d3.zoomIdentity.scale(1.3));
 
       console.log("route 6 is ", d3.selectAll(".route6"));
       d3.selectAll(".route6")
@@ -1433,32 +1459,10 @@ export default {
         .duration(1000)
         .ease(d3.easeLinear)
         .attr("stroke-dashoffset", 0);
-    },
-    firstImage: function () {
-      d3.selectAll(".img")
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear)
-        .style("opacity", 1)
-        .attr("height", this.height / 1.5)
-        .attr("width", this.width / 1.5);
-    },
 
-    drawBarChart: function () {
-      let pathLength2;
-      d3.selectAll(".second")
-        .attr("stroke-dasharray", function () {
-          pathLength2 = 40 * this.getTotalLength();
-        })
-        .attr("opacity", 1)
-        .attr("stroke-dasharray", pathLength2 + " " + pathLength2)
-        .attr("stroke-dashoffset", pathLength2)
-        .transition()
-        .duration(1500)
-        .ease(d3.easeLinear)
-        .attr("stroke-dashoffset", 0);
+      d3.selectAll(".countries.route6").style("opacity", "1");
 
-      d3.selectAll(".text-years").style("opacity", "1").transition();
+      d3.selectAll(".countries.route4").style("opacity", "0");
     },
 
     hideChart: function () {
@@ -1466,158 +1470,389 @@ export default {
       d3.selectAll(".text-years").style("opacity", "0").transition();
     },
 
-    unzoomChart: function () {
-      function zoomed() {
-        d3.selectAll(".second").attr("transform", d3.event.transform);
-      }
-      function zoomedText() {
-        d3.selectAll(".text-years").attr("transform", d3.event.transform);
-      }
-
-      var zoom = d3.zoom().on("zoom", zoomed);
-      var zoomText = d3.zoom().on("zoom", zoomedText);
-
-      d3.selectAll(".second")
-        .transition()
-        .duration(750)
-        .call(zoom.transform, d3.zoomIdentity.translate(600, -50).scale(0.5));
-
-      d3.selectAll(".text-years")
-        .transition()
-        .duration(750)
-        .call(
-          zoomText.transform,
-          d3.zoomIdentity.translate(600, -50).scale(0.5)
-        );
-    },
-
-    zoomBackChart: function () {
-      function zoomed() {
-        d3.selectAll(".second").attr("transform", d3.event.transform);
-      }
-      function zoomedText() {
-        d3.selectAll(".text-years").attr("transform", d3.event.transform);
-      }
-
-      var zoom = d3.zoom().on("zoom", zoomed);
-      var zoomText = d3.zoom().on("zoom", zoomedText);
-
-      d3.selectAll(".second")
-        .transition()
-        .duration(750)
-        .call(zoom.transform, d3.zoomIdentity.translate(-600, 50).scale(1));
-
-      d3.selectAll(".text-years")
-        .transition()
-        .duration(750)
-        .call(zoomText.transform, d3.zoomIdentity.translate(-600, 50).scale(1));
-    },
-
-    resetChart: function () {
-      d3.selectAll(".bubbles")
-        .transition()
-        .duration(1000)
-        .style("fill", "#53292a")
-        .style("fill-opacity", 0.5)
-        .attr("stroke", "#2c3e50");
-    },
-
     highlight2014: function () {
       d3.selectAll(".year1").attr("fill", "#766F81").transition();
-      d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 21.7) {
-          return "iconSelected";
-        } else {
-          return "iconPlain";
-        }
-      });
-      // d3.selectAll(".evros").transition().delay(500).attr("opacity", "1");
-      // d3.selectAll(".first_text").transition().delay(500).attr("opacity", "1");
+      d3.selectAll(".picto1").transition().attr("opacity", 1);
+      d3.selectAll(".year").style("opacity", "1").html("2014");
+      d3.selectAll(".legend_year").attr("opacity", 1)
+      d3.selectAll(".legend").style("opacity", 1)
+      d3.selectAll(".legend_select").attr("opacity", 1)
+
+      var div1 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+      var div2 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip2")
+        .style("opacity", 0);
+
+      d3.selectAll("use")
+        .transition()
+        .attr("class", function (d, i) {
+          if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+          } 
+          else if (d < 401 && d>399)
+          {
+            console.log(d)
+            return "legend_year"
+          }
+          else if (d < 402 && d>400)
+          {
+            return "legend_select"
+          }
+          else if (d < 400 && d > 400 - 42.14548797) {
+            return "iconSelected2014";
+          } else return "iconPlain";
+        });
+
+      d3.selectAll(".rect2014").attr("opacity", 1);
+      d3.selectAll(".text2014").attr("opacity", 1);
+
+       console.log("uses ",d3.selectAll("use"))
+
+      let evros =
+        "https://s3.eu-central-1.amazonaws.com/euobs-media/b9f57a411d15045489f54ba555cdae87.jpg";
+      let refugee =
+        "https://www.middleeasteye.net/sites/default/files/styles/article_page/public/images-story/greece_turkey-afp-2_29_20.jpeg?itok=IYj15sgC";
+      d3.selectAll("use")
+        .on("mouseover", function (d, i) {
+          if (d < 382 && d > 380) {
+            div1.style("opacity", 1);
+            div1.html(
+              "<img src=" +
+                evros +
+                " alt='boat'/> <br> the Barbed Wire Evros Fence."
+            );
+            div1
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          } else if (d < 378 && d > 376) {
+            div2.style("opacity", 0.9);
+            div2.html(
+              "<img src=" +
+                refugee +
+                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            );
+            div2
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          }
+        })
+        .on("mouseout", function (d) {
+          div1.transition().duration(500).style("opacity", 0);
+          div2.transition().duration(500).style("opacity", 0);
+        });
+
+      d3.selectAll(".picto2").transition().attr("opacity", 0);
     },
 
     highlight2015: function () {
+      d3.selectAll(".year").html("2015");
       d3.selectAll(".year2").attr("fill", "#766F81").transition();
       d3.selectAll(".first_text").attr("opacity", "0");
       d3.selectAll(".evros").transition().delay(500).attr("opacity", "0");
       d3.selectAll(".first_text").transition().delay(500).attr("opacity", "0");
-      d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 126.7) {
-          return "iconSelected";
-        } else {
-          return "iconPlain";
-        }
-      });
+
+      d3.selectAll(".picto2").transition().attr("opacity", 1);
+
+      d3.selectAll("use")
+        .transition()
+        .attr("class", function (d, i) {
+          if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+          } else if (
+            (d > 340 && d < 342) ||
+            (d > 300 && d < 302) ||
+            (d > 276 && d < 278) ||
+            (d > 207 && d < 209) ||
+            (d > 254 && d < 256)
+          ) {
+            return "iconSelectable_2015";
+          } else if (
+            d < 400 - 42.14548797 &&
+            d > 400 - 42.14548797 - 204.4946677
+          ) {
+            return "iconSelected2015";
+          } else if (d < 400 && d > 400 - 42.14548797) {
+            return "iconSelected2014";
+          } else return "iconPlain";
+        });
+
+      d3.selectAll(".picto3").transition().attr("opacity", 0);
+
+      d3.selectAll(".rect2015").attr("opacity", 1);
+
+      d3.selectAll(".text2015").attr("opacity", 1);
     },
 
     highlight2016: function () {
+      d3.selectAll(".year").html("2016");
+      d3.selectAll(".picto3").transition().attr("opacity", 1);
       d3.selectAll(".year3").attr("fill", "#766F81").transition();
-      d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 163.7) {
-          return "iconSelected";
-        } else {
-          return "iconPlain";
-        }
-      });
+      d3.selectAll("use")
+        .transition()
+        .attr("class", function (d, i) {
+          if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+          } else if (
+            (d > 340 && d < 342) ||
+            (d > 300 && d < 302) ||
+            (d > 276 && d < 278) ||
+            (d > 207 && d < 209) ||
+            (d > 254 && d < 256)
+          ) {
+            return "iconSelectable_2015";
+          } else if (d > 143 && d < 145) {
+            return "iconSelectable_2016";
+          } else if (
+            d < 400 - 42.14548797 &&
+            d > 400 - 42.14548797 - 204.4946677
+          ) {
+            return "iconSelected2015";
+          } else if (d < 400 && d > 400 - 42.14548797) {
+            return "iconSelected2014";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101
+          ) {
+            return "iconSelected2016";
+          } else return "iconPlain";
+        });
+      d3.selectAll(".picto4").transition().attr("opacity", 0);
+      d3.selectAll(".rect2016").attr("opacity", 1);
+      d3.selectAll(".text2016").attr("opacity", 1);
     },
 
     highlight2017: function () {
+      d3.selectAll(".year").html("2017");
       d3.selectAll(".year4").attr("fill", "#766F81").transition();
-      d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 177) {
-          return "iconSelected";
-        } else {
-          return "iconPlain";
-        }
-      });
+      d3.selectAll(".year3").attr("fill", "#766F81").transition();
+      d3.selectAll(".picto4").transition().attr("opacity", 1);
+      d3.selectAll("use")
+        .transition()
+        .attr("class", function (d, i) {
+          if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+
+          } else if (
+           (d > 340 && d < 342) ||
+            (d > 300 && d < 302) ||
+            (d > 276 && d < 278) ||
+            (d > 207 && d < 209) ||
+            (d > 254 && d < 256)
+          ) {
+            return "iconSelectable_2015";
+          } else if(d > 143 && d < 145)  {
+            return "iconSelectable_2016";
+          } else if (d > 100 && d < 98) {
+            return "iconSelectable_2017";
+          } else if (
+            d < 400 - 42.14548797 &&
+            d > 400 - 42.14548797 - 204.4946677
+          ) {
+            return "iconSelected2015";
+          } else if (d < 400 && d > 400 - 42.14548797) {
+            return "iconSelected2014";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101
+          ) {
+            return "iconSelected2016";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 - 71.66341101 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303
+          ) {
+            return "iconSelected2017";
+          } else return "iconPlain";
+        });
+      d3.selectAll(".picto5").transition().attr("opacity", 0);
+      d3.selectAll(".rect2017").attr("opacity", 1);
+
+      d3.selectAll(".text2017").attr("opacity", 1);
     },
 
     highlight2018: function () {
+      d3.selectAll(".year").html("2018");
       d3.selectAll(".year5").attr("fill", "#766F81").transition();
-      d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 189) {
-          return "iconSelected";
-        } else {
-          return "iconPlain";
-        }
-      });
+      d3.selectAll(".picto5").transition().attr("opacity", 1);
+      d3.selectAll("use")
+        .transition()
+        .attr("class", function (d, i) {
+          if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+
+          } else if (
+           (d > 340 && d < 342) ||
+            (d > 300 && d < 302) ||
+            (d > 276 && d < 278) ||
+            (d > 207 && d < 209) ||
+            (d > 254 && d < 256)
+          ) {
+            return "iconSelectable_2015";
+          } else if(d > 143 && d < 145)  {
+            return "iconSelectable_2016";
+          } else if (d > 100 && d < 98) {
+            return "iconSelectable_2017";
+          // } else if (d > 79 && d < 81) {
+          //   return "iconSelectable_2018";
+          // } 
+          }else if (
+            d < 400 - 42.14548797 &&
+            d > 400 - 42.14548797 - 204.4946677
+          ) {
+            return "iconSelected2015";
+          } else if (d < 400 && d > 400 - 42.14548797) {
+            return "iconSelected2014";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101
+          ) {
+            return "iconSelected2016";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 - 71.66341101 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303
+          ) {
+            return "iconSelected2017";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303 &&
+            d >
+              400 -
+                42.14548797 -
+                204.4946677 -
+                71.66341101 -
+                34.38417303 -
+                23.07187056
+          ) {
+            return "iconSelected2018";
+          } else return "iconPlain";
+        });
+      d3.selectAll(".picto6").transition().attr("opacity", 0);
+      d3.selectAll(".rect2018").attr("opacity", 1);
+      d3.selectAll(".text2018").attr("opacity", 1);
     },
     highlight2019: function () {
+      d3.selectAll(".year").html("2019");
       d3.selectAll(".year6").attr("fill", "#766F81").transition();
-      d3.selectAll("use").attr("class", function (d, i) {
-        if (d < 200) {
-          return "iconSelected";
-        } else {
-          return "iconPlain";
-        }
-      });
+      d3.selectAll(".picto6").transition().attr("opacity", 1);
+      d3.selectAll("use")
+        .transition()
+        .attr("class", function (d, i) {
+         if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+
+          } else if (
+           (d > 340 && d < 342) ||
+            (d > 300 && d < 302) ||
+            (d > 276 && d < 278) ||
+            (d > 207 && d < 209) ||
+            (d > 254 && d < 256)
+          ) {
+            return "iconSelectable_2015";
+          } else if(d > 143 && d < 145)  {
+            return "iconSelectable_2016";
+          } else if (d > 100 && d < 98) {
+            return "iconSelectable_2017";
+          // } else if (d > 79 && d < 81) {
+          //   return "iconSelectable_2018";
+          // } else if (
+          //   (d > 39 && d < 41) ||
+          //   (d > 45 && d < 47) ||
+          //   (d > 13 && d < 15) ||
+          //   (d > 20 && d < 22)
+          // ) {
+          //   return "iconSelectable_2019";
+          } else if (
+            d < 400 - 42.14548797 &&
+            d > 400 - 42.14548797 - 204.4946677
+          ) {
+            return "iconSelected2015";
+          } else if (d < 400 && d > 400 - 42.14548797) {
+            return "iconSelected2014";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101
+          ) {
+            return "iconSelected2016";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 - 71.66341101 &&
+            d > 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303
+          ) {
+            return "iconSelected2017";
+          } else if (
+            d < 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303 &&
+            d >
+              400 -
+                42.14548797 -
+                204.4946677 -
+                71.66341101 -
+                34.38417303 -
+                23.07187056
+          ) {
+            return "iconSelected2018";
+          }
+          // } else if (
+          //   d <
+          //     400
+          //       // 42.14548797 -
+          //       // 204.4946677 -
+          //       // 71.66341101 -
+          //       // 34.38417303 -
+          //       // 23.07187056
+          //       &&
+          //   d >
+          //     400 -
+          //       42.14548797 -
+          //       204.4946677 -
+          //       71.66341101 -
+          //       34.38417303 -
+          //       23.07187056 -
+          //       20.25962513
+          // ) {
+          else if (d<400){ return "iconSelected2019"}
+          else  if(d<402 && d>399) {return "iconPlain"};
+        });
+      d3.selectAll(".picto6").transition().attr("opacity", 1);
+      d3.selectAll(".rect2019").attr("opacity", 1);
+      d3.selectAll(".text2019").attr("opacity", 1);
     },
     lastView: function () {
       d3.selectAll(".last").transition().attr("opacity", "1");
+      d3.selectAll(".year").transition().style("opacity", "0");
+      d3.selectAll(".observ").transition().style("opacity", "1");
     },
 
     removeHighlight: function () {
-      d3.selectAll(".year1").attr("fill", "none");
-      d3.selectAll(".year2").attr("fill", "none");
-      d3.selectAll(".year3").attr("fill", "none");
-      d3.selectAll(".year4").attr("fill", "none");
-      d3.selectAll(".year5").attr("fill", "none");
-      d3.selectAll(".year6").attr("fill", "none");
-      d3.selectAll(".evros").attr("opacity", "0");
       d3.selectAll(".iconPlain").transition().attr("opacity", "0");
       d3.selectAll(".icon-text").transition().attr("opacity", "0");
-      d3.selectAll(".iconSelected").transition().attr("opacity", "0");
-    },
-
-    resetZoom: function () {
-      // var zoom = d3.zoom().on("zoom", zoomed);
-      // function zoomed() {
-      //   d3.selectAll(".country").attr("transform", d3.event.transform);
-      // }
-      // console.log(d3.selectAll(".country"));
-      // d3.selectAll(".country")
-      //   .transition()
-      //   .duration(750)
-      //   .call(zoom.transform, d3.zoomIdentity.translate(-1000, -900));
+      d3.selectAll(".iconSelected2014").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelected2015").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelected2016").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelected2017").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelected2018").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelected2019").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelected2020").transition().attr("opacity", "0");
+      d3.selectAll(".iconSelectable").transition().attr("opacity", "0");
+      d3.selectAll(".picto6").transition().attr("opacity", 0);
+      d3.selectAll(".picto5").transition().attr("opacity", 0);
+      d3.selectAll(".picto4").transition().attr("opacity", 0);
+      d3.selectAll(".picto3").transition().attr("opacity", 0);
+      d3.selectAll(".picto2").transition().attr("opacity", 0);
+      d3.selectAll(".picto1").transition().attr("opacity", 0);
+      d3.selectAll(".year").transition().style("opacity", "0");
+      d3.selectAll(".observ").transition().style("opacity", 1);
+      d3.selectAll("rect").transition().style("opacity", 0);
+      d3.selectAll(".text2014").transition().style("opacity", 0);
+      d3.selectAll(".text2015").transition().style("opacity", 0);
+      d3.selectAll(".text2016").transition().style("opacity", 0);
+      d3.selectAll(".text2017").transition().style("opacity", 0);
+      d3.selectAll(".text2018").transition().style("opacity", 0);
+      d3.selectAll(".text2019").transition().style("opacity", 0);
+      d3.selectAll(".countries").transition().style("opacity", 0);
+      d3.selectAll(".legend").transition().style("opacity", 0);
     },
 
     showIcons: function () {
@@ -1629,6 +1864,8 @@ export default {
         .transition()
         .duration(1000)
         .attr("opacity", "1");
+
+      d3.selectAll(".picto1").transition().attr("opacity", 0);
     },
     hideRoute12: function () {
       d3.selectAll(".route1").transition().duration(200).attr("opacity", 0);
@@ -1643,6 +1880,10 @@ export default {
     },
     hideRoute6: function () {
       d3.selectAll(".route6").transition().duration(200).attr("opacity", 0);
+      d3.selectAll(".countries.route6")
+        .transition()
+        .duration(200)
+        .style("opacity", 0);
     },
   },
 };
@@ -1670,7 +1911,7 @@ export default {
   margin-bottom: 1rem;
   height: 40%;
   /* font-family: "Domine"; */
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier;
   font-weight: 300;
   line-height: 1.4em;
   font-size: 1.5em;
@@ -1689,37 +1930,41 @@ text {
   /* font-weight: 800; */
   line-height: 1.4em;
   font-size: 1em;
+  color: blue;
 }
 
-p,
-.countries {
-  font-family: "Courier New", Courier, monospace;
-  /* font-weight: 800; */
+p {
+  font-family: "Courier New", Courier;
   line-height: 1.4em;
-  font-size: 1em;
+  font-size: 0.6em;
+  opacity: 0.6;
+}
+
+.countries {
+  font-family: "Courier New", Courier;
+  line-height: 1.4em;
+  font-size: 0.6em;
+  font-weight: bold;
   opacity: 0.6;
 }
 
 h2 {
-  font-family: "Courier New", Courier, monospace;
-  line-height: 1.4em;
-  font-size: 1.5em;
+  font-family: "Courier New", Courier;
+  line-height: 1em;
+  font-size: 2em;
   opacity: 0.85;
+  text-align: left;
+  fill: #444444;
 }
 
 h3 {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Courier New", Courier;
   line-height: 1.4em;
   font-size: 1em;
   padding: auto;
   opacity: 0.7;
-}
-
-.text-years {
-  font-weight: 800;
-  font-size: 30px;
-  color: #2c3e50;
-  opacity: 0.6;
+  text-align: left;
+  fill: #444444;
 }
 
 @media (max-width: 900px) {
@@ -1729,7 +1974,6 @@ h3 {
 #graphic,
 #graphic2,
 #graphic3 {
-  /* margin: auto; */
   width: 100%;
   flex-direction: row;
   align-items: top;
@@ -1749,54 +1993,82 @@ h3 {
 #map,
 #bub,
 #bub2 {
-  /* display: inline-block; */
   position: fixed;
   top: 1rem;
-  /* right: -30%; */
-  /* right: -750px; */
   z-index: 1;
-  /* margin-left: 0; */
-  /* height: 100rem; */
-  /* width: 1000rem; */
   padding: 2px;
 }
 
-#img {
-  /* display: inline-block; */
-  /* position: fixed; */
-  /* top: 1rem; */
-
-  left: 500px;
-  z-index: 1;
-  /* margin-left: 0; */
+img {
+  width: 200px;
+  height: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 8px;
 }
 
-/* 
-rect{
-  z-index: 100;
-} */
+.tooltip1 {
+  min-width: 200px;
+  max-width: 400px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin-left: 20px;
+  transform: translate(0, 50%);
+  padding: 0;
+  color: #eeeeee;
+  background-color: #444444;
+  font-weight: normal;
+  font-size: 13px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 99999999;
+  box-sizing: border-box;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 1;
+  transition: opacity 0.8s;
+}
+
+.tooltip1 img {
+}
+.text-content {
+  padding: 10px 20px;
+}
+
+.tooltip1 i {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -12px;
+  width: 12px;
+  height: 24px;
+  overflow: hidden;
+}
+.tooltip1 i::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: 0;
+  top: 50%;
+  transform: translate(50%, -50%) rotate(-45deg);
+  background-color: #444444;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
 
 #app {
-  /* font-family: Helvetica, Arial, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   background-color: #dbd9d2;
   margin-top: 1rem;
-  /* max-width: 100rem; */
-}
-
-.text-years {
-  font-weight: 800;
-  font-size: 30px;
-  color: #2c3e50;
-  opacity: 0.6;
+  color: #444444;
 }
 
 .scroll-container {
   height: 100vh;
-  /* overflow-y: scroll; */
   scroll-snap-type: y mandatory;
 }
 
@@ -1819,6 +2091,7 @@ header {
   transform: translateY(0);
   width: 95%;
   z-index: 100;
+  text-decoration: none;
 }
 
 .header_title {
@@ -1827,20 +2100,24 @@ header {
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  font-family: "Courier New", Courier;
 }
 
 .header_nav {
   list-style: none;
   padding: 0;
+  text-decoration: none;
 }
 
 .header_navItem {
   display: inline-block;
-  font-size: 15px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   margin-left: 20px;
   text-transform: uppercase;
   color: #dbd9d2;
+  text-decoration: none;
+  font-family: "Courier New", Courier;
 }
 
 .header_navItem a {
@@ -1849,8 +2126,6 @@ header {
 }
 
 .header_navItem a:after {
-  background-color: #dbd9d2;
-  content: "";
   display: block;
   height: 1px;
   margin-bottom: 2px;
@@ -1865,11 +2140,12 @@ header {
   color: #dbd9d2;
 }
 
-text {
+.icon-text {
   fill: #00688b;
-  text-anchor: left;
-  font-size: 20px;
-  font-family: sans-serif, Helvetica, Arial;
+  text-anchor: right;
+  text-align: justify;
+  font-size: 1.2em;
+  font-family: "Courier New", Courier;
   font-weight: bold;
 }
 
@@ -1877,12 +2153,122 @@ text {
   fill: #a7a59b;
 }
 
-.iconSelected {
-  fill: #00688b;
+.iconSelected2014 {
+  fill: #6d9db3;
 }
 
-rect {
+.picto1 {
+  fill: #6d9db3;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.legend {
+   fill: #766f81;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelected2015 {
+  fill: #78a9bf;
+  stroke-width: 10px;
+}
+
+.picto2 {
+  fill: #78a9bf;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelected2016 {
+  fill: #84b5cb;
+}
+
+.picto3 {
+  fill: #84b5cb;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelected2017 {
+  fill: #90c1d7;
+}
+
+.picto4 {
+  fill: #90c1d7;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelected2018 {
+  fill: #9ccde3;
+}
+
+.picto5 {
+  fill: #9ccde3;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelected2019 {
+  fill: #a8daf0;
+}
+
+.picto6 {
+  fill: #a8daf0;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelectedMissing {
   fill: #fff1e0;
+}
+
+.iconSelectable_2014 {
+  /* opacity: 0.5; */
+  fill: #6d9db3;
+  stroke-width: 0.6;
+  stroke: #766f81;
+}
+.iconSelectable_2015 {
+  /* opacity: 0.5; */
+  fill: #78a9bf;
+  stroke-width: 0.6;
+  stroke: #766f81;
+}
+.iconSelectable_2016 {
+  /* opacity: 0.5; */
+  fill: #84b5cb;
+  stroke-width: 0.6;
+  stroke: #766f81;
+}
+.iconSelectable_2017 {
+  /* opacity: 0.5; */
+  fill: #90c1d7;
+  stroke-width: 0.6;
+  stroke: #766f81;
+}
+.iconSelectable_2018 {
+  /* opacity: 0.5; */
+  fill: #9ccde3;
+  stroke-width: 0.6;
+  stroke: #766f81;
+}
+.iconSelectable_2019 {
+  /* opacity: 0.5; */
+  fill: #a8daf0;
+  stroke-width: 0.6;
+  stroke: #766f81;
+}
+
+.legend_year {
+   fill: #6d9db3;
+}
+
+.legend_select {
+  fill: #6d9db3;
+  stroke-width: 0.6;
+  stroke: #766f81;
 }
 
 .intro,
@@ -1892,20 +2278,15 @@ rect {
   align-items: center;
   top: 15%;
   left: 0.5%;
-}
-
-.banksy {
-  border: #00688b;
+  padding-left: 5%;
 }
 
 #progress-container-el {
-  /* background */
   background-color: #dbd9d2 !important;
 }
 
 #progress-el {
-  /* progress bar */
-  background-color: #766F81 !important;
+  background-color: #766f81 !important;
 }
 
 .landing {
@@ -1931,7 +2312,6 @@ rect {
   background-color: #dbd9d2;
 }
 
-
 .content {
   position: absolute;
   left: 50%;
@@ -1939,8 +2319,50 @@ rect {
   transform: translate(-15%, -20%);
   color: #898883;
 }
-  
 
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 130px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+}
 
+div.tooltip2 {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 200px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+}
 
+div.year {
+  position: absolute;
+  font-size: 50px;
+  top: 15%;
+  left: 10%;
+  opacity: 0;
+  color: #898883;
+}
+
+div.observ {
+  font-size: 30px;
+  color: #898883;
+}
+
+.countries {
+  fill: #766f81;
+}
 </style>

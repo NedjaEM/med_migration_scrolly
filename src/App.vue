@@ -8,25 +8,25 @@
         and Colonial Legacies in the Mediterranean
       </h1>
       <nav>
-        <ul class="header_nav">
-          <li class="header_navItem">
+        <ul class="v">
+          <button
+            class="header_navItem open-modal1"
+            type="button"
+            data-open="modal1"
+          >
             <a href="#">About</a>
-          </li>
-          <li class="header_navItem">
+          </button>
+          <button
+            class="header_navItem open-modal2"
+            type="button"
+            data-open="modal1"
+          >
             <a href="#">Contact</a>
-          </li>
+          </button>
         </ul>
       </nav>
     </header>
-    <!-- <div class="footer">
-      <div class="f1">Read about Events</div>
 
-      <div class="f2">
-        Number of migrants arriving to Europe between 2014 and 2019
-      </div>
-
-      <div class="f3">Number of migrants who died</div>
-    </div> -->
     <div id="app">
       <section class="landing">
         <div class="banksy"></div>
@@ -36,8 +36,8 @@
             in the Mediterranean
           </h2>
           <h3>
-            Europe's Mediterrenean Border is known to be
-            the most lethal border in the world. <br />
+            Europe's Mediterrenean Border is known to be the most lethal border
+            in the world. <br />
             <br />
             This project aims to highlight the Mediterranean migration events
             between 2014 and 2019 <br />
@@ -78,11 +78,6 @@
           <Story3 :state="state" :active_index="active_index"></Story3>
         </div>
         <div id="bub2"></div>
-        <!-- <div class="observ">
-          Incidents in the Mediterranean resulting in Migrants Death
-        </div> -->
-        <!-- <iframe width="60%" height="526" frameborder="0"
-  src="https://observablehq.com/embed/44d37f5b01e5a5ba?cell=chart"></iframe> -->
       </div>
     </div>
   </main>
@@ -380,13 +375,13 @@ export default {
           return "icon" + d;
         })
         .attr("x", function (d) {
-          var remainder = d % numCols; //calculates the x position (column number) using modulus
-          return xPadding + remainder * wBuffer - 70; //apply the buffer and return value
+          var remainder = d % numCols;
+          return xPadding + remainder * wBuffer - 70;
           console.log(x);
         })
         .attr("y", function (d) {
-          var whole = Math.floor(d / numCols); //calculates the y position (row number)
-          return yPadding + whole * hBuffer; //apply the buffer and return the value
+          var whole = Math.floor(d / numCols);
+          return yPadding + whole * hBuffer;
         })
 
         .classed("iconPlain", true)
@@ -597,132 +592,6 @@ export default {
           .attr("opacity", 0)
           .style("font-size", "15px")
           .style("font-family", "khula");
-
-        // bar
-        //   .append("text")
-        //   .attr("class", (d) => "text" + d.Year)
-        //   .attr("x", 0.8 * this.width)
-        //   .attr("y", function (d) {
-        //     return y(d.Year) + 10;
-        //   })
-        //   .attr("font-size", "0.7em")
-        //   .attr("text-anchor", "left")
-        //   .text(function (d) {
-        //     return d.Year;
-        //   })
-        //   .style("fill", "#dbd9d2")
-        //   .style("font-size", "10px")
-        //   .attr("opacity", 0);
-
-        // bar
-        //   .append("text")
-        //   .attr("class", (d) => "text" + d.Year)
-        //   .attr("x", (d) => 0.8 * this.width + x(d["Dead Missing"]) + 1)
-        //   .attr("y", function (d) {
-        //     return y(d.Year) + 10;
-        //   })
-        //   .attr("font-size", "0.7em")
-        //   .attr("text-anchor", "left")
-        //   .text(function (d) {
-        //     return d["Dead Missing"];
-        //   })
-        //   .style("fill", "#766f81")
-        //   .style("font-size", "12px")
-        //   .style("font-weight", "bold")
-        //   .attr("opacity", 0);
-
-        // this.svg.call(d3.axisLeft(y));
-
-        // let colors = d3
-        //   .scaleLinear()
-        //   .domain(data.map((d) => d.Year))
-        //   .range(["#6A359C", "#DCD0FF"])
-        //   .interpolate(d3.interpolateHcl);
-
-        // this.svg
-        //   .append("g")
-        //   .attr("stroke", "white")
-        //   .selectAll("rect")
-        //   .data(data)
-        //   .join("rect")
-        //   .attr("class", (d) => "rect" + d.Year)
-        //   .attr("fill", (d) => colors(d["Dead Missing"]))
-        //   .attr("y", (d) => yScale(d.start))
-        //   .attr("x", 0.8 * this.width)
-        //   .attr("height", (d) => yScale(d.end) - yScale(d.start))
-        //   .attr("width", 100)
-        //   .attr("opacity", 0);
-
-        // this.svg
-        //   .append("g")
-        //   .attr("font-size", 15)
-        //   .selectAll("text")
-        //   .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
-        //   .join("text")
-        //   .attr("class", (d) => "text" + d.Year)
-        //   .attr("fill", "#766f81")
-        //   .attr(
-        //     "transform",
-        //     (d) => `translate(${0.8 * this.width},${yScale(d.start) + 6})`
-        //   )
-        //   .call((text) =>
-        //     text
-        //       .append("tspan")
-        //       .attr("y", "0.7em")
-        //       .attr("font-weight", "bold")
-        //       .text((d) => d.Year)
-        //   )
-        //   .attr("opacity", 0);
-
-        // this.svg
-        //   .append("g")
-        //   .attr("font-size", 15)
-        //   .selectAll("text")
-        //   .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
-        //   .join("text")
-        //   .attr("class", (d) => "text" + d.Year)
-        //   .attr("fill", "#766f81")
-        //   .attr(
-        //     "transform",
-        //     (d) => `translate(${0.88 * this.width},${yScale(d.start) + 6})`
-        //   )
-        //   .call((text) =>
-        //     text
-        //       .append("tspan")
-        //       .attr("y", "0.7em")
-        //       .attr("font-weight", "bold")
-        //       .text((d) => d["Dead Missing"] + " died")
-        //   )
-        //   .attr("opacity", 0);
-
-        // this.svg
-        //   .append("g")
-        //   .attr("font-size", 15)
-        //   .selectAll("text")
-        //   .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
-        //   .join("text")
-        //   .attr("class", (d) => "text" + d.Year)
-        //   .attr("fill", "#766f81")
-        //   .attr(
-        //     "transform",
-        //     (d) => `translate(${0.88 * this.width},${yScale(d.start) + 15})`
-        //   )
-        //   .call((text) =>
-        //     text
-        //       .append("tspan")
-        //       .attr("y", "0.7em")
-        //       .attr("font-weight", "bold")
-        //       .text((d) => "or went missing")
-        //   )
-        //   .attr("opacity", 0);
-        // .call((text) =>
-        //   text
-        //     .append("tspan")
-        //     .attr("x", 0)
-        //     .attr("y", "1.7em")
-        //     .attr("fill-opacity", 0.7)
-        //     .text((d) => formatPercent(d.value))
-        // );
       });
     },
     drawInitial: function () {
@@ -731,6 +600,11 @@ export default {
         .append("svg")
         .attr("width", this.width)
         .attr("height", this.height);
+
+      d3.selectAll(".header_navItem.open-modal1").on("click", function () {
+        d3.selectAll(".modal1").style("opacity", 1);
+        console.log("open the modal");
+      });
 
       const projection = d3
         .geoMercator()
@@ -756,18 +630,18 @@ export default {
         .attr("transform", `translate(${this.width / 5},40)`)
         .attr("opacity", 0);
 
-      let tunis = [10, 33];
-      let tunis_mid = [10.6, 36.41];
-      let libya = [13, 25];
-      let libya_mid = [16, 30];
-      let italy = [15, 41];
-      let mor = [-13.5, 25.5];
+      let tunis = [12, 33];
+      let tunis_mid = [12.6, 36.41];
+      let libya = [17, 25];
+      let libya_mid = [18, 35];
+      let italy = [15, 43];
+      let mor = [-10.5, 25.5];
       let mor_mid = [-15, 29];
-      let spain = [-5, 39];
-      let Mauritania = [-13.4357, 15];
-      let maur_mid = [-19.13, 16.5];
-      let senegal_mid = [-20.71, 13.59];
-      let senegal = [-11.51, 11];
+      let spain = [-3, 39];
+      let Mauritania = [-13.4357, 18];
+      let maur_mid = [-19.13, 19];
+      let senegal_mid = [-17.71, 17];
+      let senegal = [-13.51, 13];
       let canary = [-16.16, 28.2916];
       let turkey = [30, 40];
       let turkey_mid = [28, 37];
@@ -825,7 +699,7 @@ export default {
       route1
         .join("text")
         .text("Tunisia")
-        .attr("x", projection(tunis)[0] - projection(tunis)[0] / 10)
+        .attr("x", projection(tunis)[0])
         .attr("y", projection(tunis)[1])
         .attr("class", "countries route1")
         .style("opacity", "0")
@@ -835,14 +709,14 @@ export default {
         .join("text")
         .text("Italy")
         .attr("x", projection(italy)[0])
-        .attr("y", projection(italy)[1])
+        .attr("y", projection(italy)[1] + 2)
         .attr("class", "countries route1")
         .style("opacity", "0")
         .style("fill", "#115a73 ");
       route1
         .join("text")
         .text("Libya")
-        .attr("x", projection(libya)[0])
+        .attr("x", projection(libya)[0] + 3)
         .attr("y", projection(libya)[1])
         .attr("class", "countries route1")
         .style("opacity", "0")
@@ -972,6 +846,20 @@ export default {
         .style("fill", "#115a73 ");
 
       d3.selectAll(".countries").style("color", "#115a73 ");
+
+      d3.selectAll(".country")
+        .filter(
+          (d) =>
+            d.properties.name === "Turkey" || d.properties.name === "Greece"
+        )
+        .transition()
+        .duration(1500)
+        .attr("fill", "#c4c1b6");
+
+      console.log(
+        "tukey ",
+        d3.selectAll(".country").filter((d) => d.properties.name === "Turkey")
+      );
     },
 
     hideMap: function () {
@@ -1673,45 +1561,6 @@ export default {
       d3.selectAll(".rect2015").attr("opacity", 1);
 
       d3.selectAll(".text2015").attr("opacity", 1);
-
-      // (d > 340 && d < 342) ||
-      //   (d > 300 && d < 302) ||
-      //   (d > 276 && d < 278) ||
-      //   (d > 207 && d < 209) ||
-      //   (d > 254 && d < 256)
-
-      let evros =
-        "https://s3.eu-central-1.amazonaws.com/euobs-media/b9f57a411d15045489f54ba555cdae87.jpg";
-      let refugee =
-        "https://www.middleeasteye.net/sites/default/files/styles/article_page/public/images-story/greece_turkey-afp-2_29_20.jpeg?itok=IYj15sgC";
-      // d3.selectAll("use")
-      //   .on("mouseover", function (d, i) {
-      //     if (d < 342 && d > 340) {
-      //       div3.style("opacity", 1);
-      //       div3.html(
-      //         "<img src=" +
-      //           evros +
-      //           " alt='boat'/> <br> the Barbed Wire Evros Fence."
-      //       );
-      //       div3
-      //         .style("left", d3.event.pageX + "px")
-      //         .style("top", d3.event.pageY - 150 + "px");
-      //     } else if (d < 300 && d > 302) {
-      //       div4.style("opacity", 0.9);
-      //       div4.html(
-      //         "<img src=" +
-      //           refugee +
-      //           " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-      //       );
-      //       div4
-      //         .style("left", d3.event.pageX + "px")
-      //         .style("top", d3.event.pageY - 150 + "px");
-      //     }
-      //   })
-      //   .on("mouseout", function (d) {
-      //     div3.transition().duration(500).style("opacity", 0);
-      //     div4.transition().duration(500).style("opacity", 0);
-      //   });
     },
 
     highlight2016: function () {
@@ -1899,13 +1748,10 @@ export default {
               23.07187056
           ) {
             return "iconSelected2019";
-          } else if (d < 401 && d > 399) {
-            return "iconPlain";
           }
-          // } else if (d < 402 && d > 399) {
-          //   return "iconPlain";
           // }
         });
+      d3.selectAll(".legend_year").attr("class", "iconPlain");
       d3.selectAll(".picto6").transition().attr("opacity", 1);
       d3.selectAll(".rect2019").attr("opacity", 1);
       d3.selectAll(".text2019").attr("opacity", 1);
@@ -2148,10 +1994,11 @@ img {
   background-color: #dbd9d2;
   margin-top: 1rem;
   color: #898883;
+  overflow: hidden;
 }
 
 .scroll-container {
-  height: 100vh;
+  height: 150vh;
   scroll-snap-type: y mandatory;
 }
 
@@ -2165,22 +2012,19 @@ header {
   background: #898883;
   color: #dbd9d2;
   display: flex;
-  height: 70px;
+  height: 60px;
   justify-content: space-between;
   padding: 0 20px;
-  top: -3px;
   position: fixed;
-  transition: transform 300ms ease-in-out;
-  transform: translateY(0);
   width: 95%;
   z-index: 100;
-  text-decoration: none;
+  margin-top: 0;
+  top: 4px
 }
 
 .header_title {
-  display: inline-block;
   font-size: 17px;
-  font-weight: bold;
+  font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-family: "Raleway";
@@ -2201,6 +2045,8 @@ header {
   color: #dbd9d2;
   text-decoration: none;
   font-family: "Khula";
+  background-color: #898883;
+  border: none;
 }
 
 .header_navItem a {
@@ -2248,7 +2094,7 @@ header {
 }
 
 .iconSelected2019 {
-  fill: #7bccc4
+  fill: #7bccc4;
 }
 
 .picto6 {
@@ -2299,7 +2145,7 @@ header {
   fill: #2b8cbe;
 }
 
-.picto2{
+.picto2 {
   fill: #2b8cbe;
   font-size: 1em;
   font-weight: bold;
@@ -2384,14 +2230,17 @@ header {
 
 #progress-container-el {
   background-color: #dbd9d2 !important;
+  height: 20px;
 }
 
 #progress-el {
   background-color: #766f81 !important;
+  height: 20px;
 }
 
 .landing {
   display: flex;
+  top: -4px
 }
 
 .banksy {
@@ -2409,6 +2258,8 @@ header {
   background-repeat: no-repeat;
 
   background-attachment: fixed;
+
+  background-size: 100;
 
   background-color: #dbd9d2;
 }
@@ -2554,4 +2405,6 @@ div.observ {
   border-right: 2px solid #dbd9d2;
   width: 45%;
 }
+
+
 </style>

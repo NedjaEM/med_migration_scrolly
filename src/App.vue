@@ -3,7 +3,9 @@
     <VueScrollProgress></VueScrollProgress>
     <header class="header">
       <h1 class="header_title">
-        Mapping State Violence and Colonial Legacies in the Mediterranean
+        Mapping State Violence
+        <br />
+        and Colonial Legacies in the Mediterranean
       </h1>
       <nav>
         <ul class="header_nav">
@@ -16,6 +18,15 @@
         </ul>
       </nav>
     </header>
+    <!-- <div class="footer">
+      <div class="f1">Read about Events</div>
+
+      <div class="f2">
+        Number of migrants arriving to Europe between 2014 and 2019
+      </div>
+
+      <div class="f3">Number of migrants who died</div>
+    </div> -->
     <div id="app">
       <section class="landing">
         <div class="banksy"></div>
@@ -25,7 +36,7 @@
             in the Mediterranean
           </h2>
           <h3>
-            Europe's Mediterrenean Border is known to be <br />
+            Europe's Mediterrenean Border is known to be
             the most lethal border in the world. <br />
             <br />
             This project aims to highlight the Mediterranean migration events
@@ -72,37 +83,6 @@
         </div> -->
         <!-- <iframe width="60%" height="526" frameborder="0"
   src="https://observablehq.com/embed/44d37f5b01e5a5ba?cell=chart"></iframe> -->
-      </div>
-
-      <div class="tooltip1">
-        <img
-          src="https://api.time.com/wp-content/uploads/2015/10/italy-migrants-refugees-asylum-seekers-1.jpg"
-          alt="boatd"
-        />
-        <div class="text-content">
-          <h3>Evros Border</h3>
-          <ul>
-            <li>
-              The 200 Km long Greek-Turkish border along the Evros river has
-              been a common route for migrants coming from Syria, Iraq and
-              Afghanistan\ to cross to Greece from Turkey. However, in 2012, a
-              tall barbed wire fence was build to block entry through the dry
-              land \ part of the border.
-            </li>
-            <li>
-              "This fence gave no other choice to migrants who were fleeing hard
-              conditions in their countries but to seek other crossing
-              alternatives\ namely by crossing the mediterranean sea, a much
-              more perilous route. ",
-            </li>
-            <li>
-              The fence, instead of discouraging migrants to cross,\ caused a
-              high influx of people crossing through the Eastern Mediterranean
-              route and putting their lives at risk.
-            </li>
-          </ul>
-        </div>
-        <i></i>
       </div>
     </div>
   </main>
@@ -212,6 +192,7 @@ export default {
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
           scroll_functions.hideChart();
+          d3.selectAll(".legend").transition().style("opacity", 0);
         } else if (i == 6) {
           scroll_functions.removeHighlight();
           scroll_functions.hideMap();
@@ -223,13 +204,13 @@ export default {
           scroll_functions.highlight2015();
         } else if (i == 13) {
           scroll_functions.highlight2016();
-        } else if (i == 15) {
-          scroll_functions.highlight2017();
         } else if (i == 16) {
-          scroll_functions.highlight2018();
+          scroll_functions.highlight2017();
         } else if (i == 17) {
-          scroll_functions.highlight2019();
+          scroll_functions.highlight2018();
         } else if (i == 18) {
+          scroll_functions.highlight2019();
+        } else if (i == 19) {
           scroll_functions.removeHighlight();
         }
       });
@@ -358,22 +339,32 @@ export default {
       //text element to display number of icons highlighted
       this.svg
         .append("text")
-        .attr("id", "txtValue")
-        .attr("x", 0.48 * this.width - 200)
+        .attr("id", "txtValue1")
+        .attr("x", 0.46 * this.width - 200)
         .attr("y", 0.13 * this.height)
         .attr("dy", -3)
-        .attr("class", "icon-text")
-        .text("1,927,007 people arrived to Europe")
+        .attr("class", "icon-text1")
+        .text("1,927,007")
         .attr("opacity", "0");
 
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.42 * this.width - 200)
+        .attr("x", 0.46 * this.width - 200)
         .attr("y", 0.16 * this.height)
         .attr("dy", -3)
-        .attr("class", "icon-text")
-        .text(" through the Mediterranean between 2014 and 2019")
+        .attr("class", "icon-text2")
+        .text(" people arrived to Europe through")
+        .attr("opacity", "0");
+
+      this.svg
+        .append("text")
+        .attr("id", "txtValue")
+        .attr("x", 0.46 * this.width - 200)
+        .attr("y", 0.18 * this.height)
+        .attr("dy", -3)
+        .attr("class", "icon-text2")
+        .text("the Mediterranean between 2014 and 2019")
         .attr("opacity", "0");
 
       //create group element and create an svg <use> element for each icon
@@ -391,6 +382,7 @@ export default {
         .attr("x", function (d) {
           var remainder = d % numCols; //calculates the x position (column number) using modulus
           return xPadding + remainder * wBuffer - 70; //apply the buffer and return value
+          console.log(x);
         })
         .attr("y", function (d) {
           var whole = Math.floor(d / numCols); //calculates the y position (row number)
@@ -416,27 +408,14 @@ export default {
       this.svg
         .append("g")
         .attr("id", "legend_year")
-         .attr("class", "legend_year")
+        .attr("class", "legend_year")
         .selectAll("div")
         .data(myIndex_legend)
         .enter()
         .append("use")
         .attr("xlink:href", "#iconCustomLegend")
         .attr("x", 0)
-        .attr("y", 0)
-
-        this.svg
-        .append("g")
-        .attr("id", "legend_select")
-        .attr("class", "legend_select")
-        .selectAll("div")
-        .data(myIndex_legend)
-        .enter()
-        .append("use")
-        .attr("xlink:href", "#iconCustomLegend")
-        .attr("x", 0)
-        .attr("y", 0)
-      
+        .attr("y", 0);
 
       var zoomLegend = d3.zoom().on("zoom", zoomedLegend);
 
@@ -450,46 +429,20 @@ export default {
         .call(
           zoomLegend.transform,
           d3.zoomIdentity
-            .translate(0.8 * this.width, 0.12 * this.height)
-            .scale(this.width / 500)
-        );
-
-      var zoomLegend1 = d3.zoom().on("zoom", zoomedLegend1);
-
-      function zoomedLegend1() {
-        d3.selectAll(".legend_select").attr("transform", d3.event.transform);
-      }
-
-      d3.selectAll(".legend_select")
-        .transition()
-        .duration(750)
-        .call(
-          zoomLegend1.transform,
-          d3.zoomIdentity
-            .translate(0.8 * this.width, 0.17 * this.height)
+            .translate(0.4 * this.width, 0.9 * this.height)
             .scale(this.width / 500)
         );
 
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", 0.8*this.width+20)
-        .attr("y", 0.12 * this.height +15)
+        .attr("x", 0.42 * this.width + 10)
+        .attr("y", 0.9 * this.height + 15)
         .attr("class", "legend")
-        .text(" = 4,817 migrants")
+        .text("4,817 migrants")
         .attr("opacity", "0");
 
-       this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", 0.8*this.width+20)
-        .attr("y", 0.17 * this.height +15)
-        .attr("class", "legend")
-        .text("hover over")
-        .attr("opacity", "0");
-
-      d3.selectAll(".legend_select").attr("opacity",0)
-      d3.selectAll(".legend_year").attr("opacity",0)
+      d3.selectAll(".legend_year").attr("opacity", 0);
 
       let x1 = d3.select("#icon399").attr("x");
       let y1 = d3.select("#icon399").attr("y");
@@ -497,11 +450,12 @@ export default {
       let x2 = d3.select("#icon250").attr("x");
       let y2 = d3.select("#icon250").attr("y");
 
+      console.log("xxxx ", d3.selectAll("#icon399").attr("y"));
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 7 - 10)
+        .attr("x", this.width - this.width / 2.8)
+        .attr("y", this.height - this.height / 9)
         .attr("class", "picto1")
         .text("209,660 migrants")
         .attr("opacity", "0");
@@ -509,17 +463,8 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 7 + 5)
-        .attr("class", "picto1")
-        .text("arrived to Europe")
-        .attr("opacity", "0");
-
-      this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 2.2 - 10)
+        .attr("x", this.width - this.width / 2.8)
+        .attr("y", this.height - this.height / 5 - 10)
         .attr("class", "picto2")
         .text("1,017,294 migrants")
         .attr("opacity", "0");
@@ -527,17 +472,8 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 2.2 + 5)
-        .attr("class", "picto2")
-        .text("arrived to Europe")
-        .attr("opacity", "0");
-
-      this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.7 - 10)
+        .attr("x", this.width - this.width / 2.8)
+        .attr("y", this.height - this.height / 1.8 - 10)
         .attr("class", "picto3")
         .text("356,502 migrants")
         .attr("opacity", "0");
@@ -545,17 +481,8 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.7 + 5)
-        .attr("class", "picto3")
-        .text("arrived to Europe")
-        .attr("opacity", "0");
-
-      this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.55 - 10)
+        .attr("x", this.width - this.width / 2.8)
+        .attr("y", this.height - this.height / 1.5 - 10)
         .attr("class", "picto4")
         .text("171,050 migrants")
         .attr("opacity", "0");
@@ -563,17 +490,8 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.55 + 5)
-        .attr("class", "picto4")
-        .text("arrived to Europe")
-        .attr("opacity", "0");
-
-      this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.4 - 10)
+        .attr("x", this.width - this.width / 2.8)
+        .attr("y", this.height - this.height / 1.35 - 10)
         .attr("class", "picto5")
         .text("114,775 migrants")
         .attr("opacity", "0");
@@ -581,28 +499,10 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.4 + 5)
-        .attr("class", "picto5")
-        .text("arrived to Europe")
-        .attr("opacity", "0");
-
-      this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1.3 - 10)
+        .attr("x", this.width - this.width / 2.8)
+        .attr("y", this.height - this.height / 1.29 - 10)
         .attr("class", "picto6")
         .text("100,785 migrants")
-        .attr("opacity", "0");
-
-      this.svg
-        .selectAll("#pictoLayer")
-        .append("text")
-        .attr("x", this.width - 1.5 * x1 - 350)
-        .attr("y", this.height - this.height / 1 + 5)
-        .attr("class", "picto6")
-        .text("arrived to Europe")
         .attr("opacity", "0");
 
       var zoom = d3.zoom().on("zoom", zoomed);
@@ -622,17 +522,31 @@ export default {
         );
 
       d3.csv(bar_data, d3.autoType).then((data) => {
-        console.log(data);
-        const yScale = d3
-          .scaleLinear()
-          .domain([0, 1])
-          .range([this.height / 4, this.height - 100]);
+        var y = d3
+          .scaleBand()
+          .range([this.height / 6, this.height])
+          .padding(0.1);
 
-        // let colors = d3
-        //   .scaleLinear()
-        //   .domain(data.map((d) => d.Year))
-        //   .range(["#6A359C", "#DCD0FF"])
-        //   .interpolate(d3.interpolateHcl);
+        var x = d3.scaleLinear().range([0, 0.15 * this.width]);
+
+        x.domain([
+          0,
+          d3.max(data, function (d) {
+            return d["Dead Missing"];
+          }),
+        ]);
+        y.domain(
+          data.map(function (d) {
+            return d.Year;
+          })
+        );
+
+        console.log(
+          data.map(function (d) {
+            return d.Year;
+          })
+        );
+
         let colors = d3
           .scaleOrdinal()
           .domain(data.map((d) => d["Dead Missing"]))
@@ -645,82 +559,162 @@ export default {
             "#898883",
           ]);
 
-        this.svg
-          .append("g")
-          .attr("stroke", "white")
-          .selectAll("rect")
-          .data(data)
-          .join("rect")
-          .attr("class", (d) => "rect" + d.Year)
+        let yScales = [
+          this.height - this.height / 1.29 - 30,
+          this.height - this.height / 1.35 - 10,
+          this.height - this.height / 1.5 - 10,
+          this.height - this.height / 1.8 - 10,
+          this.height - this.height / 5 - 10,
+          this.height - this.height / 9,
+        ];
+        let bar = this.svg.selectAll("g.bar").data(data).enter().append("g");
+
+        bar
+          .append("text")
           .attr("fill", (d) => colors(d["Dead Missing"]))
-          .attr("y", (d) => yScale(d.start))
           .attr("x", 0.8 * this.width)
-          .attr("height", (d) => yScale(d.end) - yScale(d.start))
-          .attr("width", 100)
-          .attr("opacity", 0);
+          .text((d) => d["Dead Missing"])
+          .attr("y", function (d, i) {
+            console.log("yScales ", yScales[i]);
+            return yScales[i];
+          })
+          .attr("class", (d) => "rect" + d.Year)
+          .attr("opacity", 0)
+          .style("font-size", "27px")
+          .style("font-weight", "bolder")
+          .style("font-family", "khula");
 
-        this.svg
-          .append("g")
-          .attr("font-size", 15)
-          .selectAll("text")
-          .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
-          .join("text")
-          .attr("class", (d) => "text" + d.Year)
-          .attr("fill", "#766f81")
-          .attr(
-            "transform",
-            (d) => `translate(${0.8 * this.width},${yScale(d.start) + 6})`
-          )
-          .call((text) =>
-            text
-              .append("tspan")
-              .attr("y", "0.7em")
-              .attr("font-weight", "bold")
-              .text((d) => d.Year)
-          )
-          .attr("opacity", 0);
+        bar
+          .append("text")
+          .attr("fill", (d) => colors(d["Dead Missing"]))
+          .attr("x", 0.8 * this.width)
+          .text("Missing or Dead Migrants")
+          .attr("y", function (d, i) {
+            console.log("yScales ", yScales[i]);
+            return yScales[i] + 10;
+          })
+          .attr("class", (d) => "rect" + d.Year)
+          .attr("opacity", 0)
+          .style("font-size", "15px")
+          .style("font-family", "khula");
 
-        this.svg
-          .append("g")
-          .attr("font-size", 15)
-          .selectAll("text")
-          .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
-          .join("text")
-          .attr("class", (d) => "text" + d.Year)
-          .attr("fill", "#766f81")
-          .attr(
-            "transform",
-            (d) => `translate(${0.88 * this.width},${yScale(d.start) + 6})`
-          )
-          .call((text) =>
-            text
-              .append("tspan")
-              .attr("y", "0.7em")
-              .attr("font-weight", "bold")
-              .text((d) => d["Dead Missing"] + " died")
-          )
-          .attr("opacity", 0);
+        // bar
+        //   .append("text")
+        //   .attr("class", (d) => "text" + d.Year)
+        //   .attr("x", 0.8 * this.width)
+        //   .attr("y", function (d) {
+        //     return y(d.Year) + 10;
+        //   })
+        //   .attr("font-size", "0.7em")
+        //   .attr("text-anchor", "left")
+        //   .text(function (d) {
+        //     return d.Year;
+        //   })
+        //   .style("fill", "#dbd9d2")
+        //   .style("font-size", "10px")
+        //   .attr("opacity", 0);
 
-        this.svg
-          .append("g")
-          .attr("font-size", 15)
-          .selectAll("text")
-          .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
-          .join("text")
-          .attr("class", (d) => "text" + d.Year)
-          .attr("fill", "#766f81")
-          .attr(
-            "transform",
-            (d) => `translate(${0.88 * this.width},${yScale(d.start) + 15})`
-          )
-          .call((text) =>
-            text
-              .append("tspan")
-              .attr("y", "0.7em")
-              .attr("font-weight", "bold")
-              .text((d) => "or went missing")
-          )
-          .attr("opacity", 0);
+        // bar
+        //   .append("text")
+        //   .attr("class", (d) => "text" + d.Year)
+        //   .attr("x", (d) => 0.8 * this.width + x(d["Dead Missing"]) + 1)
+        //   .attr("y", function (d) {
+        //     return y(d.Year) + 10;
+        //   })
+        //   .attr("font-size", "0.7em")
+        //   .attr("text-anchor", "left")
+        //   .text(function (d) {
+        //     return d["Dead Missing"];
+        //   })
+        //   .style("fill", "#766f81")
+        //   .style("font-size", "12px")
+        //   .style("font-weight", "bold")
+        //   .attr("opacity", 0);
+
+        // this.svg.call(d3.axisLeft(y));
+
+        // let colors = d3
+        //   .scaleLinear()
+        //   .domain(data.map((d) => d.Year))
+        //   .range(["#6A359C", "#DCD0FF"])
+        //   .interpolate(d3.interpolateHcl);
+
+        // this.svg
+        //   .append("g")
+        //   .attr("stroke", "white")
+        //   .selectAll("rect")
+        //   .data(data)
+        //   .join("rect")
+        //   .attr("class", (d) => "rect" + d.Year)
+        //   .attr("fill", (d) => colors(d["Dead Missing"]))
+        //   .attr("y", (d) => yScale(d.start))
+        //   .attr("x", 0.8 * this.width)
+        //   .attr("height", (d) => yScale(d.end) - yScale(d.start))
+        //   .attr("width", 100)
+        //   .attr("opacity", 0);
+
+        // this.svg
+        //   .append("g")
+        //   .attr("font-size", 15)
+        //   .selectAll("text")
+        //   .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
+        //   .join("text")
+        //   .attr("class", (d) => "text" + d.Year)
+        //   .attr("fill", "#766f81")
+        //   .attr(
+        //     "transform",
+        //     (d) => `translate(${0.8 * this.width},${yScale(d.start) + 6})`
+        //   )
+        //   .call((text) =>
+        //     text
+        //       .append("tspan")
+        //       .attr("y", "0.7em")
+        //       .attr("font-weight", "bold")
+        //       .text((d) => d.Year)
+        //   )
+        //   .attr("opacity", 0);
+
+        // this.svg
+        //   .append("g")
+        //   .attr("font-size", 15)
+        //   .selectAll("text")
+        //   .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
+        //   .join("text")
+        //   .attr("class", (d) => "text" + d.Year)
+        //   .attr("fill", "#766f81")
+        //   .attr(
+        //     "transform",
+        //     (d) => `translate(${0.88 * this.width},${yScale(d.start) + 6})`
+        //   )
+        //   .call((text) =>
+        //     text
+        //       .append("tspan")
+        //       .attr("y", "0.7em")
+        //       .attr("font-weight", "bold")
+        //       .text((d) => d["Dead Missing"] + " died")
+        //   )
+        //   .attr("opacity", 0);
+
+        // this.svg
+        //   .append("g")
+        //   .attr("font-size", 15)
+        //   .selectAll("text")
+        //   .data(data.filter((d) => yScale(d.end) - yScale(d.start) > 40))
+        //   .join("text")
+        //   .attr("class", (d) => "text" + d.Year)
+        //   .attr("fill", "#766f81")
+        //   .attr(
+        //     "transform",
+        //     (d) => `translate(${0.88 * this.width},${yScale(d.start) + 15})`
+        //   )
+        //   .call((text) =>
+        //     text
+        //       .append("tspan")
+        //       .attr("y", "0.7em")
+        //       .attr("font-weight", "bold")
+        //       .text((d) => "or went missing")
+        //   )
+        //   .attr("opacity", 0);
         // .call((text) =>
         //   text
         //     .append("tspan")
@@ -822,7 +816,7 @@ export default {
         .join("path")
         .attr("class", "route1")
         .attr("d", curve)
-        .attr("stroke", "#766F81")
+        .attr("stroke", "#115a73 ")
         .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
         .attr("opacity", "0")
@@ -835,7 +829,7 @@ export default {
         .attr("y", projection(tunis)[1])
         .attr("class", "countries route1")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       route1
         .join("text")
@@ -844,7 +838,7 @@ export default {
         .attr("y", projection(italy)[1])
         .attr("class", "countries route1")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
       route1
         .join("text")
         .text("Libya")
@@ -852,7 +846,7 @@ export default {
         .attr("y", projection(libya)[1])
         .attr("class", "countries route1")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       let route2 = this.svg.selectAll(".route2").data([pointsLine2]);
 
@@ -860,7 +854,7 @@ export default {
         .join("path")
         .attr("class", "route2")
         .attr("d", curve)
-        .attr("stroke", "#766F81")
+        .attr("stroke", "#115a73 ")
         .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
         .attr("opacity", "0")
@@ -872,7 +866,7 @@ export default {
         .join("path")
         .attr("class", "route3")
         .attr("d", curve)
-        .attr("stroke", "#766F81")
+        .attr("stroke", "#115a73 ")
         .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
         .attr("opacity", "0")
@@ -885,7 +879,7 @@ export default {
         .attr("y", projection(mor)[1])
         .attr("class", "countries route3")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       route3
         .join("text")
@@ -894,7 +888,7 @@ export default {
         .attr("y", projection(spain)[1])
         .attr("class", "countries route3")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       let route4 = this.svg.selectAll(".route4").data([pointsLine4]);
 
@@ -902,7 +896,7 @@ export default {
         .join("path")
         .attr("class", "route4")
         .attr("d", curve)
-        .attr("stroke", "#766F81")
+        .attr("stroke", "#115a73 ")
         .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
         .attr("opacity", "0")
@@ -915,7 +909,7 @@ export default {
         .attr("y", projection(senegal)[1])
         .attr("class", "countries route4")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       route3
         .join("text")
@@ -924,7 +918,7 @@ export default {
         .attr("y", projection(canary)[1])
         .attr("class", "countries route4")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       route3
         .join("text")
@@ -933,7 +927,7 @@ export default {
         .attr("y", projection(Mauritania)[1])
         .attr("class", "countries route4")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       this.svg
         .selectAll(".route5")
@@ -941,7 +935,7 @@ export default {
         .join("path")
         .attr("class", "route5")
         .attr("d", curve)
-        .attr("stroke", "#766F81")
+        .attr("stroke", "#115a73 ")
         .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
         .attr("opacity", "0")
@@ -953,7 +947,7 @@ export default {
         .join("path")
         .attr("class", "route6")
         .attr("d", curve)
-        .attr("stroke", "#766F81")
+        .attr("stroke", "#115a73 ")
         .attr("stroke-width", "0.1rem")
         .attr("fill", "none")
         .attr("opacity", "0")
@@ -966,7 +960,7 @@ export default {
         .attr("y", projection(greece)[1])
         .attr("class", "countries route6")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
       route3
         .join("text")
@@ -975,9 +969,9 @@ export default {
         .attr("y", projection(turkey)[1])
         .attr("class", "countries route6")
         .style("opacity", "0")
-        .style("fill", "766f81");
+        .style("fill", "#115a73 ");
 
-      d3.selectAll(".countries").style("color", "#766F81");
+      d3.selectAll(".countries").style("color", "#115a73 ");
     },
 
     hideMap: function () {
@@ -1474,9 +1468,6 @@ export default {
       d3.selectAll(".year1").attr("fill", "#766F81").transition();
       d3.selectAll(".picto1").transition().attr("opacity", 1);
       d3.selectAll(".year").style("opacity", "1").html("2014");
-      d3.selectAll(".legend_year").attr("opacity", 1)
-      d3.selectAll(".legend").style("opacity", 1)
-      d3.selectAll(".legend_select").attr("opacity", 1)
 
       var div1 = d3
         .select("body")
@@ -1489,22 +1480,54 @@ export default {
         .attr("class", "tooltip2")
         .style("opacity", 0);
 
+      var div3 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip3")
+        .style("opacity", 0);
+      var div4 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip4")
+        .style("opacity", 0);
+
+      var div5 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip2")
+        .style("opacity", 0);
+      var div6 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip2")
+        .style("opacity", 0);
+      var div7 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip2")
+        .style("opacity", 0);
+      var div8 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip2")
+        .style("opacity", 0);
+      var div9 = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip2")
+        .style("opacity", 0);
+
       d3.selectAll("use")
         .transition()
         .attr("class", function (d, i) {
           if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
             return "iconSelectable_2014";
-          } 
-          else if (d < 401 && d>399)
-          {
-            console.log(d)
-            return "legend_year"
-          }
-          else if (d < 402 && d>400)
-          {
-            return "legend_select"
-          }
-          else if (d < 400 && d > 400 - 42.14548797) {
+          } else if (d < 401 && d > 399) {
+            console.log(d);
+            return "legend_year";
+          } else if (d < 402 && d > 400) {
+            return "legend_select";
+          } else if (d < 400 && d > 400 - 42.14548797) {
             return "iconSelected2014";
           } else return "iconPlain";
         });
@@ -1512,12 +1535,17 @@ export default {
       d3.selectAll(".rect2014").attr("opacity", 1);
       d3.selectAll(".text2014").attr("opacity", 1);
 
-       console.log("uses ",d3.selectAll("use"))
+      console.log("uses ", d3.selectAll("use"));
 
       let evros =
         "https://s3.eu-central-1.amazonaws.com/euobs-media/b9f57a411d15045489f54ba555cdae87.jpg";
       let refugee =
         "https://www.middleeasteye.net/sites/default/files/styles/article_page/public/images-story/greece_turkey-afp-2_29_20.jpeg?itok=IYj15sgC";
+      let syrian_ref =
+        "https://s.abcnews.com/images/International/rt_refugee_dinghy_deflates_05_jc_150914_16x9_992.jpg";
+      let yarmouk =
+        "https://assets.irinnews.org/s3fs-public/styles/responsive_large/public/images/201502021138530732.jpg?lyVxDDjNVQhgb_iIAtQmlc2Z_BJA_I9y&itok=UHdwIk85";
+
       d3.selectAll("use")
         .on("mouseover", function (d, i) {
           if (d < 382 && d > 380) {
@@ -1541,10 +1569,68 @@ export default {
               .style("left", d3.event.pageX + "px")
               .style("top", d3.event.pageY - 150 + "px");
           }
+          if (d < 342 && d > 340) {
+            div3.style("opacity", 1);
+            div3.html(
+              "<img src=" +
+                syrian_ref +
+                " alt='boat'/> <br> The number of Syrian refugees reached 4 millions in 2015. These refugees were living in overcrowded and underfunded camps in countries like Turkey and Lebanon"
+            );
+            div3
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          } else if (d > 300 && d < 302) {
+            div4.style("opacity", 0.9);
+            div4.html(
+              "<img src=" +
+                yarmouk +
+                " alt='boat'/> <br> Tariq, a 19-year-old Palestinian from Yarmouk Camp, close to the Syrian capital, Damascus, whom Human Rights Watch interviewed in Serbia, explained, “I left so I could escape from the war and out of fear of being arrested, just like happened to my family members. Also, I was afraid of the army. The situation of Palestinians in Syria is particularly difficult…Yarmouk camp is under siege. There is no food or anything.” https://www.hrw.org/report/2015/06/19/mediterranean-migration-crisis/why-people-flee-what-eu-should-do\
+                Above image is from the Yarmouk Camp in Syria"
+            );
+            div4
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          } else if (d > 276 && d < 278) {
+            div5.style("opacity", 0.9);
+            div5.html(
+              "<img src=" +
+                refugee +
+                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            );
+            div5
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          } else if (d > 207 && d < 209) {
+            div6.style("opacity", 0.9);
+            div6.html(
+              "<img src=" +
+                refugee +
+                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            );
+            div6
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          } else if (d > 254 && d < 256) {
+            div7.style("opacity", 0.9);
+            div7.html(
+              "<img src=" +
+                refugee +
+                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            );
+            div7
+              .style("left", d3.event.pageX + "px")
+              .style("top", d3.event.pageY - 150 + "px");
+          }
         })
+
         .on("mouseout", function (d) {
           div1.transition().duration(500).style("opacity", 0);
           div2.transition().duration(500).style("opacity", 0);
+          div3.transition().duration(500).style("opacity", 0);
+          div4.transition().duration(500).style("opacity", 0);
+          div5.transition().duration(500).style("opacity", 0);
+          div6.transition().duration(500).style("opacity", 0);
+          div7.transition().duration(500).style("opacity", 0);
         });
 
       d3.selectAll(".picto2").transition().attr("opacity", 0);
@@ -1587,6 +1673,45 @@ export default {
       d3.selectAll(".rect2015").attr("opacity", 1);
 
       d3.selectAll(".text2015").attr("opacity", 1);
+
+      // (d > 340 && d < 342) ||
+      //   (d > 300 && d < 302) ||
+      //   (d > 276 && d < 278) ||
+      //   (d > 207 && d < 209) ||
+      //   (d > 254 && d < 256)
+
+      let evros =
+        "https://s3.eu-central-1.amazonaws.com/euobs-media/b9f57a411d15045489f54ba555cdae87.jpg";
+      let refugee =
+        "https://www.middleeasteye.net/sites/default/files/styles/article_page/public/images-story/greece_turkey-afp-2_29_20.jpeg?itok=IYj15sgC";
+      // d3.selectAll("use")
+      //   .on("mouseover", function (d, i) {
+      //     if (d < 342 && d > 340) {
+      //       div3.style("opacity", 1);
+      //       div3.html(
+      //         "<img src=" +
+      //           evros +
+      //           " alt='boat'/> <br> the Barbed Wire Evros Fence."
+      //       );
+      //       div3
+      //         .style("left", d3.event.pageX + "px")
+      //         .style("top", d3.event.pageY - 150 + "px");
+      //     } else if (d < 300 && d > 302) {
+      //       div4.style("opacity", 0.9);
+      //       div4.html(
+      //         "<img src=" +
+      //           refugee +
+      //           " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+      //       );
+      //       div4
+      //         .style("left", d3.event.pageX + "px")
+      //         .style("top", d3.event.pageY - 150 + "px");
+      //     }
+      //   })
+      //   .on("mouseout", function (d) {
+      //     div3.transition().duration(500).style("opacity", 0);
+      //     div4.transition().duration(500).style("opacity", 0);
+      //   });
     },
 
     highlight2016: function () {
@@ -1637,16 +1762,15 @@ export default {
         .attr("class", function (d, i) {
           if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
             return "iconSelectable_2014";
-
           } else if (
-           (d > 340 && d < 342) ||
+            (d > 340 && d < 342) ||
             (d > 300 && d < 302) ||
             (d > 276 && d < 278) ||
             (d > 207 && d < 209) ||
             (d > 254 && d < 256)
           ) {
             return "iconSelectable_2015";
-          } else if(d > 143 && d < 145)  {
+          } else if (d > 143 && d < 145) {
             return "iconSelectable_2016";
           } else if (d > 100 && d < 98) {
             return "iconSelectable_2017";
@@ -1684,23 +1808,22 @@ export default {
         .attr("class", function (d, i) {
           if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
             return "iconSelectable_2014";
-
           } else if (
-           (d > 340 && d < 342) ||
+            (d > 340 && d < 342) ||
             (d > 300 && d < 302) ||
             (d > 276 && d < 278) ||
             (d > 207 && d < 209) ||
             (d > 254 && d < 256)
           ) {
             return "iconSelectable_2015";
-          } else if(d > 143 && d < 145)  {
+          } else if (d > 143 && d < 145) {
             return "iconSelectable_2016";
           } else if (d > 100 && d < 98) {
             return "iconSelectable_2017";
-          // } else if (d > 79 && d < 81) {
-          //   return "iconSelectable_2018";
-          // } 
-          }else if (
+            // } else if (d > 79 && d < 81) {
+            //   return "iconSelectable_2018";
+            // }
+          } else if (
             d < 400 - 42.14548797 &&
             d > 400 - 42.14548797 - 204.4946677
           ) {
@@ -1741,34 +1864,7 @@ export default {
       d3.selectAll("use")
         .transition()
         .attr("class", function (d, i) {
-         if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
-            return "iconSelectable_2014";
-
-          } else if (
-           (d > 340 && d < 342) ||
-            (d > 300 && d < 302) ||
-            (d > 276 && d < 278) ||
-            (d > 207 && d < 209) ||
-            (d > 254 && d < 256)
-          ) {
-            return "iconSelectable_2015";
-          } else if(d > 143 && d < 145)  {
-            return "iconSelectable_2016";
-          } else if (d > 100 && d < 98) {
-            return "iconSelectable_2017";
-          // } else if (d > 79 && d < 81) {
-          //   return "iconSelectable_2018";
-          // } else if (
-          //   (d > 39 && d < 41) ||
-          //   (d > 45 && d < 47) ||
-          //   (d > 13 && d < 15) ||
-          //   (d > 20 && d < 22)
-          // ) {
-          //   return "iconSelectable_2019";
-          } else if (
-            d < 400 - 42.14548797 &&
-            d > 400 - 42.14548797 - 204.4946677
-          ) {
+          if (d < 400 - 42.14548797 && d > 400 - 42.14548797 - 204.4946677) {
             return "iconSelected2015";
           } else if (d < 400 && d > 400 - 42.14548797) {
             return "iconSelected2014";
@@ -1793,27 +1889,22 @@ export default {
                 23.07187056
           ) {
             return "iconSelected2018";
+          } else if (
+            d <
+            400 -
+              42.14548797 -
+              204.4946677 -
+              71.66341101 -
+              34.38417303 -
+              23.07187056
+          ) {
+            return "iconSelected2019";
+          } else if (d < 401 && d > 399) {
+            return "iconPlain";
           }
-          // } else if (
-          //   d <
-          //     400
-          //       // 42.14548797 -
-          //       // 204.4946677 -
-          //       // 71.66341101 -
-          //       // 34.38417303 -
-          //       // 23.07187056
-          //       &&
-          //   d >
-          //     400 -
-          //       42.14548797 -
-          //       204.4946677 -
-          //       71.66341101 -
-          //       34.38417303 -
-          //       23.07187056 -
-          //       20.25962513
-          // ) {
-          else if (d<400){ return "iconSelected2019"}
-          else  if(d<402 && d>399) {return "iconPlain"};
+          // } else if (d < 402 && d > 399) {
+          //   return "iconPlain";
+          // }
         });
       d3.selectAll(".picto6").transition().attr("opacity", 1);
       d3.selectAll(".rect2019").attr("opacity", 1);
@@ -1827,7 +1918,8 @@ export default {
 
     removeHighlight: function () {
       d3.selectAll(".iconPlain").transition().attr("opacity", "0");
-      d3.selectAll(".icon-text").transition().attr("opacity", "0");
+      d3.selectAll(".icon-text1").transition().attr("opacity", "0");
+      d3.selectAll(".icon-text2").transition().attr("opacity", "0");
       d3.selectAll(".iconSelected2014").transition().attr("opacity", "0");
       d3.selectAll(".iconSelected2015").transition().attr("opacity", "0");
       d3.selectAll(".iconSelected2016").transition().attr("opacity", "0");
@@ -1852,20 +1944,27 @@ export default {
       d3.selectAll(".text2018").transition().style("opacity", 0);
       d3.selectAll(".text2019").transition().style("opacity", 0);
       d3.selectAll(".countries").transition().style("opacity", 0);
-      d3.selectAll(".legend").transition().style("opacity", 0);
     },
 
     showIcons: function () {
+      d3.selectAll(".footer").transition().duration(1000).style("opacity", "1");
       d3.selectAll(".iconPlain")
         .transition()
         .duration(1000)
         .attr("opacity", "1");
-      d3.selectAll(".icon-text")
+      d3.selectAll(".icon-text1")
+        .transition()
+        .duration(1000)
+        .attr("opacity", "2");
+      d3.selectAll(".icon-text2")
         .transition()
         .duration(1000)
         .attr("opacity", "1");
 
       d3.selectAll(".picto1").transition().attr("opacity", 0);
+      d3.selectAll(".legend_year").attr("opacity", 1);
+      d3.selectAll(".legend").style("opacity", 1);
+      d3.selectAll(".legend_select").attr("opacity", 1);
     },
     hideRoute12: function () {
       d3.selectAll(".route1").transition().duration(200).attr("opacity", 0);
@@ -1911,7 +2010,7 @@ export default {
   margin-bottom: 1rem;
   height: 40%;
   /* font-family: "Domine"; */
-  font-family: "Courier New", Courier;
+  font-family: "Biryani";
   font-weight: 300;
   line-height: 1.4em;
   font-size: 1.5em;
@@ -1925,23 +2024,8 @@ export default {
   padding-left: 2%;
 }
 
-text {
-  font-family: "Courier New", Courier, monospace;
-  /* font-weight: 800; */
-  line-height: 1.4em;
-  font-size: 1em;
-  color: blue;
-}
-
-p {
-  font-family: "Courier New", Courier;
-  line-height: 1.4em;
-  font-size: 0.6em;
-  opacity: 0.6;
-}
-
 .countries {
-  font-family: "Courier New", Courier;
+  font-family: "khula";
   line-height: 1.4em;
   font-size: 0.6em;
   font-weight: bold;
@@ -1949,20 +2033,19 @@ p {
 }
 
 h2 {
-  font-family: "Courier New", Courier;
-  line-height: 1em;
+  font-family: "Khula";
   font-size: 2em;
-  opacity: 0.85;
+  opacity: 1;
   text-align: left;
   fill: #444444;
 }
 
 h3 {
-  font-family: "Courier New", Courier;
+  font-family: "Biryani";
   line-height: 1.4em;
-  font-size: 1em;
+  font-size: 1.1em;
   padding: auto;
-  opacity: 0.7;
+  opacity: 1;
   text-align: left;
   fill: #444444;
 }
@@ -2064,7 +2147,7 @@ img {
   text-align: center;
   background-color: #dbd9d2;
   margin-top: 1rem;
-  color: #444444;
+  color: #898883;
 }
 
 .scroll-container {
@@ -2096,11 +2179,11 @@ header {
 
 .header_title {
   display: inline-block;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 17px;
+  font-weight: bold;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-family: "Courier New", Courier;
+  font-family: "Raleway";
 }
 
 .header_nav {
@@ -2117,7 +2200,7 @@ header {
   text-transform: uppercase;
   color: #dbd9d2;
   text-decoration: none;
-  font-family: "Courier New", Courier;
+  font-family: "Khula";
 }
 
 .header_navItem a {
@@ -2140,82 +2223,94 @@ header {
   color: #dbd9d2;
 }
 
-.icon-text {
-  fill: #00688b;
+.icon-text1 {
+  fill: #898883;
   text-anchor: right;
   text-align: justify;
-  font-size: 1.2em;
-  font-family: "Courier New", Courier;
+  font-size: 1.3em;
+  font-family: "khula";
   font-weight: bold;
+  border-style: 2px solid black;
+}
+
+.icon-text2 {
+  fill: #898883;
+  text-anchor: right;
+  text-align: justify;
+  font-size: 0.9em;
+  font-family: "khula";
+  font-weight: bold;
+  border-style: 2px solid black;
 }
 
 .iconPlain {
   fill: #a7a59b;
 }
 
-.iconSelected2014 {
-  fill: #6d9db3;
+.iconSelected2019 {
+  fill: #7bccc4
 }
 
-.picto1 {
-  fill: #6d9db3;
+.picto6 {
+  fill: #7bccc4;
   font-size: 1em;
   font-weight: bold;
 }
 
 .legend {
-   fill: #766f81;
+  fill: #898883;
   font-size: 1em;
   font-weight: bold;
+  font-family: "khula";
 }
 
-.iconSelected2015 {
-  fill: #78a9bf;
-  stroke-width: 10px;
+.iconSelected2018 {
+  fill: #4ab9ae;
 }
 
-.picto2 {
-  fill: #78a9bf;
-  font-size: 1em;
-  font-weight: bold;
-}
-
-.iconSelected2016 {
-  fill: #84b5cb;
-}
-
-.picto3 {
-  fill: #84b5cb;
+.picto5 {
+  fill: #4ab9ae;
   font-size: 1em;
   font-weight: bold;
 }
 
 .iconSelected2017 {
-  fill: #90c1d7;
+  fill: #55a190;
+  stroke-width: 10px;
 }
 
 .picto4 {
-  fill: #90c1d7;
+  fill: #55a190;
   font-size: 1em;
   font-weight: bold;
 }
 
-.iconSelected2018 {
-  fill: #9ccde3;
+.iconSelected2016 {
+  fill: #4eb3d3;
 }
 
-.picto5 {
-  fill: #9ccde3;
+.picto3 {
+  fill: #4eb3d3;
   font-size: 1em;
   font-weight: bold;
 }
 
-.iconSelected2019 {
-  fill: #a8daf0;
+.iconSelected2015 {
+  fill: #2b8cbe;
 }
 
-.picto6 {
-  fill: #a8daf0;
+.picto2{
+  fill: #2b8cbe;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.iconSelected2014 {
+  fill: #08589e;
+}
+
+.picto1 {
+  fill: #08589e;
   font-size: 1em;
   font-weight: bold;
 }
@@ -2224,51 +2319,57 @@ header {
   fill: #fff1e0;
 }
 
-.iconSelectable_2014 {
+.iconSelectable_2019 {
   /* opacity: 0.5; */
-  fill: #6d9db3;
+  fill: #7bccc4;
   stroke-width: 0.6;
-  stroke: #766f81;
-}
-.iconSelectable_2015 {
-  /* opacity: 0.5; */
-  fill: #78a9bf;
-  stroke-width: 0.6;
-  stroke: #766f81;
-}
-.iconSelectable_2016 {
-  /* opacity: 0.5; */
-  fill: #84b5cb;
-  stroke-width: 0.6;
-  stroke: #766f81;
-}
-.iconSelectable_2017 {
-  /* opacity: 0.5; */
-  fill: #90c1d7;
-  stroke-width: 0.6;
-  stroke: #766f81;
+  stroke: black;
+  opacity: 0.8;
 }
 .iconSelectable_2018 {
   /* opacity: 0.5; */
-  fill: #9ccde3;
+  fill: #4ab9ae;
   stroke-width: 0.6;
-  stroke: #766f81;
+  stroke: black;
+  opacity: 0.8;
 }
-.iconSelectable_2019 {
+.iconSelectable_2017 {
   /* opacity: 0.5; */
-  fill: #a8daf0;
+  fill: #55a190;
   stroke-width: 0.6;
-  stroke: #766f81;
+  stroke: black;
+  opacity: 0.8;
+}
+.iconSelectable_2016 {
+  /* opacity: 0.5; */
+  fill: #4eb3d3;
+  stroke-width: 0.6;
+  stroke: black;
+  opacity: 0.8;
+}
+.iconSelectable_2015 {
+  /* opacity: 0.5; */
+  fill: #2b8cbe;
+  stroke-width: 0.6;
+  stroke: black;
+  opacity: 0.8;
+}
+.iconSelectable_2014 {
+  /* opacity: 0.5; */
+  fill: #08589e;
+  stroke-width: 0.6;
+  stroke: black;
+  opacity: 0.8;
 }
 
 .legend_year {
-   fill: #6d9db3;
+  fill: #898883;
 }
 
 .legend_select {
-  fill: #6d9db3;
   stroke-width: 0.6;
-  stroke: #766f81;
+  stroke: black;
+  fill: #a7a59b;
 }
 
 .intro,
@@ -2348,13 +2449,43 @@ div.tooltip2 {
   z-index: 50;
 }
 
+div.tooltip3 {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 200px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+div.tooltip4 {
+  position: absolute;
+  text-align: center;
+  width: 300px;
+  height: 400px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+}
+
 div.year {
   position: absolute;
-  font-size: 50px;
+  font-size: 40px;
   top: 15%;
-  left: 10%;
+  left: 3.5%;
   opacity: 0;
   color: #898883;
+  text-align: left;
+  font-family: "biryani";
 }
 
 div.observ {
@@ -2364,5 +2495,63 @@ div.observ {
 
 .countries {
   fill: #766f81;
+}
+
+.footer {
+  align-items: center;
+  background: #898883;
+  color: #dbd9d2;
+  display: flex;
+  height: 30px;
+  justify-content: space-between;
+  padding: 0 20px;
+  top: 67px;
+  position: fixed;
+  transition: transform 300ms ease-in-out;
+  transform: translateY(0);
+  width: 95%;
+  z-index: 100;
+  text-decoration: none;
+  font-family: "Courier New", Courier;
+  opacity: 0;
+}
+
+.f1 {
+  background: #898883;
+  padding: 0;
+  margin: 0;
+}
+
+.f2 {
+  background: #898883;
+}
+
+.f3 {
+  background: #898883;
+}
+
+.f1,
+.f2,
+.f3 {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: left;
+  padding: 0 2%;
+  min-width: 300px;
+  height: 25px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.f2 {
+  border-right: 2px solid #dbd9d2;
+  width: 70%;
+}
+
+.f1 {
+  text-align: left;
+  border-right: 2px solid #dbd9d2;
+  width: 45%;
 }
 </style>

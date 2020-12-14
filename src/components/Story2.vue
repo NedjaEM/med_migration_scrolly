@@ -24,7 +24,7 @@ export default {
         {
           title: "",
           description:
-            "According to data from the IOM (International Organization for Migration, almost 2 million people have arrived to Spain, Italy, Greece and Cyprus through the Mediterranean between 2014 and 2019.",
+            "According to data from the International Organization for Migration, almost 2 million people have arrived to Spain, Italy, Greece and Cyprus through the Mediterranean between 2014 and 2019.",
         },
         {
           title: "",
@@ -76,21 +76,26 @@ export default {
         {
           title: "",
           description:
-            "EU-Turkey Statement, another attempt at curbing numbers",
+            "EU-Turkey Statement in which European foreign and defense ministers agreed to use naval forces to intercept and disrupt ships used by smugglers.",
         },
         {
           title: "",
-          description: " Italy-Libya Agreement",
+          description:"The agreement stated that all new irregular migrants crossing from Turkey into Greek islands as from 20 March 2016 will be returned to Turkey\
+          and that Turkey will take any necessary measures to prevent new sea or land routes for illegal migration"
+        },
+        {
+          title: "",
+          description: "The Italy-Libya Agreement in which Italy agreed to train andsupport the Libyan Coast Guard and other Libyan authorities, with the aim of allowing them to intercept people at sea and return them to Libya.",
         },
         {
           title: "",
           description:
-            "Most migrants leaving libya to italy are not libyans. libya still attracts migrants from other countries despite the level of insecurity. Libya does not provide the status of refugee\
-Some people entered libya to get to europe but ended up stuck in libya in detention centres",
+            "Most migrants leaving libya to italy are not libyans. Libya still attracts migrants from other countries despite the level of insecurity. Libya does not provide the status of refugee\
+Some people entered libya to get to europe but ended up stuck in libya in detention centres. The Italy-Libya Agreement leaves thousands of people victims of this abuse.",
         },
         {
           title: "",
-          description: " Since 2017, as the number of migrants departing Libya has dropped, the number of people travelling from Tunisia to Italy has increased exponentially.",
+          description: "Since 2017, as the number of migrants departing Libya has dropped, the number of people travelling from Tunisia to Italy has increased exponentially.",
         },
         {
           title: "",
@@ -112,16 +117,8 @@ Some people entered libya to get to europe but ended up stuck in libya in detent
 
 <style scoped>
 p {
-  font-family: "Courier New", Courier;
+  font-family: "Biryani";
   font-weight: 600;
-  line-height: 1.4em;
-  font-size: 1em;
-   margin-top: -100%;
-}
-
-.inst {
-   font-family: "Courier New", Courier;
-  font-weight: 1000;
   line-height: 1.4em;
   font-size: 1em;
    margin-top: -100%;
@@ -129,7 +126,7 @@ p {
 
 h1 {
   opacity: 0.8;
-  font-family: "Courier New", Courier;
+  font-family: "Khula";
   font-size: 1em;
    margin-bottom: 0px;
 
@@ -138,7 +135,7 @@ h1 {
 .step {
   height: 50rem;
   /* font-family: "Domine"; */
-  font-family: "Courier New", Courier;
+  font-family: "Biryani";
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.2em;
@@ -148,4 +145,14 @@ h1 {
   flex-direction: column;
   justify-content: space-around;
 }
+
+.inst {
+   font-family: "Biryani";
+  font-weight: 1000;
+  line-height: 1.4em;
+  font-size: 1em;
+   margin-top: -100%;
+}
+
+
 </style>

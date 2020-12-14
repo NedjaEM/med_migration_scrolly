@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 p {
-  font-family: "Courier New", Courier;
+  font-family: "Biryani";
   font-weight: 600;
   line-height: 1.4em;
   font-size: 1em;
@@ -42,7 +42,7 @@ p {
 
 h1 {
   opacity: 0.8;
-  font-family: "Courier New", Courier;
+  font-family: "Khula";
   font-size: 1em;
    margin-bottom: 0px;
 
@@ -51,7 +51,7 @@ h1 {
 .step {
   height: 50rem;
   /* font-family: "Domine"; */
-  font-family: "Courier New", Courier;
+  font-family: "Biryani";
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.2em;
@@ -61,4 +61,5 @@ h1 {
   flex-direction: column;
   justify-content: space-around;
 }
+
 </style>

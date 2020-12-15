@@ -1,5 +1,10 @@
 <template>
   <main class="scroll-container">
+    <div class="modal1">
+      <div class="modal__header"></div>
+      <div class="modal__content"></div>
+      <div class="modal__footer"></div>
+    </div>
     <VueScrollProgress></VueScrollProgress>
     <header class="header">
       <h1 class="header_title">
@@ -10,6 +15,7 @@
       <nav>
         <ul class="v">
           <button
+            @click="$refs.modalName.openModal()"
             class="header_navItem open-modal1"
             type="button"
             data-open="modal1"
@@ -80,6 +86,54 @@
         <div id="bub2"></div>
       </div>
     </div>
+    <modal ref="modalName">
+      <template v-slot:header>
+        <h1>About</h1>
+      </template>
+
+      <template v-slot:body>
+        <p>
+          This project is inspired by the daily tragedies happening along the
+          mediterranean sea, which tend to go unnoticed. The numbers of migrants
+          attempting to flee their homes for a better and safer life is alarming
+          and I wanted to show this through my visualization as well as a
+          critical analysis of the involvment of nations and authorities in
+          these events.
+        </p>
+        <p>
+          Below are my sources and some additional resources worth looking at if
+          you want to learn more:
+        </p>
+        <li onclick="location.href='https://missingmigrants.iom.int/about';">Missing Migrants Project by the IOM</li>
+        <li></li>
+        <li></li>
+      </template>
+
+      <template v-slot:header1>
+        <h1>About Me</h1>
+      </template>
+
+      <template v-slot:body1>
+        <p>
+          My name is Nadia El Mouldi. I am a full-stack software engineer who is
+          passionate about the humanities. I like creating platforms that
+          highlight injustices in the world as a way to amplify the voices of
+          those who are not heard.
+        </p>
+        <p></p>
+      </template>
+
+      <template v-slot:footer>
+        <div class="d-flex align-items-center justify-content-between">
+          <button
+            class="btn btn--secondary"
+            @click="$refs.modalName.closeModal()"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </modal>
   </main>
 </template>
 
@@ -94,6 +148,7 @@ import map_json from "../public/Data/map.geo.json";
 import bar_data from "../public/Data/aggregate_data.csv";
 import missing_data from "../public/Data/med_migrants.csv";
 import VueScrollProgress from "vue-scroll-progress";
+import Modal from "./components/Modal";
 import Vue from "vue";
 
 Vue.use(VueScrollProgress);
@@ -106,6 +161,7 @@ export default {
     Story2,
     Story3,
     VueScrollProgress,
+    Modal,
   },
   data: function () {
     return {
@@ -188,6 +244,7 @@ export default {
           scroll_functions.colorEastern();
           scroll_functions.hideChart();
           d3.selectAll(".legend").transition().style("opacity", 0);
+          scroll_functions.removeHighlight();
         } else if (i == 6) {
           scroll_functions.removeHighlight();
           scroll_functions.hideMap();
@@ -602,7 +659,7 @@ export default {
         .attr("height", this.height);
 
       d3.selectAll(".header_navItem.open-modal1").on("click", function () {
-        d3.selectAll(".modal1").style("opacity", 1);
+        d3.selectAll(".modal1").attr("opacity", 1);
         console.log("open the modal");
       });
 
@@ -1522,6 +1579,8 @@ export default {
         });
 
       d3.selectAll(".picto2").transition().attr("opacity", 0);
+      d3.selectAll(".rect2015").attr("opacity", 0);
+      d3.selectAll(".text2015").attr("opacity", 0);
     },
 
     highlight2015: function () {
@@ -1561,6 +1620,8 @@ export default {
       d3.selectAll(".rect2015").attr("opacity", 1);
 
       d3.selectAll(".text2015").attr("opacity", 1);
+      d3.selectAll(".rect2016").attr("opacity", 0);
+      d3.selectAll(".text2016").attr("opacity", 0);
     },
 
     highlight2016: function () {
@@ -1599,6 +1660,8 @@ export default {
       d3.selectAll(".picto4").transition().attr("opacity", 0);
       d3.selectAll(".rect2016").attr("opacity", 1);
       d3.selectAll(".text2016").attr("opacity", 1);
+      d3.selectAll(".rect2017").attr("opacity", 0);
+      d3.selectAll(".text2017").attr("opacity", 0);
     },
 
     highlight2017: function () {
@@ -1646,6 +1709,8 @@ export default {
       d3.selectAll(".rect2017").attr("opacity", 1);
 
       d3.selectAll(".text2017").attr("opacity", 1);
+      d3.selectAll(".rect2018").attr("opacity", 0);
+      d3.selectAll(".text2018").attr("opacity", 0);
     },
 
     highlight2018: function () {
@@ -1705,6 +1770,8 @@ export default {
       d3.selectAll(".picto6").transition().attr("opacity", 0);
       d3.selectAll(".rect2018").attr("opacity", 1);
       d3.selectAll(".text2018").attr("opacity", 1);
+      d3.selectAll(".rect2019").attr("opacity", 0);
+      d3.selectAll(".text2019").attr("opacity", 0);
     },
     highlight2019: function () {
       d3.selectAll(".year").html("2019");
@@ -1763,6 +1830,8 @@ export default {
     },
 
     removeHighlight: function () {
+      d3.selectAll(".iconSelected2014").attr("class", "iconPlain");
+      d3.selectAll(".iconSelectable_2014").attr("class", "iconPlain");
       d3.selectAll(".iconPlain").transition().attr("opacity", "0");
       d3.selectAll(".icon-text1").transition().attr("opacity", "0");
       d3.selectAll(".icon-text2").transition().attr("opacity", "0");
@@ -1790,6 +1859,8 @@ export default {
       d3.selectAll(".text2018").transition().style("opacity", 0);
       d3.selectAll(".text2019").transition().style("opacity", 0);
       d3.selectAll(".countries").transition().style("opacity", 0);
+      d3.selectAll(".rect2014").attr("opacity", 0);
+      d3.selectAll(".text2014").attr("opacity", 0);
     },
 
     showIcons: function () {
@@ -2019,7 +2090,7 @@ header {
   width: 95%;
   z-index: 100;
   margin-top: 0;
-  top: 4px
+  top: 4px;
 }
 
 .header_title {
@@ -2240,7 +2311,7 @@ header {
 
 .landing {
   display: flex;
-  top: -4px
+  top: -4px;
 }
 
 .banksy {
@@ -2406,5 +2477,8 @@ div.observ {
   width: 45%;
 }
 
-
+.btn {
+  background-color: #1b1b19;
+  color: #898883 ;
+}
 </style>

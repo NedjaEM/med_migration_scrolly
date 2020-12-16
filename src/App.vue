@@ -104,7 +104,9 @@
           Below are my sources and some additional resources worth looking at if
           you want to learn more:
         </p>
-        <li onclick="location.href='https://missingmigrants.iom.int/about';">Missing Migrants Project by the IOM</li>
+        <li onclick="location.href='https://missingmigrants.iom.int/about';">
+          Missing Migrants Project by the IOM
+        </li>
         <li></li>
         <li></li>
       </template>
@@ -226,8 +228,8 @@ export default {
           scroll_functions.hideRoute12();
         }
         if (i == 2) {
-          scroll_functions.hideRoute3();
           scroll_functions.colorCentral();
+          scroll_functions.hideRoute3();
         } else if (i == 3) {
           scroll_functions.hideRoute12();
           scroll_functions.drawMapNoTransition();
@@ -1050,6 +1052,8 @@ export default {
         .transition()
         .duration(750)
         .call(zoomLines2.transform, d3.zoomIdentity.scale(1.8));
+
+
       d3.selectAll(".route3")
         .transition()
         .duration(750)
@@ -1111,6 +1115,20 @@ export default {
         .attr("stroke-dashoffset", 0);
     },
     colorWestern: function () {
+
+      var zoomLines3 = d3.zoom().on("zoom", zoomedLines3);
+
+       function zoomedLines3() {
+        d3.selectAll(".route3").attr("transform", d3.event.transform);
+      }
+
+      d3.selectAll(".route3")
+        .transition()
+        .duration(750)
+        .call(zoomLines3.transform, d3.zoomIdentity.scale(1.8));
+
+
+
       d3.selectAll(".country")
         .filter(
           (d) =>
@@ -1888,7 +1906,7 @@ export default {
       d3.selectAll(".route2").transition().duration(200).attr("opacity", 0);
     },
     hideRoute3: function () {
-      d3.selectAll(".route3").transition().attr("opacity", "0");
+      d3.selectAll(".route3").transition().duration(200).attr("opacity", "0");
     },
     hideRoute45: function () {
       d3.selectAll(".route4").transition().duration(200).attr("opacity", 0);
@@ -2479,6 +2497,6 @@ div.observ {
 
 .btn {
   background-color: #1b1b19;
-  color: #898883 ;
+  color: #898883;
 }
 </style>

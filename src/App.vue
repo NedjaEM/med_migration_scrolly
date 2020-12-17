@@ -104,11 +104,33 @@
           Below are my sources and some additional resources worth looking at if
           you want to learn more:
         </p>
-        <li onclick="location.href='https://missingmigrants.iom.int/about';">
+        <li
+          style="text-decoration: underline"
+          onclick="location.href='https://missingmigrants.iom.int/about';"
+        >
           Missing Migrants Project by the IOM
         </li>
-        <li></li>
-        <li></li>
+        <li
+          style="text-decoration: underline"
+          onclick="location.href='https://data2.unhcr.org/en/situations/mediterranean';"
+        >
+          UNHCR Sea Arrival Dashboard
+        </li>
+        <li
+          style="text-decoration: underline"
+          onclick="location.href='https://www.hrw.org/report/2015/06/19/mediterranean-migration-crisis/why-people-flee-what-eu-should-do#';"
+        >
+          The Mediterranean Migration Crisis Why People Flee, What the EU Should
+          Do by the Human Rights Watch
+        </li>
+
+        <li
+          style="text-decoration: underline"
+          onclick="location.href='https://publications.iom.int/system/files/pdf/four_decades_of_cross_mediterranean.pdf';"
+        >
+          Four Decades of Cross-Mediterranean Undocumented Migration to Europe:
+          A Review of the Evidence
+        </li>
       </template>
 
       <template v-slot:header1>
@@ -1053,7 +1075,6 @@ export default {
         .duration(750)
         .call(zoomLines2.transform, d3.zoomIdentity.scale(1.8));
 
-
       d3.selectAll(".route3")
         .transition()
         .duration(750)
@@ -1115,10 +1136,9 @@ export default {
         .attr("stroke-dashoffset", 0);
     },
     colorWestern: function () {
-
       var zoomLines3 = d3.zoom().on("zoom", zoomedLines3);
 
-       function zoomedLines3() {
+      function zoomedLines3() {
         d3.selectAll(".route3").attr("transform", d3.event.transform);
       }
 
@@ -1126,8 +1146,6 @@ export default {
         .transition()
         .duration(750)
         .call(zoomLines3.transform, d3.zoomIdentity.scale(1.8));
-
-
 
       d3.selectAll(".country")
         .filter(
@@ -1795,10 +1813,30 @@ export default {
       d3.selectAll(".year").html("2019");
       d3.selectAll(".year6").attr("fill", "#766F81").transition();
       d3.selectAll(".picto6").transition().attr("opacity", 1);
-      d3.selectAll("use")
+       d3.selectAll("use")
         .transition()
         .attr("class", function (d, i) {
-          if (d < 400 - 42.14548797 && d > 400 - 42.14548797 - 204.4946677) {
+          if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
+            return "iconSelectable_2014";
+          } else if (
+            (d > 340 && d < 342) ||
+            (d > 300 && d < 302) ||
+            (d > 276 && d < 278) ||
+            (d > 207 && d < 209) ||
+            (d > 254 && d < 256)
+          ) {
+            return "iconSelectable_2015";
+          } else if (d > 143 && d < 145) {
+            return "iconSelectable_2016";
+          } else if (d > 100 && d < 98) {
+            return "iconSelectable_2017";
+            // } else if (d > 79 && d < 81) {
+            //   return "iconSelectable_2018";
+            // }
+          } else if (
+            d < 400 - 42.14548797 &&
+            d > 400 - 42.14548797 - 204.4946677
+          ) {
             return "iconSelected2015";
           } else if (d < 400 && d > 400 - 42.14548797) {
             return "iconSelected2014";
@@ -1821,9 +1859,11 @@ export default {
                 71.66341101 -
                 34.38417303 -
                 23.07187056
-          ) {
+          ) 
+          {
             return "iconSelected2018";
-          } else if (
+          } 
+           else if (
             d <
             400 -
               42.14548797 -
@@ -1834,13 +1874,45 @@ export default {
           ) {
             return "iconSelected2019";
           }
-          // }
+          else return "iconPlain";
         });
+      // d3.selectAll("use")
+      //   .transition()
+      //   .attr("class", function (d, i) {
+      //     if (d < 400 - 42.14548797 && d > 400 - 42.14548797 - 204.4946677) {
+      //       return "iconSelected2015";
+      //     } else if (d < 400 && d > 400 - 42.14548797) {
+      //       return "iconSelected2014";
+      //     } else if (
+      //       d < 400 - 42.14548797 - 204.4946677 &&
+      //       d > 400 - 42.14548797 - 204.4946677 - 71.66341101
+      //     ) {
+      //       return "iconSelected2016";
+      //     } else if (
+      //       d < 400 - 42.14548797 - 204.4946677 - 71.66341101 &&
+      //       d > 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303
+      //     ) {
+      //       return "iconSelected2017";
+      //     } else if (
+      //       d < 400 - 42.14548797 - 204.4946677 - 71.66341101 - 34.38417303 &&
+      //       d >
+      //         400 -
+      //           42.14548797 -
+      //           204.4946677 -
+      //           71.66341101 -
+      //           34.38417303 -
+      //           23.07187056
+      //     ) {
+      //       return "iconSelected2018";
+      
+      //     else return "iconPlain";
+      //   });
       d3.selectAll(".legend_year").attr("class", "iconPlain");
       d3.selectAll(".picto6").transition().attr("opacity", 1);
       d3.selectAll(".rect2019").attr("opacity", 1);
       d3.selectAll(".text2019").attr("opacity", 1);
     },
+
     lastView: function () {
       d3.selectAll(".last").transition().attr("opacity", "1");
       d3.selectAll(".year").transition().style("opacity", "0");
@@ -1885,15 +1957,15 @@ export default {
       d3.selectAll(".footer").transition().duration(1000).style("opacity", "1");
       d3.selectAll(".iconPlain")
         .transition()
-        .duration(1000)
+        .duration(300)
         .attr("opacity", "1");
       d3.selectAll(".icon-text1")
         .transition()
-        .duration(1000)
+        .duration(300)
         .attr("opacity", "2");
       d3.selectAll(".icon-text2")
         .transition()
-        .duration(1000)
+        .duration(300)
         .attr("opacity", "1");
 
       d3.selectAll(".picto1").transition().attr("opacity", 0);

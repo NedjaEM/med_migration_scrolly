@@ -262,9 +262,6 @@ export default {
           scroll_functions.hideRoute45();
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
-          scroll_functions.hideChart();
-          d3.selectAll(".legend").transition().style("opacity", 0);
-          scroll_functions.removeHighlight();
         } else if (i == 6) {
           scroll_functions.removeHighlight();
           scroll_functions.hideMap();
@@ -412,7 +409,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue1")
-        .attr("x", 0.49 * this.width - 200)
+        .attr("x", 0.48 * this.width - 200)
         .attr("y", 0.13 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text1")
@@ -422,7 +419,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.49 * this.width - 200)
+        .attr("x", 0.48 * this.width - 200)
         .attr("y", 0.16 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text2")
@@ -432,7 +429,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.49 * this.width - 200)
+        .attr("x", 0.48 * this.width - 200)
         .attr("y", 0.18 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text2")
@@ -1247,7 +1244,7 @@ export default {
       }
 
       function zoomedText() {
-        d3.selectAll(".countrries").attr("transform", d3.event.transform);
+        d3.selectAll(".countries").attr("transform", d3.event.transform);
       }
 
       d3.selectAll(".country")
@@ -1367,12 +1364,14 @@ export default {
         .transition()
         .duration(1500)
         .attr("fill-opacity", "0.5");
+
       d3.selectAll(".country")
         .filter((d) => d.properties.name === "Turkey")
         .transition()
         .duration(1500)
         .attr("fill", "#800020")
         .attr("fill-opacity", "0.5");
+
       d3.selectAll(".country")
         .filter((d) => d.properties.name === "Greece")
         .transition()
@@ -1431,10 +1430,7 @@ export default {
       d3.selectAll(".countries.route4").style("opacity", "0");
     },
 
-    hideChart: function () {
-      d3.selectAll(".second").attr("opacity", "0").transition();
-      d3.selectAll(".text-years").style("opacity", "0").transition();
-    },
+
 
     highlight2014: function () {
       d3.selectAll(".year1").attr("fill", "#766F81").transition();

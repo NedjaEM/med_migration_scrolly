@@ -22,13 +22,6 @@
           >
             <a href="#">About</a>
           </button>
-          <button
-            class="header_navItem open-modal2"
-            type="button"
-            data-open="modal1"
-          >
-            <a href="#">Contact</a>
-          </button>
         </ul>
       </nav>
     </header>
@@ -144,6 +137,9 @@
           highlight injustices in the world as a way to amplify the voices of
           those who are not heard.
         </p>
+        <p>
+        Get in touch at: nadiaelmouldi@gmail.com
+        </p>
         <p></p>
       </template>
 
@@ -189,8 +185,8 @@ export default {
   },
   data: function () {
     return {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: 0.99*window.innerWidth,
+      height: 0.99*window.innerHeight,
       state: "",
       loadData: [],
       active_index: 0,
@@ -416,7 +412,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue1")
-        .attr("x", 0.46 * this.width - 200)
+        .attr("x", 0.48 * this.width - 200)
         .attr("y", 0.13 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text1")
@@ -426,7 +422,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.46 * this.width - 200)
+        .attr("x", 0.48 * this.width - 200)
         .attr("y", 0.16 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text2")
@@ -436,7 +432,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.46 * this.width - 200)
+        .attr("x", 0.48 * this.width - 200)
         .attr("y", 0.18 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text2")
@@ -681,11 +677,6 @@ export default {
         .append("svg")
         .attr("width", this.width)
         .attr("height", this.height);
-
-      d3.selectAll(".header_navItem.open-modal1").on("click", function () {
-        d3.selectAll(".modal1").attr("opacity", 1);
-        console.log("open the modal");
-      });
 
       const projection = d3
         .geoMercator()

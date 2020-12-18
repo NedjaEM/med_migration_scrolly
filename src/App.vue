@@ -412,7 +412,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue1")
-        .attr("x", 0.55 * this.width - 200)
+        .attr("x", 0.52 * this.width - 200)
         .attr("y", 0.13 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text1")
@@ -422,7 +422,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.55 * this.width - 200)
+        .attr("x", 0.52 * this.width - 200)
         .attr("y", 0.16 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text2")
@@ -432,7 +432,7 @@ export default {
       this.svg
         .append("text")
         .attr("id", "txtValue")
-        .attr("x", 0.55 * this.width - 200)
+        .attr("x", 0.52 * this.width - 200)
         .attr("y", 0.18 * this.height)
         .attr("dy", -3)
         .attr("class", "icon-text2")

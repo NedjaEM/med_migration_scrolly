@@ -137,9 +137,7 @@
           highlight injustices in the world as a way to amplify the voices of
           those who are not heard.
         </p>
-        <p>
-        Get in touch at: nadiaelmouldi@gmail.com
-        </p>
+        <p>Get in touch at: nadiaelmouldi@gmail.com</p>
         <p></p>
       </template>
 
@@ -185,8 +183,8 @@ export default {
   },
   data: function () {
     return {
-      width: 0.99*window.innerWidth,
-      height: 0.99*window.innerHeight,
+      width: 0.99 * window.innerWidth,
+      height: 0.99 * window.innerHeight,
       state: "",
       loadData: [],
       active_index: 0,
@@ -262,6 +260,7 @@ export default {
           scroll_functions.hideRoute45();
           scroll_functions.drawMapNoTransition();
           scroll_functions.colorEastern();
+          scroll_functions.hideIcons();
         } else if (i == 6) {
           scroll_functions.removeHighlight();
           scroll_functions.hideMap();
@@ -1430,8 +1429,6 @@ export default {
       d3.selectAll(".countries.route4").style("opacity", "0");
     },
 
-
-
     highlight2014: function () {
       d3.selectAll(".year1").attr("fill", "#766F81").transition();
       d3.selectAll(".picto1").transition().attr("opacity", 1);
@@ -1462,27 +1459,27 @@ export default {
       var div5 = d3
         .select("body")
         .append("div")
-        .attr("class", "tooltip2")
+        .attr("class", "tooltip5")
         .style("opacity", 0);
       var div6 = d3
         .select("body")
         .append("div")
-        .attr("class", "tooltip2")
+        .attr("class", "tooltip6")
         .style("opacity", 0);
       var div7 = d3
         .select("body")
         .append("div")
-        .attr("class", "tooltip2")
+        .attr("class", "tooltip7")
         .style("opacity", 0);
       var div8 = d3
         .select("body")
         .append("div")
-        .attr("class", "tooltip2")
+        .attr("class", "tooltip8")
         .style("opacity", 0);
       var div9 = d3
         .select("body")
         .append("div")
-        .attr("class", "tooltip2")
+        .attr("class", "tooltip9")
         .style("opacity", 0);
 
       d3.selectAll("use")
@@ -1552,42 +1549,42 @@ export default {
             div4.html(
               "<img src=" +
                 yarmouk +
-                " alt='boat'/> <br> Tariq, a 19-year-old Palestinian from Yarmouk Camp, close to the Syrian capital, Damascus, whom Human Rights Watch interviewed in Serbia, explained, “I left so I could escape from the war and out of fear of being arrested, just like happened to my family members. Also, I was afraid of the army. The situation of Palestinians in Syria is particularly difficult…Yarmouk camp is under siege. There is no food or anything.” https://www.hrw.org/report/2015/06/19/mediterranean-migration-crisis/why-people-flee-what-eu-should-do\
+                " alt='boat'/> <br> Tariq, a 19-year-old Palestinian from Yarmouk Camp, close to the Syrian capital, Damascus, whom Human Rights Watch interviewed in Serbia, explained, “I left so I could escape from the war and out of fear of being arrested, just like happened to my family members. Also, I was afraid of the army. The situation of Palestinians in Syria is particularly difficult…Yarmouk camp is under siege. There is no food or anything.”\
                 Above image is from the Yarmouk Camp in Syria"
             );
             div4
               .style("left", d3.event.pageX + "px")
               .style("top", d3.event.pageY - 150 + "px");
-          } else if (d > 276 && d < 278) {
-            div5.style("opacity", 0.9);
-            div5.html(
-              "<img src=" +
-                refugee +
-                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-            );
-            div5
-              .style("left", d3.event.pageX + "px")
-              .style("top", d3.event.pageY - 150 + "px");
-          } else if (d > 207 && d < 209) {
-            div6.style("opacity", 0.9);
-            div6.html(
-              "<img src=" +
-                refugee +
-                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-            );
-            div6
-              .style("left", d3.event.pageX + "px")
-              .style("top", d3.event.pageY - 150 + "px");
-          } else if (d > 254 && d < 256) {
-            div7.style("opacity", 0.9);
-            div7.html(
-              "<img src=" +
-                refugee +
-                " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-            );
-            div7
-              .style("left", d3.event.pageX + "px")
-              .style("top", d3.event.pageY - 150 + "px");
+          // } else if (d > 276 && d < 278) {
+          //   div5.style("opacity", 0.9);
+          //   div5.html(
+          //     "<img src=" +
+          //       refugee +
+          //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+          //   );
+          //   div5
+          //     .style("left", d3.event.pageX + "px")
+          //     .style("top", d3.event.pageY - 150 + "px");
+          // } else if (d > 207 && d < 209) {
+          //   div6.style("opacity", 0.9);
+          //   div6.html(
+          //     "<img src=" +
+          //       refugee +
+          //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+          //   );
+          //   div6
+          //     .style("left", d3.event.pageX + "px")
+          //     .style("top", d3.event.pageY - 150 + "px");
+          // } else if (d > 254 && d < 256) {
+          //   div7.style("opacity", 0.9);
+          //   div7.html(
+          //     "<img src=" +
+          //       refugee +
+          //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+          //   );
+          //   div7
+          //     .style("left", d3.event.pageX + "px")
+          //     .style("top", d3.event.pageY - 150 + "px");
           }
         })
 
@@ -1800,7 +1797,7 @@ export default {
       d3.selectAll(".year").html("2019");
       d3.selectAll(".year6").attr("fill", "#766F81").transition();
       d3.selectAll(".picto6").transition().attr("opacity", 1);
-       d3.selectAll("use")
+      d3.selectAll("use")
         .transition()
         .attr("class", function (d, i) {
           if ((d < 382 && d > 380) || (d < 378 && d > 376)) {
@@ -1846,11 +1843,9 @@ export default {
                 71.66341101 -
                 34.38417303 -
                 23.07187056
-          ) 
-          {
+          ) {
             return "iconSelected2018";
-          } 
-           else if (
+          } else if (
             d <
             400 -
               42.14548797 -
@@ -1860,8 +1855,7 @@ export default {
               23.07187056
           ) {
             return "iconSelected2019";
-          }
-          else return "iconPlain";
+          } else return "iconPlain";
         });
       // d3.selectAll("use")
       //   .transition()
@@ -1891,7 +1885,7 @@ export default {
       //           23.07187056
       //     ) {
       //       return "iconSelected2018";
-      
+
       //     else return "iconPlain";
       //   });
       d3.selectAll(".legend_year").attr("class", "iconPlain");
@@ -1959,6 +1953,26 @@ export default {
       d3.selectAll(".legend_year").attr("opacity", 1);
       d3.selectAll(".legend").style("opacity", 1);
       d3.selectAll(".legend_select").attr("opacity", 1);
+    },
+
+    hideIcons: function() {
+       d3.selectAll(".iconPlain")
+        .transition()
+        .duration(300)
+        .attr("opacity", "0");
+      d3.selectAll(".icon-text1")
+        .transition()
+        .duration(300)
+        .attr("opacity", "0");
+      d3.selectAll(".icon-text2")
+        .transition()
+        .duration(300)
+        .attr("opacity", "0");
+
+      d3.selectAll(".picto1").transition().attr("opacity", 0);
+      d3.selectAll(".legend_year").attr("opacity", 0);
+      d3.selectAll(".legend").style("opacity", 0);
+      d3.selectAll(".legend_select").attr("opacity", 0);
     },
     hideRoute12: function () {
       d3.selectAll(".route1").transition().duration(200).attr("opacity", 0);
@@ -2426,12 +2440,13 @@ div.tooltip {
   width: 200px;
   height: 130px;
   padding: 2px;
-  font: 12px sans-serif;
+  font: 14px sans-serif;
   background: lightsteelblue;
-  border: 0px;
+  border: 2px solid #898883;
   border-radius: 8px;
   pointer-events: none;
   z-index: 50;
+  font-family: "biryani";
 }
 
 div.tooltip2 {
@@ -2440,26 +2455,28 @@ div.tooltip2 {
   width: 200px;
   height: 200px;
   padding: 2px;
-  font: 12px sans-serif;
+  font: 14px sans-serif;
   background: lightsteelblue;
-  border: 0px;
+  border: 2px solid #898883;
   border-radius: 8px;
   pointer-events: none;
   z-index: 50;
+  font-family: "biryani";
 }
 
 div.tooltip3 {
   position: absolute;
   text-align: center;
   width: 200px;
-  height: 200px;
+  height: 250px;
   padding: 2px;
-  font: 12px sans-serif;
+  font: 14px sans-serif;
   background: lightsteelblue;
-  border: 0px;
+  border: 2px solid #898883;
   border-radius: 8px;
   pointer-events: none;
   z-index: 50;
+  font-family: "biryani";
 }
 
 div.tooltip4 {
@@ -2468,12 +2485,58 @@ div.tooltip4 {
   width: 300px;
   height: 400px;
   padding: 2px;
-  font: 12px sans-serif;
+  font: 14px sans-serif;
   background: lightsteelblue;
-  border: 0px;
+  border: 2px solid #898883;
   border-radius: 8px;
   pointer-events: none;
   z-index: 50;
+  font-family: "biryani";
+}
+
+div.tooltip5 {
+  position: absolute;
+  text-align: center;
+  width: 300px;
+  height: 400px;
+  padding: 2px;
+  font: 14px sans-serif;
+  background: lightsteelblue;
+  border: 2px solid #898883;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+  font-family: "biryani";
+}
+
+div.tooltip6 {
+  position: absolute;
+  text-align: center;
+  width: 300px;
+  height: 400px;
+  padding: 2px;
+  font: 14px sans-serif;
+  background: lightsteelblue;
+  border: 2px solid #898883;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+  font-family: "biryani";
+}
+
+div.tooltip7 {
+  position: absolute;
+  text-align: center;
+  width: 300px;
+  height: 400px;
+  padding: 2px;
+  font: 14px sans-serif;
+  background: lightsteelblue;
+  border: 2px solid #898883;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 50;
+  font-family: "biryani";
 }
 
 div.year {

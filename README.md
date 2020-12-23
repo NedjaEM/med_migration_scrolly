@@ -13,5 +13,5 @@ I summed the number of arrivals for each year and each arrival country by toggli
 
 ### Number of migrants dead or missing at sea
 
-The initial data was obtained from the Missing Migrants project website. The data was in an excel format representing one incident at sea by row. I then filtered the data by routes (Central, Eastern and Western Mediterranean) and summed the incident by category, resulting in the following data
+The initial data was obtained from the Missing Migrants project website. The data was in an excel format representing one incident at sea by row. I then filtered the data by routes (Central, Eastern and Western Mediterranean) and summed the incident by category.
 

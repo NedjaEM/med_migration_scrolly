@@ -394,8 +394,8 @@ export default {
       var numRows = 20;
 
       //padding for the grid
-      var xPadding = 30;
-      var yPadding = 30;
+      var xPadding = this.width/40
+      var yPadding = this.height/20;
 
       //horizontal and vertical spacing between the icons
       var hBuffer = 8;
@@ -434,7 +434,7 @@ export default {
         .attr("class", "icon-text2")
         .text("the Mediterranean between 2014 and 2019")
         .attr("opacity", "0");
-
+      console.log("width issss "+this.width);
       //create group element and create an svg <use> element for each icon
       this.svg
         .append("g")
@@ -450,7 +450,7 @@ export default {
         .attr("x", function (d) {
           var remainder = d % numCols;
           return xPadding + remainder * wBuffer - 70;
-          console.log(x);
+          
         })
         .attr("y", function (d) {
           var whole = Math.floor(d / numCols);
@@ -522,7 +522,7 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - this.width / 2.8)
+        .attr("x", this.width - this.width / 3.3)
         .attr("y", this.height - this.height / 9)
         .attr("class", "picto1")
         .text("209,660 migrants")
@@ -531,7 +531,7 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - this.width / 2.8)
+        .attr("x", this.width - this.width / 3.3)
         .attr("y", this.height - this.height / 5 - 10)
         .attr("class", "picto2")
         .text("1,017,294 migrants")
@@ -540,7 +540,7 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - this.width / 2.8)
+        .attr("x", this.width - this.width / 3.3)
         .attr("y", this.height - this.height / 1.8 - 10)
         .attr("class", "picto3")
         .text("356,502 migrants")
@@ -549,7 +549,7 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - this.width / 2.8)
+        .attr("x", this.width - this.width / 3.3)
         .attr("y", this.height - this.height / 1.5 - 10)
         .attr("class", "picto4")
         .text("171,050 migrants")
@@ -558,7 +558,7 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - this.width / 2.8)
+        .attr("x", this.width - this.width / 3.3)
         .attr("y", this.height - this.height / 1.35 - 10)
         .attr("class", "picto5")
         .text("114,775 migrants")
@@ -567,7 +567,7 @@ export default {
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
-        .attr("x", this.width - this.width / 2.8)
+        .attr("x", this.width - this.width / 3.3)
         .attr("y", this.height - this.height / 1.29 - 10)
         .attr("class", "picto6")
         .text("100,785 migrants")

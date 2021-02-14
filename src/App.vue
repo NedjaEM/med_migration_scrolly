@@ -394,8 +394,13 @@ export default {
       var numRows = 20;
 
       //padding for the grid
-      var xPadding = this.width/40
-      var yPadding = this.height/20;
+      if (this.width > 700) {
+        var xPadding = 30;
+        var yPadding = 30;
+      } else {
+        var xPadding = 70;
+        var yPadding = 70;
+      }
 
       //horizontal and vertical spacing between the icons
       var hBuffer = 8;
@@ -405,36 +410,70 @@ export default {
       var myIndex = d3.range(numCols * numRows);
 
       //text element to display number of icons highlighted
-      this.svg
-        .append("text")
-        .attr("id", "txtValue1")
-        .attr("x", 0.48 * this.width - 200)
-        .attr("y", 0.13 * this.height)
-        .attr("dy", -3)
-        .attr("class", "icon-text1")
-        .text("1,927,007")
-        .attr("opacity", "0");
+      if (this.width > 600) {
+        console.log(window.screen.width + "of course it is");
+        this.svg
+          .append("text")
+          .attr("id", "txtValue1")
+          .attr("x", 0.48 * this.width - 200)
+          .attr("y", 0.13 * this.height)
+          .attr("dy", -3)
+          .attr("class", "icon-text1")
+          .text("1,927,007")
+          .attr("opacity", "0");
 
-      this.svg
-        .append("text")
-        .attr("id", "txtValue")
-        .attr("x", 0.48 * this.width - 200)
-        .attr("y", 0.16 * this.height)
-        .attr("dy", -3)
-        .attr("class", "icon-text2")
-        .text(" people arrived to Europe through")
-        .attr("opacity", "0");
+        this.svg
+          .append("text")
+          .attr("id", "txtValue")
+          .attr("x", 0.48 * this.width - 200)
+          .attr("y", 0.16 * this.height)
+          .attr("dy", -3)
+          .attr("class", "icon-text2")
+          .text(" people arrived to Europe through")
+          .attr("opacity", "0");
 
-      this.svg
-        .append("text")
-        .attr("id", "txtValue")
-        .attr("x", 0.48 * this.width - 200)
-        .attr("y", 0.18 * this.height)
-        .attr("dy", -3)
-        .attr("class", "icon-text2")
-        .text("the Mediterranean between 2014 and 2019")
-        .attr("opacity", "0");
-      console.log("width issss "+this.width);
+        this.svg
+          .append("text")
+          .attr("id", "txtValue")
+          .attr("x", 0.48 * this.width - 200)
+          .attr("y", 0.18 * this.height)
+          .attr("dy", -3)
+          .attr("class", "icon-text2")
+          .text("the Mediterranean between 2014 and 2019")
+          .attr("opacity", "0");
+      } else {
+        console.log("of course it is NOTT");
+        this.svg
+          .append("text")
+          .attr("id", "txtValue1")
+          .attr("x", 0.4 * this.width)
+          .attr("y", 0.13 * this.height)
+          .attr("dy", -3)
+          .attr("class", "icon-text1")
+          .text("1,927,007")
+          .attr("opacity", "0");
+
+        this.svg
+          .append("text")
+          .attr("id", "txtValue")
+          .attr("x", 0.4 * this.width)
+          .attr("y", 0.16 * this.height)
+          .attr("dy", -3)
+          .attr("class", "icon-text2")
+          .text(" people arrived to Europe through")
+          .attr("opacity", "0");
+
+        this.svg
+          .append("text")
+          .attr("id", "txtValue")
+          .attr("x", 0.4 * this.width)
+          .attr("y", 0.18 * this.height)
+          .attr("dy", -3)
+          .attr("class", "icon-text2")
+          .text("the Mediterranean between 2014 and 2019")
+          .attr("opacity", "0");
+      }
+
       //create group element and create an svg <use> element for each icon
       this.svg
         .append("g")
@@ -450,7 +489,6 @@ export default {
         .attr("x", function (d) {
           var remainder = d % numCols;
           return xPadding + remainder * wBuffer - 70;
-          
         })
         .attr("y", function (d) {
           var whole = Math.floor(d / numCols);
@@ -519,6 +557,7 @@ export default {
       let y2 = d3.select("#icon250").attr("y");
 
       console.log("xxxx ", d3.selectAll("#icon399").attr("y"));
+
       this.svg
         .selectAll("#pictoLayer")
         .append("text")
@@ -579,15 +618,27 @@ export default {
         d3.selectAll(".iconPlain").attr("transform", d3.event.transform);
       }
 
-      d3.selectAll(".iconPlain")
-        .transition()
-        .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity
-            .translate(0.4 * this.width, this.height / 20)
-            .scale(this.width / 500)
-        );
+      if (this.width > 600) {
+        d3.selectAll(".iconPlain")
+          .transition()
+          .duration(750)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity
+              .translate(0.4 * this.width, this.height / 20)
+              .scale(this.width / 500)
+          );
+      } else {
+        d3.selectAll(".iconPlain")
+          .transition()
+          .duration(750)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity
+              .translate(0.4 * this.width, this.height / 20)
+              .scale(this.width / 300)
+          );
+      }
 
       d3.csv(bar_data, d3.autoType).then((data) => {
         var y = d3
@@ -1555,36 +1606,36 @@ export default {
             div4
               .style("left", d3.event.pageX + "px")
               .style("top", d3.event.pageY - 150 + "px");
-          // } else if (d > 276 && d < 278) {
-          //   div5.style("opacity", 0.9);
-          //   div5.html(
-          //     "<img src=" +
-          //       refugee +
-          //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-          //   );
-          //   div5
-          //     .style("left", d3.event.pageX + "px")
-          //     .style("top", d3.event.pageY - 150 + "px");
-          // } else if (d > 207 && d < 209) {
-          //   div6.style("opacity", 0.9);
-          //   div6.html(
-          //     "<img src=" +
-          //       refugee +
-          //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-          //   );
-          //   div6
-          //     .style("left", d3.event.pageX + "px")
-          //     .style("top", d3.event.pageY - 150 + "px");
-          // } else if (d > 254 && d < 256) {
-          //   div7.style("opacity", 0.9);
-          //   div7.html(
-          //     "<img src=" +
-          //       refugee +
-          //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
-          //   );
-          //   div7
-          //     .style("left", d3.event.pageX + "px")
-          //     .style("top", d3.event.pageY - 150 + "px");
+            // } else if (d > 276 && d < 278) {
+            //   div5.style("opacity", 0.9);
+            //   div5.html(
+            //     "<img src=" +
+            //       refugee +
+            //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            //   );
+            //   div5
+            //     .style("left", d3.event.pageX + "px")
+            //     .style("top", d3.event.pageY - 150 + "px");
+            // } else if (d > 207 && d < 209) {
+            //   div6.style("opacity", 0.9);
+            //   div6.html(
+            //     "<img src=" +
+            //       refugee +
+            //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            //   );
+            //   div6
+            //     .style("left", d3.event.pageX + "px")
+            //     .style("top", d3.event.pageY - 150 + "px");
+            // } else if (d > 254 && d < 256) {
+            //   div7.style("opacity", 0.9);
+            //   div7.html(
+            //     "<img src=" +
+            //       refugee +
+            //       " alt='boat'/> <br> It is estimated that most people coming into Greece from Turkey qualify for refugee status in most European countries."
+            //   );
+            //   div7
+            //     .style("left", d3.event.pageX + "px")
+            //     .style("top", d3.event.pageY - 150 + "px");
           }
         })
 
@@ -1955,8 +2006,8 @@ export default {
       d3.selectAll(".legend_select").attr("opacity", 1);
     },
 
-    hideIcons: function() {
-       d3.selectAll(".iconPlain")
+    hideIcons: function () {
+      d3.selectAll(".iconPlain")
         .transition()
         .duration(300)
         .attr("opacity", "0");
@@ -2009,8 +2060,17 @@ export default {
   padding: 1%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
   #sections {
+    position: relative;
+    /* display: inline-block; */
+    width: 20%;
+    height: 40%;
+    /* top: 60px; */
+    z-index: 90;
+    margin-left: 1rem;
+    /* height: 10000px; */
+    padding: 1%;
   }
 }
 
@@ -2030,6 +2090,26 @@ export default {
   justify-content: space-around;
   background-color: none;
   padding-left: 2%;
+}
+
+@media only screen and (max-width: 600px) {
+  .step {
+    margin-bottom: 1rem;
+    height: 40%;
+    /* font-family: "Domine"; */
+    font-family: "Biryani";
+    font-weight: 100;
+    line-height: 1.4em;
+    font-size: 0.5em;
+    text-align: justify;
+    margin-left: 0.5rem;
+    display: flex;
+    top: 20%;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: none;
+    padding-left: 2%;
+  }
 }
 
 .countries {
@@ -2072,12 +2152,15 @@ h3 {
   padding-right: 2px;
 }
 
-@media (max-width: 900px) {
-  #graphic {
-    width: 100rem;
+@media (max-width: 600px) {
+  #graphic,
+  #graphic2,
+  #graphic3 {
+    width: 80%;
     flex-direction: row;
     align-items: top;
     justify-content: space-around;
+    padding-right: 2px;
   }
 }
 
@@ -2249,6 +2332,96 @@ header {
   font-family: "khula";
   font-weight: bold;
   border-style: 2px solid black;
+}
+
+@media only screen and (max-width: 700px) {
+  .icon-text1 {
+    fill: #898883;
+    text-anchor: right;
+    text-align: justify;
+    font-size: 1em;
+    font-family: "khula";
+    font-weight: bold;
+    border-style: 2px solid black;
+  }
+
+  .icon-text2 {
+    fill: #898883;
+    text-anchor: right;
+    text-align: justify;
+    font-size: 0.7em;
+    font-family: "khula";
+    font-weight: bold;
+    border-style: 2px solid black;
+  }
+
+  .picto6 {
+    fill: #7bccc4;
+    font-size: 0.5em;
+    font-weight: bold;
+  }
+
+  .legend {
+    fill: #898883;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: "khula";
+  }
+
+  .iconSelected2018 {
+    fill: #4ab9ae;
+  }
+
+  .picto5 {
+    fill: #4ab9ae;
+    font-size: 0.5em;
+    font-weight: bold;
+  }
+
+  .iconSelected2017 {
+    fill: #55a190;
+    stroke-width: 10px;
+  }
+
+  .picto4 {
+    fill: #55a190;
+    font-size: 0.5em;
+    font-weight: bold;
+  }
+
+  .iconSelected2016 {
+    fill: #4eb3d3;
+  }
+
+  .picto3 {
+    fill: #4eb3d3;
+    font-size: 0.5em;
+    font-weight: bold;
+  }
+
+  .iconSelected2015 {
+    fill: #2b8cbe;
+  }
+
+  .picto2 {
+    fill: #2b8cbe;
+    font-size: 0.5em;
+    font-weight: bold;
+  }
+
+  .iconSelected2014 {
+    fill: #08589e;
+  }
+
+  .picto1 {
+    fill: #08589e;
+    font-size: 0.5em;
+    font-weight: bold;
+  }
+
+  .iconSelectedMissing {
+    fill: #fff1e0;
+  }
 }
 
 .iconPlain {
@@ -2426,6 +2599,25 @@ header {
   background-color: #dbd9d2;
 }
 
+@media only screen and (max-width: 600px) {
+  .banksy {
+    flex: 0.4;
+  }
+  .landing {
+    background-image: url("../public/Data/inspo.jpg");
+
+    background-position: left;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+    background-size: 50;
+
+    background-color: #dbd9d2;
+  }
+}
+
 .content {
   position: absolute;
   left: 50%;
@@ -2548,6 +2740,19 @@ div.year {
   color: #898883;
   text-align: left;
   font-family: "biryani";
+}
+
+@media only screen and (max-width: 600px) {
+  div.year {
+    position: absolute;
+    font-size: 20px;
+    top: 15%;
+    left: 3.5%;
+    opacity: 0;
+    color: #898883;
+    text-align: left;
+    font-family: "biryani";
+  }
 }
 
 div.observ {

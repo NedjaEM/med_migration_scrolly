@@ -62,4 +62,20 @@ h1 {
   justify-content: space-around;
 }
 
+@media only screen and (max-width: 600px) {
+  .step {
+  height: 50rem;
+  /* font-family: "Domine"; */
+  font-family: "Biryani";
+  font-weight: 400;
+  line-height: 1.4em;
+  font-size: 0.8em;
+  text-align: left;;
+  margin-left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+}
+
 </style>

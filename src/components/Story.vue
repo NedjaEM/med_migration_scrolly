@@ -61,15 +61,14 @@ p {
   font-weight: 600;
   line-height: 1.4em;
   font-size: 1em;
-   margin-top: -100%;
+  margin-top: -100%;
 }
 
 h1 {
   opacity: 0.8;
   font-family: "Khula";
   font-size: 1em;
-   margin-bottom: 0px;
-
+  margin-bottom: 0px;
 }
 
 .step {
@@ -79,10 +78,26 @@ h1 {
   font-weight: 400;
   line-height: 1.4em;
   font-size: 1.2em;
-  text-align: left;;
+  text-align: left;
   margin-left: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+@media only screen and (max-width: 600px) {
+  .step {
+    height: 50rem;
+    /* font-family: "Domine"; */
+    font-family: "Biryani";
+    font-weight: 400;
+    line-height: 1.4em;
+    font-size: 0.8em;
+    text-align: left;
+    margin-left: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
 }
 </style>
